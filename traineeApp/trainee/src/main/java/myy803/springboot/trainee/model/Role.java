@@ -1,8 +1,10 @@
 package myy803.springboot.trainee.model;
 
 public enum Role {
-	USER("User"),
-    ADMIN("Admin");
+	STUDENT("Student"),
+    PROFESSOR("Professor"),
+    COMPANY("Company"),
+    COMMITTEE("Committee"),;
 
     private final String value;
 
@@ -13,4 +15,6 @@ public enum Role {
     public String getValue() {
         return value;
     }
+
+
 }

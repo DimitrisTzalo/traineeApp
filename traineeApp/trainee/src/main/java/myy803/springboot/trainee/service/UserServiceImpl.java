@@ -25,7 +25,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	public void saveUser(User user) {
 		String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        userDAO.save(user);	
+        userDAO.save(user);
+
     }
 
 	@Override
