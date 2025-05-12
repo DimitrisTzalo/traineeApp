@@ -1,0 +1,54 @@
+/* File: main.css */
+
+body {
+    background: #f4f6f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 40px;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 40px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+
+h2, h4 {
+    text-align: center;
+    color: #222;
+    margin-bottom: 20px;
+}
+
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #0069d9;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0053ba;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #e1e1e1;
+}
+
+a.btn {
+    margin-right: 10px;
+}
