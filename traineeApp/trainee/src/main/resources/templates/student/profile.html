@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <title>Student's Profile</title>
+</head>
+<body>
+<div class="container">
+    <p class="h4 mb-4">Student's Profile</p>
+
+    <form th:action="@{/student/save}" th:object="${student}" method="POST">
+        <input type="hidden" th:field="*{username}" />
+
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" th:field="*{student_name}" class="form-control mb-3 col-4">
+        </div>
+
+        <div class="form-group">
+            <label>AM</label>
+            <input type="text" th:field="*{student_am}" class="form-control mb-3 col-4">
+        </div>
+
+        <div class="form-group">
+            <label>Average Grade</label>
+            <input type="text" th:field="*{average_grade}" class="form-control mb-3 col-4">
+        </div>
+
+        <button type="submit" class="btn btn-info col-2">Save</button>
+    </form>
+
+    <hr>
+    <a th:href="@{/student/dashboard}">Back to Student Dashboard</a>
+</div>
+</body>
+</html>

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class StudentServiceImpl implements StudentService {
     @Autowired
@@ -19,6 +21,18 @@ public class StudentServiceImpl implements StudentService {
     public void saveProfile(Student student) {
         studentRepo.save(student);
     }
+
+    @Override
+    public Student getStudentProfile(String username) {
+        Optional<Student> student = studentRepo.findByStudentName(username);
+
+        if (student.isPresent()) {
+            return student.get();
+        } else {
+            return new Student(username);
+        }
+    }
+
     /*
     @Override
     public boolean isUserPresent(User user) {

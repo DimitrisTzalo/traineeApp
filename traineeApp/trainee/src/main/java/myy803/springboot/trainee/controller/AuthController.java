@@ -33,7 +33,7 @@ public class AuthController {
             model.addAttribute("successMessage", "User already registered!");
             return "auth/login";
         }
-        System.out.println("eeee");
+
         System.out.println(user.getRole());
         if (user.getRole() == null) {
             throw new IllegalArgumentException("Role must not be null");
@@ -44,7 +44,7 @@ public class AuthController {
 
         model.addAttribute("successMessage", "User registered successfully!");
 
-        System.out.println("eeeewhat");
+
 
 
         return "auth/login";

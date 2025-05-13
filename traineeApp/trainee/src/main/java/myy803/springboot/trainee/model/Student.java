@@ -1,5 +1,6 @@
 package myy803.springboot.trainee.model;
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
 @Entity
 @Table(name = "students")
@@ -33,6 +34,16 @@ public class Student {
 
     @Column(name = "looking_for_traineeship")
     private boolean lookingForTraineeship;
+
+    public Student() {
+        super();
+    }
+    public Student(String username) {
+        this.username = username;
+    }
+
+
+
 
     // Getters and Setters
     public Integer getStudentId() {return student_id;}
