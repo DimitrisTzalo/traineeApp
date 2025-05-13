@@ -30,15 +30,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	public void saveUser(User user) {
 		String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-
-		// Set default role if not set
-		if (user.getRole() == null) {user.setRole(Role.STUDENT);}
-
-		// Save via StudentRepo if it's a Student
-		if (user instanceof Student) {studentRepo.save((Student) user);}
-		else {userDAO.save(user);}
-    }
+		user.setPassword(encodedPassword);
+		userDAO.save(user);
+	}
 
 	@Override
 	public boolean isUserPresent(User user) {

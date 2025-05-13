@@ -48,6 +48,4 @@ public class Student extends User {
     public boolean isLookingForTraineeship() {return lookingForTraineeship;}
     public void setLookingForTraineeship(boolean lookingForTraineeship) {this.lookingForTraineeship = lookingForTraineeship;}
 
-
-
 }

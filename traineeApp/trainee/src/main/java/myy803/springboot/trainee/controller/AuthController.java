@@ -1,5 +1,6 @@
 package myy803.springboot.trainee.controller;
 
+import myy803.springboot.trainee.model.Role;
 import myy803.springboot.trainee.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,24 +23,25 @@ public class AuthController {
 
     @RequestMapping("/register")
     public String register(Model model){
-        model.addAttribute("user", new Student());
+        Student student = new Student();
+        student.setRole(Role.STUDENT); // Ορίζουμε τον ρόλο
+        model.addAttribute("user", student);
         return "auth/signup";
     }
 
     @RequestMapping("/save")
-    public String registerUser(@ModelAttribute("user") Student user, Model model){
-        System.out.println("USERNAME: " + user.getUsername());
-        System.out.println("PASSWORD: " + user.getPassword());
-        System.out.println("ROLE: " + user.getRole());
-       
-        if(userService.isUserPresent(user)){
-            model.addAttribute("successMessage", "User already registered!");
-            return "auth/signin";
+    public String registerUser(@ModelAttribute("user") Student user, Model model) {
+        try {
+            if (userService.isUserPresent(user)) {
+                model.addAttribute("errorMessage", "Το όνομα χρήστη υπάρχει ήδη!");
+                return "auth/signup";
+            }
+            userService.saveUser(user);
+            model.addAttribute("successMessage", "Επιτυχής εγγραφή!");
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Σφάλμα κατά την εγγραφή: " + e.getMessage());
+            return "auth/signup";
         }
-
-        userService.saveUser(user);
-        model.addAttribute("successMessage", "User registered successfully!");
-
         return "auth/signin";
     }
 }
