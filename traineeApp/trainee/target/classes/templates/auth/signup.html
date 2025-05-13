@@ -17,15 +17,13 @@
 
 <div class="container">
 
-  <form 
-  action="#" 
-  th:action="@{/save}" th:object="${user}" method="post">
+  <form th:action="@{/save}" th:object="${user}" method="post">
     <h3>Registration</h3>
     <input type="text" th:field="*{username}" placeholder="User Name" /> <br/><br/>
      <input type="password" th:field="*{password}" placeholder="Password" /> <br/><br/>
     <select th:field="*{role}" required>
       <option value="">Select</option>
-      <option value="ADMIN">ADMIN</option>
+      <option value="STUDENT">STUDENT</option>
       <option value="USER">USER</option>
     </select> <br/><br/>
     

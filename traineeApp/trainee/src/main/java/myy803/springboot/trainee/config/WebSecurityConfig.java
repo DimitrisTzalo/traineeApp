@@ -80,7 +80,7 @@ public class WebSecurityConfig {
                 http.authorizeHttpRequests(
                 		(authz) -> authz
                 		.requestMatchers("/", "/login", "/register", "/save").permitAll()
-                        .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
+                        .requestMatchers("/student/**").hasAnyAuthority("STUDENT")
                         .requestMatchers("/user/**").hasAnyAuthority("USER") // ??? ZAS is this needed ??? - changed from account to user
                         .anyRequest().authenticated()
                 		);

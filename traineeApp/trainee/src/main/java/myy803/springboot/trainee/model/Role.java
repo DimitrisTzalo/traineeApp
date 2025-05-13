@@ -2,7 +2,7 @@ package myy803.springboot.trainee.model;
 
 public enum Role {
 	USER("User"),
-    ADMIN("Admin");
+    STUDENT("Student");
 
     private final String value;
 

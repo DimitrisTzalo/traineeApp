@@ -2,6 +2,9 @@ package myy803.springboot.trainee.service;
 
 import java.util.Optional;
 
+import myy803.springboot.trainee.model.Role;
+import myy803.springboot.trainee.model.Student;
+import myy803.springboot.trainee.repository.StudentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,12 +23,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	
 	@Autowired
 	private UserDAO userDAO;
+
+	@Autowired
+	private StudentRepo studentRepo;
 	
 	@Override
 	public void saveUser(User user) {
 		String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        userDAO.save(user);	
+
+		// Set default role if not set
+		if (user.getRole() == null) {user.setRole(Role.STUDENT);}
+
+		// Save via StudentRepo if it's a Student
+		if (user instanceof Student) {studentRepo.save((Student) user);}
+		else {userDAO.save(user);}
     }
 
 	@Override

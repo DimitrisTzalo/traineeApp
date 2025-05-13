@@ -1,5 +1,6 @@
 package myy803.springboot.trainee.controller;
 
+import myy803.springboot.trainee.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,12 +22,15 @@ public class AuthController {
 
     @RequestMapping("/register")
     public String register(Model model){
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new Student());
         return "auth/signup";
     }
 
     @RequestMapping("/save")
-    public String registerUser(@ModelAttribute("user") User user, Model model){
+    public String registerUser(@ModelAttribute("user") Student user, Model model){
+        System.out.println("USERNAME: " + user.getUsername());
+        System.out.println("PASSWORD: " + user.getPassword());
+        System.out.println("ROLE: " + user.getRole());
        
         if(userService.isUserPresent(user)){
             model.addAttribute("successMessage", "User already registered!");

@@ -3,44 +3,30 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "students")
-public class Student {
+public class Student extends User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, name = "student_id")
-    private Integer student_id;
-
-    @Column(nullable = false, name = "username")
-    private String username;
-
-    @Column(nullable = false, name = "student_name")
+    @Column(name = "student_name", nullable = true)
     private String studentName;
 
-    @Column(nullable = false, name = "student_AM")
+    @Column(name = "student_AM", nullable = true)
     private String studentAM;
 
-    @Column(name = "average_grade")
+    @Column(name = "average_grade", nullable = true)
     private String averageGrade;
 
-    @Column(name = "preferred_location")
+    @Column(name = "preferred_location", nullable = true)
     private String preferredLocation;
 
-    @Column(name = "interests")
+    @Column(name = "interests", nullable = true)
     private String interests;
 
-    @Column(name = "skills")
+    @Column(name = "skills", nullable = true)
     private String skills;
 
-    @Column(name = "looking_for_traineeship")
+    @Column(name = "looking_for_traineeship", nullable = true)
     private boolean lookingForTraineeship;
 
     // Getters and Setters
-    public Integer getStudentId() {return student_id;}
-    public void setStudentId(Integer student_id) {this.student_id = student_id;}
-
-    public String getUsername() {return username;}
-    public void setUsername(String username) {this.username = username;}
-
     public String getStudentName() {return studentName;}
     public void setStudentName(String studentName) {this.studentName = studentName;}
 
