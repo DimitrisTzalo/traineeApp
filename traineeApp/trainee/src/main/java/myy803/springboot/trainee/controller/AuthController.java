@@ -28,18 +28,24 @@ public class AuthController {
     @RequestMapping("/save")
     public String registerUser(@ModelAttribute("user") User user, @RequestParam("role") String roleParam, Model model) {
 
-       System.out.println("eeee");
+
         if (userService.isUserPresent(user)) {
-            model.addAttribute("errorMessage", "User already registered!");
+            model.addAttribute("successMessage", "User already registered!");
             return "auth/login";
         }
+        System.out.println("eeee");
+        System.out.println(user.getRole());
+        if (user.getRole() == null) {
+            throw new IllegalArgumentException("Role must not be null");
+        }
+
 
         userService.saveUser(user);
 
         model.addAttribute("successMessage", "User registered successfully!");
-        //return "redirect:/student/dashboard";
 
-        System.out.println("Role: " + user.getRole());
+        System.out.println("eeeewhat");
+
 
         return "auth/login";
     }
