@@ -19,19 +19,22 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void saveProfile(Student student) {
+
         studentRepo.save(student);
     }
 
     @Override
     public Student getStudentProfile(String username) {
         Optional<Student> student = studentRepo.findByStudentName(username);
-
-        if (student.isPresent()) {
+        if (student.isPresent())
             return student.get();
-        } else {
+        else
             return new Student(username);
-        }
     }
+
+
+
+
 
     /*
     @Override

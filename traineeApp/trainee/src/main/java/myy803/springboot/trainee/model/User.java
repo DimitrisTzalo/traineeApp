@@ -27,6 +27,9 @@ public class User implements UserDetails{
     @Enumerated(EnumType.STRING)
     @Column(name="role")
 	private Role role;
+
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	private Student student;
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -67,7 +70,18 @@ public class User implements UserDetails{
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+		student.setUser(this); // Ensure bidirectional relationship
+	}
+
+
+
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;

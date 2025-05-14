@@ -10,6 +10,4 @@ public interface StudentService {
 
     public void saveProfile(Student student);
     public Student getStudentProfile(String username);
-
-
 }

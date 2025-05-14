@@ -7,9 +7,15 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(nullable = false, name = "student_id")
     private Integer student_id;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "student_id")
+    private User user;
 
     @Column(nullable = false, name = "username")
     private String username;
@@ -43,7 +49,13 @@ public class Student {
     }
 
 
+    public User getUser() {
+        return user;
+    }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     // Getters and Setters
     public Integer getStudentId() {return student_id;}
@@ -72,6 +84,7 @@ public class Student {
 
     public boolean isLookingForTraineeship() {return lookingForTraineeship;}
     public void setLookingForTraineeship(boolean lookingForTraineeship) {this.lookingForTraineeship = lookingForTraineeship;}
+
 
 
 

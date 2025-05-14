@@ -10,29 +10,74 @@
 <div class="container">
     <p class="h4 mb-4">Student's Profile</p>
 
-    <form th:action="@{/student/save}" th:object="${student}" method="POST">
+    <ul>
+        <li><strong>Full Name:</strong> <span th:text="${student.studentName}"></span></li>
+        <li><strong>AM:</strong> <span th:text="${student.studentAM}"></span></li>
+        <li><strong>Average Grade:</strong> <span th:text="${student.averageGrade}"></span></li>
+        <li><strong>Preferred Location:</strong> <span th:text="${student.preferredLocation}"></span></li>
+        <li><strong>Interests:</strong> <span th:text="${student.interests}"></span></li>
+        <li><strong>Skills:</strong> <span th:text="${student.skills}"></span></li>
+    </ul>
+</div>
+
+
+<form th:action="@{/student/save}" th:object="${student}" method="POST">
         <input type="hidden" th:field="*{username}" />
 
         <div class="form-group">
             <label>Full Name</label>
-            <input type="text" th:field="*{student_name}" class="form-control mb-3 col-4">
+            <input type="text" th:field="*{studentName}" class="form-control mb-3 col-4">
         </div>
 
         <div class="form-group">
             <label>AM</label>
-            <input type="text" th:field="*{student_am}" class="form-control mb-3 col-4">
+            <input type="text" th:field="*{studentAM}" class="form-control mb-3 col-4">
         </div>
 
         <div class="form-group">
             <label>Average Grade</label>
-            <input type="text" th:field="*{average_grade}" class="form-control mb-3 col-4">
+            <input type="text" th:field="*{averageGrade}" class="form-control mb-3 col-4">
         </div>
 
+        <div class="form-group">
+            <label>Preferred Location</label>
+            <input type="text" th:field="*{preferredLocation}" class="form-control mb-3 col-4">
+        </div>
+
+        <div class="form-group">
+            <label>Your interests</label>
+            <input type="text" th:field="*{interests}" class="form-control mb-3 col-4">
+        </div>
+
+        <div class="form-group">
+            <label>Your skills</label>
+            <input type="text" th:field="*{skills}" class="form-control mb-3 col-4">
+        </div>
+
+        <div class="form-group">
+            <label>Are you looking for Traineeship?</label><br>
+
+            <div class="btn-group" role="group" aria-label="Yes or No">
+                <input type="radio" class="btn-check" th:field="*{lookingForTraineeship}"
+                       value="YES" id="btnYes" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnYes">Yes</label>
+
+                <input type="radio" class="btn-check" th:field="*{lookingForTraineeship}"
+                       value="NO" id="btnNo" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnNo">No</label>
+            </div>
+        </div>
+
+
+
+
+
         <button type="submit" class="btn btn-info col-2">Save</button>
+        <a th:href="@{/student/dashboard}" class="btn btn-primary btn-sm mb-3">Back to Dashboard</a>
     </form>
 
     <hr>
-    <a th:href="@{/student/dashboard}">Back to Student Dashboard</a>
+
 </div>
 </body>
 </html>
