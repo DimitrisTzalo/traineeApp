@@ -16,8 +16,11 @@
 <body>
 
 <div class="container">
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <p th:text="${errorMessage}"></p>
+    </div>
 
-  <form th:action="@{/save}" th:object="${user}" method="post">
+  <form th:action="@{/save}" th:object="${form}" method="post">
     <h3>Registration</h3>
     <input type="text" th:field="*{username}" placeholder="User Name" /> <br/><br/>
      <input type="password" th:field="*{password}" placeholder="Password" /> <br/><br/>

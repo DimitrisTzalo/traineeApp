@@ -40,6 +40,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		return storedUser.isPresent();
 	}
 
+	@Override
+	public boolean isUsernameTaken(String username) {
+		return userDAO.findByUsername(username).isPresent();
+	}
+
+
 	// Method defined in Spring Security UserDetailsService interface
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

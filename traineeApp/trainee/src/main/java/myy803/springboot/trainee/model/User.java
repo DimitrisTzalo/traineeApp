@@ -11,6 +11,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Table(name="user")
 public abstract class User implements UserDetails{
 
 	@Id
