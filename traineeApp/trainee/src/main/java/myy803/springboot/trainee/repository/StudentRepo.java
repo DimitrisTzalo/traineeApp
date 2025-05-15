@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StudentRepo extends JpaRepository<Student, String> {
 
-    Optional<Student> findByStudentName(String username);
+    Optional<Student> findByUsername(String username);
 
     boolean existsByUsername(String username);
 

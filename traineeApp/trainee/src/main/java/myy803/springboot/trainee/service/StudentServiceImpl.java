@@ -19,17 +19,36 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void saveProfile(Student student) {
+        Optional<Student> existing = studentRepo.findByUsername(student.getUsername());
 
-        studentRepo.save(student);
+
+        if (existing.isPresent()) {
+            Student existingStudent = existing.get();
+            existingStudent.setStudentName(student.getStudentName());
+            existingStudent.setStudentAM(student.getStudentAM());
+            existingStudent.setAverageGrade(student.getAverageGrade());
+            existingStudent.setPreferredLocation(student.getPreferredLocation());
+            existingStudent.setInterests(student.getInterests());
+            existingStudent.setSkills(student.getSkills());
+            existingStudent.setLookingForTraineeship(student.isLookingForTraineeship());
+
+            studentRepo.save(existingStudent); // ✅ update
+        } else {
+            studentRepo.save(student); // ✅ new profile
+        }
     }
 
     @Override
     public Student getStudentProfile(String username) {
-        Optional<Student> student = studentRepo.findByStudentName(username);
-        if (student.isPresent())
+        return studentRepo.findByUsername(username).orElse(new Student(username));
+
+        /*if (student.isPresent())
             return student.get();
         else
             return new Student(username);
+
+
+         */
     }
 
 

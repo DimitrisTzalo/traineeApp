@@ -19,8 +19,13 @@
   <h2>Welcome to Homepage</h2>
  
  <br> <br> <hr> <br> <br>
- 
-  <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
+
+    <div th:if="${welcomeMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${welcomeMessage}">Welcome to our App!<br>Please fill your data!</span>
+    </div>
+
+
+    <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
     <p>
     	<a th:href="@{/login}" class="btn btn-primary btn-sm mb-3" th:text="Login"></a>
     	<a th:href="@{/register}" class="btn btn-primary btn-sm mb-3" th:text="Register"></a>

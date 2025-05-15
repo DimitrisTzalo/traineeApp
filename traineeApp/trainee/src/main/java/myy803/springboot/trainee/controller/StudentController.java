@@ -35,9 +35,12 @@ public class StudentController {
 
         Student student = studentService.getStudentProfile(username);
 
+        System.out.println(student);
+
 
         if (!studentRepo.existsByUsername(username)) {
             model.addAttribute("student", student);
+            model.addAttribute("welcomeMessage", "Welcome to our App! \n Please fill your data!");
             return "student/profile";
         }
 
@@ -47,7 +50,15 @@ public class StudentController {
 
     @RequestMapping("/student/profile")
     public String getStudentProfile(Model model) {
-        model.addAttribute("student", new Student());
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Student student = studentService.getStudentProfile(username);
+
+        if (!studentRepo.existsByUsername(username)) {
+            student = new Student();
+            student.setUsername(username);
+        }
+        model.addAttribute("student", student);
         return "student/profile";
     }
 
@@ -57,6 +68,7 @@ public class StudentController {
         Optional<User> optionalUser = userDAO.findByUsername(username);
 
         if (optionalUser.isEmpty()) {
+
             model.addAttribute("errorMessage", "User not found!");
             return "student/profile";
         }
@@ -64,12 +76,10 @@ public class StudentController {
         User user = optionalUser.get();
 
         student.setUser(user);
-        student.setUsername(user.getUsername()); // mallon thelei join
-
-
-
+        student.setUsername(user.getUsername());
 
         studentService.saveProfile(student);
+        model.addAttribute("successMessage", "Profile saved successfully!");
         return "student/dashboard";
     }
 
