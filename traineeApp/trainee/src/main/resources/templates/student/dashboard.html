@@ -28,7 +28,7 @@
         </button>
     </div>
 
-    <h2>Welcome <span sec:authentication="name"></span> to Student Dashboard</h2>
+    <h2>Welcome <span th:text="${student.studentName}"></span> to Student Dashboard</h2>
 
 
 
