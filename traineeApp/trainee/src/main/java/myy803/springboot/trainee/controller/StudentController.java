@@ -35,7 +35,6 @@ public class StudentController {
 
         Student student = studentService.getStudentProfile(username);
 
-        System.out.println(student);
 
 
         if (!studentRepo.existsByUsername(username)) {

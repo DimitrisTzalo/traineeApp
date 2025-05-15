@@ -32,9 +32,9 @@ public class StudentServiceImpl implements StudentService {
             existingStudent.setSkills(student.getSkills());
             existingStudent.setLookingForTraineeship(student.isLookingForTraineeship());
 
-            studentRepo.save(existingStudent); // ✅ update
+            studentRepo.save(existingStudent);
         } else {
-            studentRepo.save(student); // ✅ new profile
+            studentRepo.save(student);
         }
     }
 
@@ -42,13 +42,6 @@ public class StudentServiceImpl implements StudentService {
     public Student getStudentProfile(String username) {
         return studentRepo.findByUsername(username).orElse(new Student(username));
 
-        /*if (student.isPresent())
-            return student.get();
-        else
-            return new Student(username);
-
-
-         */
     }
 
 
