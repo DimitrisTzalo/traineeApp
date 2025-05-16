@@ -1,6 +1,7 @@
 package myy803.springboot.trainee.model;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
+
+import java.util.List;
 
 @Entity
 @Table(name = "students")
@@ -41,6 +42,13 @@ public class Student {
     @Column(name = "looking_for_traineeship")
     private boolean lookingForTraineeship;
 
+    @OneToMany(
+            mappedBy = "applicantName",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private List<TraineePositions> traineeships;
+
     public Student() {
         super();
     }
@@ -59,7 +67,6 @@ public class Student {
 
     // Getters and Setters
     public Integer getStudentId() {return student_id;}
-    public void setStudentId(Integer student_id) {this.student_id = student_id;}
 
     public String getUsername() {return username;}
     public void setUsername(String username) {this.username = username;}
@@ -85,7 +92,11 @@ public class Student {
     public boolean isLookingForTraineeship() {return lookingForTraineeship;}
     public void setLookingForTraineeship(boolean lookingForTraineeship) {this.lookingForTraineeship = lookingForTraineeship;}
 
+    public List<TraineePositions> getTraineeships() {return traineeships;}
+    public void setTraineeships(List<TraineePositions> traineeships) {this.traineeships = traineeships;}
 
 
-
+    public void addTraineeship(TraineePositions position) {
+        traineeships.add(position);
+    }
 }

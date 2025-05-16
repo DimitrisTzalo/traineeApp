@@ -1,9 +1,9 @@
 package myy803.springboot.trainee.controller;
 
+import myy803.springboot.trainee.model.TraineePositions;
 import myy803.springboot.trainee.model.User;
 import myy803.springboot.trainee.repository.StudentRepo;
 import myy803.springboot.trainee.repository.UserDAO;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,9 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import myy803.springboot.trainee.model.Student;
-import myy803.springboot.trainee.service.UserService;
 import myy803.springboot.trainee.service.StudentService;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -35,6 +36,7 @@ public class StudentController {
 
         Student student = studentService.getStudentProfile(username);
 
+        System.out.println(student);
 
 
         if (!studentRepo.existsByUsername(username)) {
@@ -81,5 +83,34 @@ public class StudentController {
         model.addAttribute("successMessage", "Profile saved successfully!");
         return "student/dashboard";
     }
+
+    @RequestMapping("/student/traineeship_positions")
+    public String listPositions(Model model) {
+
+
+        List<TraineePositions> availableTraineeships = studentService.getAllTraineeships();
+
+        if(availableTraineeships.isEmpty()) {
+            model.addAttribute("errorMessage", "No available traineeships at the moment.");
+        } else {
+            model.addAttribute("successMessage", "Available traineeships:");
+        }
+
+        model.addAttribute("availableTraineeships", availableTraineeships);
+        return "student/traineeship_positions";
+    }
+
+    @RequestMapping("/student/applyToTraineeship")
+    public String applyToTraineeship(@RequestParam("selected_position_id") Integer id, Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Student student = studentService.getStudentProfile(username);
+
+
+        studentService.applyToTraineeship(username, id); //to id na einai tou traineeship
+
+
+        return "student/traineeship_positions";
+    };
+
 
 }

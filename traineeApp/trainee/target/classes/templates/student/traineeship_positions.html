@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>Positions Directory</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h3>Positions Directory</h3>
+    <hr>
+    <div th:if="${availableTraineeships.empty}">
+        <p>No positions available at the moment.</p>
+    </div>
+
+    <div th:unless="${availableTraineeships.empty}">
+        <p>There are positions available! t.</p>
+    </div>
+    <a th:href="@{/student/dashboard}" class="btn btn-primary ml-2">Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>

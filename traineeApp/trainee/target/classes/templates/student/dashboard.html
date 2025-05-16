@@ -14,7 +14,7 @@
 
 <body>
 
-<div class="container">
+<a class="container">
 
     <div th:if="${welcomeMessage}" class="alert alert-success alert-dismissible fade show">
         <span th:text="${welcomeMessage}">Welcome to our App!<br>Please fill your data!</span>
@@ -43,6 +43,11 @@
     	<a th:href="@{/}" class="btn btn-primary btn-sm mb-3">Home</a>
     	<a th:href="@{/logout}" class="btn btn-danger btn-sm mb-3">Logout</a>
         <a th:href="@{/student/profile}" class="btn btn-primary btn-sm mb-3">My profile</a>
+
+        <a th:if="${student.lookingForTraineeship}">
+            <a th:href="@{/student/traineeship_positions}" class="btn btn-primary btn-sm mb-3">Traineeship Positions</a>
+        </a>
+
 
 
     </p>
