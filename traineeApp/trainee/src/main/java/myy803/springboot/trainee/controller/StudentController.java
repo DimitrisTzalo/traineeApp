@@ -1,6 +1,6 @@
 package myy803.springboot.trainee.controller;
 
-import myy803.springboot.trainee.model.TraineePositions;
+import myy803.springboot.trainee.model.TraineePosition;
 import myy803.springboot.trainee.model.User;
 import myy803.springboot.trainee.repository.StudentRepo;
 import myy803.springboot.trainee.repository.UserDAO;
@@ -86,9 +86,7 @@ public class StudentController {
 
     @RequestMapping("/student/traineeship_positions")
     public String listPositions(Model model) {
-
-
-        List<TraineePositions> availableTraineeships = studentService.getAllTraineeships();
+        List<TraineePosition> availableTraineeships = studentService.getAllTraineeships();
 
         if(availableTraineeships.isEmpty()) {
             model.addAttribute("errorMessage", "No available traineeships at the moment.");

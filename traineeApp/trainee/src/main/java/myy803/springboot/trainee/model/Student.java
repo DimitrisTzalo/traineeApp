@@ -42,12 +42,8 @@ public class Student {
     @Column(name = "looking_for_traineeship")
     private boolean lookingForTraineeship;
 
-    @OneToMany(
-            mappedBy = "applicantName",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY
-    )
-    private List<TraineePositions> traineeships;
+    @OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TraineePosition> traineeships;
 
     public Student() {
         super();
@@ -92,11 +88,11 @@ public class Student {
     public boolean isLookingForTraineeship() {return lookingForTraineeship;}
     public void setLookingForTraineeship(boolean lookingForTraineeship) {this.lookingForTraineeship = lookingForTraineeship;}
 
-    public List<TraineePositions> getTraineeships() {return traineeships;}
-    public void setTraineeships(List<TraineePositions> traineeships) {this.traineeships = traineeships;}
+    public List<TraineePosition> getTraineeships() {return traineeships;}
+    public void setTraineeships(List<TraineePosition> traineeships) {this.traineeships = traineeships;}
 
 
-    public void addTraineeship(TraineePositions position) {
+    public void addTraineeship(TraineePosition position) {
         traineeships.add(position);
     }
 }

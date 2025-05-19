@@ -30,6 +30,12 @@ public class User implements UserDetails{
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private Student student;
+
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	private Company company;
+
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	private Professor professor;
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -78,6 +84,18 @@ public class User implements UserDetails{
 	public void setStudent(Student student) {
 		this.student = student;
 		student.setUser(this); // Ensure bidirectional relationship
+	}
+
+	public Company getCompany() {return company;}
+	public void setCompany(Company company) {
+		this.company = company;
+		company.setUser(this);
+	}
+
+	public Professor getProfessor() {return professor;}
+	public void setProfessor(Professor professor) {
+		this.professor = professor;
+		professor.setUser(this);
 	}
 
 

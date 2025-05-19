@@ -1,9 +1,9 @@
 package myy803.springboot.trainee.service;
 
 import myy803.springboot.trainee.model.Student;
-import myy803.springboot.trainee.model.TraineePositions;
+import myy803.springboot.trainee.model.TraineePosition;
 import myy803.springboot.trainee.repository.StudentRepo;
-import myy803.springboot.trainee.repository.TraineePositionsRepo;
+import myy803.springboot.trainee.repository.TraineePositionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,7 +22,7 @@ public class StudentServiceImpl implements StudentService {
     private StudentRepo studentRepo;
 
     @Autowired
-    private TraineePositionsRepo traineePositionsRepo;
+    private TraineePositionRepo traineePositionRepo;
 
     @Override
     public void saveProfile(Student student) {
@@ -52,13 +52,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<TraineePositions> getAllTraineeships() {
-        List<TraineePositions> allPositions = traineePositionsRepo.findAll();
+    public List<TraineePosition> getAllTraineeships() {
+        List<TraineePosition> allPositions = traineePositionRepo.findAll();
 
-        List<TraineePositions> availablePositions = new ArrayList<TraineePositions>();
-        for(TraineePositions position : allPositions) {
+        List<TraineePosition> availablePositions = new ArrayList<TraineePosition>();
+        for(TraineePosition position : allPositions) {
 
-            if(position.getApplicantName() == null)
+            if (!position.isAssigned())
                 availablePositions.add(position);
         }
 
@@ -68,12 +68,12 @@ public class StudentServiceImpl implements StudentService {
 
     public void applyToTraineeship(String username, Integer traineeshipId) {
 
-        TraineePositions positions = new TraineePositions();
+        TraineePosition positions = new TraineePosition();
 
         Optional<Student> optionalStudent = studentRepo.findByUsername(username);
-        Optional<TraineePositions> optionalTraineePositions = traineePositionsRepo.findByPositionId(traineeshipId);
+        Optional<TraineePosition> optionalTraineePositions = traineePositionRepo.findByPositionId(traineeshipId);
 
-        positions.setApplicantName(optionalStudent.get());
+        positions.setApplicant(optionalStudent.get());
         positions.setDescription(optionalTraineePositions.get().getDescription());
 
         optionalStudent.get().addTraineeship(positions);

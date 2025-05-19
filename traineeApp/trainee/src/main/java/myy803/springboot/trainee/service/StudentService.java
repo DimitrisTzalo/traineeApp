@@ -2,7 +2,7 @@ package myy803.springboot.trainee.service;
 
 
 import myy803.springboot.trainee.model.Student;
-import myy803.springboot.trainee.model.TraineePositions;
+import myy803.springboot.trainee.model.TraineePosition;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,5 +17,5 @@ public interface StudentService {
     void applyToTraineeship(String username, Integer studentId);
 
 
-    List<TraineePositions> getAllTraineeships();
+    List<TraineePosition> getAllTraineeships();
 }

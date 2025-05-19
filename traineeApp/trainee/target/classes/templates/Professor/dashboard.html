@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-	<title>Student Dashboard</title>
+    <title>Professor Dashboard</title>
 </head>
 
 
@@ -28,7 +28,7 @@
         </button>
     </div>
 
-    <h2>Welcome <span th:text="${student.studentName}"></span> to Student Dashboard</h2>
+    <h2>Welcome <span th:text="${professor.professorName}"></span> to Professor Dashboard</h2>
 
 
 
@@ -37,22 +37,19 @@
 
 
 
-	<br> <br> <hr> <br> <br>
+    <br> <br> <hr> <br> <br>
 
     <p>
-    	<a th:href="@{/}" class="btn btn-primary btn-sm mb-3">Home</a>
-    	<a th:href="@{/logout}" class="btn btn-danger btn-sm mb-3">Logout</a>
-        <a th:href="@{/student/profile}" class="btn btn-primary btn-sm mb-3">My profile</a>
-
-        <a th:if="${student.lookingForTraineeship}">
-            <a th:href="@{/student/traineeship_positions}" class="btn btn-primary btn-sm mb-3">Traineeship Positions</a>
-        </a>
+        <a th:href="@{/}" class="btn btn-primary btn-sm mb-3">Home</a>
+        <a th:href="@{/logout}" class="btn btn-danger btn-sm mb-3">Logout</a>
+        <a th:href="@{/professor/profile}" class="btn btn-primary btn-sm mb-3">My profile</a>
+        <a th:href="@{/professor/assigned_positions}" class="btn btn-primary btn-sm mb-3">Your assigned Positions</a>
 
 
 
     </p>
 
-</a>
+    </a>
 
 
 
