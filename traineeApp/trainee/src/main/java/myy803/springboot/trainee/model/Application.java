@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 public class Application {
 
     @Id
-    @Column(name="application_id")
+    @Column(nullable = false, name="application_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer application_id;
 

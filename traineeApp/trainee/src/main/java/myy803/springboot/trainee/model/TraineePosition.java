@@ -45,6 +45,9 @@ public class TraineePosition {
     @Column(name = "to_date", nullable = false)
     private LocalDate toDate;
 
+    @Column(name = "location", nullable = false)
+    private String location;
+
     @Column(name = "topics")
     private String topics;
 
@@ -89,6 +92,9 @@ public class TraineePosition {
 
     public LocalDate getToDate() { return toDate; }
     public void setToDate(LocalDate toDate) { this.toDate = toDate; }
+
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
 
     public String getTopics() { return topics; }
     public void setTopics(String topics) { this.topics = topics; }

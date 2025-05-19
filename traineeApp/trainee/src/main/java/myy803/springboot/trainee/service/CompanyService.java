@@ -12,11 +12,14 @@ public interface CompanyService {
 
     public void saveProfile(Company company);
     public Company getCompanyProfile(String username);
+    List<TraineePosition> getCompanyPositions(String username);
+    void addPosition(String username, TraineePosition position);
+
 
     /*
-    void addTraineeship(TraineePosition position);
 
-    List<TraineePosition> getAllTraineeships();
+
+
 
     TraineePosition getTraineeshipById(Integer id);
 

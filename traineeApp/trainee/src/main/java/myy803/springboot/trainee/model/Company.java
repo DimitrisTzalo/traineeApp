@@ -58,4 +58,5 @@ public class Company {
     public List<TraineePosition> getCompanyPositions() {return companyPositions;}
     public void setCompanyPositions(List<TraineePosition> companyPositions) {this.companyPositions = companyPositions;}
 
+    public void addPosition(TraineePosition position) {companyPositions.add(position);}
 }

@@ -94,17 +94,22 @@ public class StudentController {
             model.addAttribute("successMessage", "Available traineeships:");
         }
 
-        model.addAttribute("availableTraineeships", availableTraineeships);
-        return "student/traineeship_positions";
+        model.addAttribute("traineePositions", availableTraineeships);
+        return "applytoTraineeship";
     }
 
     @RequestMapping("/student/applyToTraineeship")
-    public String applyToTraineeship(@RequestParam("selected_position_id") Integer position_id, Model model) {
+    public String applyToTraineeship(@RequestParam(value = "selected_position_id", required = false) Integer position_id, Model model) {
+        if (position_id == null) {
+            model.addAttribute("errorMessage", "No traineeship position was selected.");
+            return "student/traineeship_positions"; // Redirect to re-render the list
+        }
+
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
 
         studentService.applyToTraineeship(username, position_id); //to id na einai tou traineeship
-
+        model.addAttribute("message", "Application submitted successfully!");
 
         return "student/traineeship_positions";
     };

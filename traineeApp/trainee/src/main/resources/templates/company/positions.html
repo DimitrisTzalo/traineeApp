@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Student's Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+
+    <h4 class="mb-4">Your Trainee Positions</h4>
+
+    <div id="positionDetails">
+        <div th:if="${#lists.isEmpty(positions)}">
+            <p>You haven't uploaded any Traineeship positions yet.</p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(positions)}">
+            <p>Here are your uploaded traineeship positions:</p>
+
+            <ul class="list-group mb-4">
+                <li class="list-group-item" th:each="position : ${positions}">
+                    <strong th:text="${position.title}">Position Title</strong><br>
+                    <span th:text="'Description: ' + ${position.description}">Description</span><br>
+                    <span th:text="'From: ' + ${position.fromDate} + ' To: ' + ${position.toDate}">Date range</span><br>
+                    <span th:text="'Location: ' + ${position.location}">Location</span><br>
+                    <span th:text="'Skills: ' + ${position.skills}">Skills</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <button type="button" id="addBtn" class="btn btn-primary" onclick="showAddForm()">Add Position</button>
+        <button type="button" id="viewBtn" class="btn btn-secondary" onclick="hideAddForm()" style="display: none;">View Positions</button>
+        <a th:href="@{/company/dashboard}" class="btn btn-outline-secondary ml-2">Back to Dashboard</a>
+    </div>
+
+
+    <div id="addForm" style="display: none;">
+        <form th:action="@{/company/add_position}" th:object="${traineePosition}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <div class="form-group">
+                <label for="title">Position Title</label>
+                <input type="text" id="title" th:field="*{title}" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" th:field="*{description}" class="form-control" rows="3" required></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="fromDate">From Date</label>
+                    <input type="date" id="fromDate" th:field="*{fromDate}" class="form-control" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="toDate">To Date</label>
+                    <input type="date" id="toDate" th:field="*{toDate}" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" th:field="*{location}" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="skills">Required Skills</label>
+                <input type="text" id="skills" th:field="*{skills}" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="topics">Topics</label>
+                <input type="text" id="topics" th:field="*{topics}" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-success" onclick="this.disabled = true; this.form.submit();">Upload Position</button>
+
+        </form>
+    </div>
+
+</div>
+
+
+<script>
+    function showAddForm() {
+        document.getElementById('addForm').style.display = 'block';
+        document.getElementById('positionDetails').style.display = 'none';
+        document.getElementById('addBtn').style.display = 'none';
+        document.getElementById('viewBtn').style.display = 'inline-block';
+    }
+
+    function hideAddForm() {
+        document.getElementById('addForm').style.display = 'none';
+        document.getElementById('positionDetails').style.display = 'block';
+        document.getElementById('addBtn').style.display = 'inline-block';
+        document.getElementById('viewBtn').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>

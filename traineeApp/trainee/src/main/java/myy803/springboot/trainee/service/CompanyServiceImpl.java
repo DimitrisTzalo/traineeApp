@@ -47,5 +47,25 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepo.findByUsername(username).orElse(new Company(username));
     }
 
+    @Override
+    public List<TraineePosition> getCompanyPositions(String username) {
+        List<TraineePosition> positions = new ArrayList<>();
+        Optional<Company> company = companyRepo.findByUsername(username);
+        if (company.isPresent()) {
+            positions = company.get().getCompanyPositions();
+        }
+        return positions;
+    }
+
+    @Override
+    public void addPosition(String username, TraineePosition position) {
+       Optional<Company> company = companyRepo.findByUsername(username);
+        if (company.isPresent()) {
+            position.setCompany(company.get());
+            traineePositionRepo.save(position);
+        }
+
+    }
+
 
 }

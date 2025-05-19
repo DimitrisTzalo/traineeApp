@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import myy803.springboot.trainee.model.Company;
 import myy803.springboot.trainee.service.CompanyService;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -81,6 +82,28 @@ public class CompanyController {
         companyService.saveProfile(company);
         model.addAttribute("successMessage", "Profile saved successfully!");
         return "company/dashboard";
+    }
+
+    @RequestMapping("/company/positions")
+    public String getCompanyPositions(Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Company company = companyService.getCompanyProfile(username);
+        List<TraineePosition> positions = companyService.getCompanyPositions(username);
+
+        model.addAttribute("positions", positions);
+        model.addAttribute("traineePosition", new TraineePosition());
+
+        return "company/positions";
+    }
+
+    @RequestMapping("company/add_position")
+    public String addPosition(@ModelAttribute("traineePosition") TraineePosition traineePosition, Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        companyService.addPosition(username, traineePosition);
+        model.addAttribute("successMessage", "Successfully added position!");
+
+        return "redirect:/company/positions";
     }
 
 
