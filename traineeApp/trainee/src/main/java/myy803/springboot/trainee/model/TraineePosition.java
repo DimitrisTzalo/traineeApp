@@ -60,7 +60,6 @@ public class TraineePosition {
     @Column(name = "pass_fail_grade", nullable = false)
     private boolean passFailGrade;
 
-    // Constructors, Getters, Setters
 
     public TraineePosition() {}
 

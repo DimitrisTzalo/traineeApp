@@ -1,8 +1,10 @@
 package myy803.springboot.trainee.service;
 
 import myy803.springboot.trainee.model.Student;
+import myy803.springboot.trainee.model.Application;
 import myy803.springboot.trainee.model.TraineePosition;
 import myy803.springboot.trainee.repository.StudentRepo;
+import myy803.springboot.trainee.repository.ApplicationRepo;
 import myy803.springboot.trainee.repository.TraineePositionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,6 +25,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private TraineePositionRepo traineePositionRepo;
+
+    @Autowired
+    private ApplicationRepo applicationRepo;
 
     @Override
     public void saveProfile(Student student) {
@@ -51,7 +56,9 @@ public class StudentServiceImpl implements StudentService {
 
     }
 
+
     @Override
+
     public List<TraineePosition> getAllTraineeships() {
         List<TraineePosition> allPositions = traineePositionRepo.findAll();
 
@@ -65,20 +72,20 @@ public class StudentServiceImpl implements StudentService {
         return availablePositions;
 
     }
-
+    @Override
     public void applyToTraineeship(String username, Integer traineeshipId) {
 
-        TraineePosition positions = new TraineePosition();
+        Application application = new Application();
 
-        Optional<Student> optionalStudent = studentRepo.findByUsername(username);
-        Optional<TraineePosition> optionalTraineePositions = traineePositionRepo.findByPositionId(traineeshipId);
+        Optional<Student> applicant = studentRepo.findByUsername(username);
 
-        positions.setApplicant(optionalStudent.get());
-        positions.setDescription(optionalTraineePositions.get().getDescription());
+        Optional<TraineePosition> position = traineePositionRepo.findByPositionId(traineeshipId);
 
-        optionalStudent.get().addTraineeship(positions);
+        application.setApplicant(applicant.get());
+        application.setPosition(position.get());
+        applicant.get().getApplications().add(application);
 
-        studentRepo.save(optionalStudent.get());
+        studentRepo.save(applicant.get());
 
     }
 

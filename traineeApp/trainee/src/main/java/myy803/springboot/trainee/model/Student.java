@@ -43,7 +43,7 @@ public class Student {
     private boolean lookingForTraineeship;
 
     @OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<TraineePosition> traineeships;
+    private List<Application> applications;
 
     public Student() {
         super();
@@ -88,11 +88,9 @@ public class Student {
     public boolean isLookingForTraineeship() {return lookingForTraineeship;}
     public void setLookingForTraineeship(boolean lookingForTraineeship) {this.lookingForTraineeship = lookingForTraineeship;}
 
-    public List<TraineePosition> getTraineeships() {return traineeships;}
-    public void setTraineeships(List<TraineePosition> traineeships) {this.traineeships = traineeships;}
+    public List<Application> getApplications() {return applications;}
+    public void setApplications(List<Application> applications) {this.applications = applications;}
 
 
-    public void addTraineeship(TraineePosition position) {
-        traineeships.add(position);
-    }
+    public void addApplication(Application application) {applications.add(application); }
 }

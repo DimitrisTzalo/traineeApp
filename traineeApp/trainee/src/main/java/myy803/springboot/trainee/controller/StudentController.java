@@ -99,12 +99,11 @@ public class StudentController {
     }
 
     @RequestMapping("/student/applyToTraineeship")
-    public String applyToTraineeship(@RequestParam("selected_position_id") Integer id, Model model) {
+    public String applyToTraineeship(@RequestParam("selected_position_id") Integer position_id, Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Student student = studentService.getStudentProfile(username);
 
 
-        studentService.applyToTraineeship(username, id); //to id na einai tou traineeship
+        studentService.applyToTraineeship(username, position_id); //to id na einai tou traineeship
 
 
         return "student/traineeship_positions";
