@@ -1,7 +1,9 @@
 package myy803.springboot.trainee.controller;
 
+import myy803.springboot.trainee.model.Application;
 import myy803.springboot.trainee.model.TraineePosition;
 import myy803.springboot.trainee.model.User;
+import myy803.springboot.trainee.repository.ApplicationRepo;
 import myy803.springboot.trainee.repository.StudentRepo;
 import myy803.springboot.trainee.repository.UserDAO;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,8 +16,11 @@ import myy803.springboot.trainee.model.Student;
 import myy803.springboot.trainee.service.StudentService;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class StudentController {
@@ -25,6 +30,9 @@ public class StudentController {
 
     @Autowired
     StudentRepo studentRepo;
+
+    @Autowired
+    ApplicationRepo applicationRepo;
 
     @Autowired
     StudentService studentService;
@@ -86,32 +94,34 @@ public class StudentController {
 
     @RequestMapping("/student/traineeship_positions")
     public String listPositions(Model model) {
-        List<TraineePosition> availableTraineeships = studentService.getAllTraineeships();
-        System.out.println("### Found " + availableTraineeships.size() + " trainee positions");
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Student currentStudent = studentService.getStudentProfile(username);
 
-        if(availableTraineeships.isEmpty()) {
-            System.out.println("### No available traineeships");
-            model.addAttribute("errorMessage", "No available traineeships at the moment.");
-        } else {
-            model.addAttribute("successMessage", "Available traineeships:");
+        List<TraineePosition> positions = studentService.getAllTraineeships();
+        List<Application> studentApplications = applicationRepo.findByApplicant_Username(username);
+
+        Set<Integer> appliedPositionIds = new HashSet<>();
+        for (Application app : studentApplications) {
+            appliedPositionIds.add(app.getPosition().getPositionId());
         }
 
-        model.addAttribute("availableTraineeships", availableTraineeships);
+
+        model.addAttribute("availableTraineeships", positions);
+        model.addAttribute("currentStudent", currentStudent);
+        model.addAttribute("appliedPositionIds", appliedPositionIds);
+
         return "student/traineeship_positions";
+
     }
 
     @RequestMapping("/student/applyToTraineeship")
     public String applyToTraineeship(@RequestParam(value = "selected_position_id", required = false) Integer position_id, Model model) {
-        if (position_id == null) {
-            model.addAttribute("errorMessage", "No traineeship position was selected.");
-            return "student/traineeship_positions"; // Redirect to re-render the list
-        }
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
 
-        studentService.applyToTraineeship(username, position_id); //to id na einai tou traineeship
-        model.addAttribute("message", "Application submitted successfully!");
+        studentService.applyToTraineeship(username, position_id);
+        model.addAttribute("successMessage", "Application submitted successfully!");
 
         return "redirect:/student/traineeship_positions";
     };

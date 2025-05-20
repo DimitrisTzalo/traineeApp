@@ -41,13 +41,21 @@
                 <td th:text="${traineePosition.location}">Location</td>
                 <td th:text="${traineePosition.description}">Description</td>
 
+
                 <td>
-                    <form th:action="@{/student/applyToTraineeship}" method="post">
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <input type="hidden" name="selected_position_id" th:value="${traineePosition.positionId}" />
-                        <button type="submit" class="btn btn-success btn-sm">Apply</button>
-                    </form>
+                    <div th:if="${appliedPositionIds.contains(traineePosition.positionId)}">
+                        <p class="text-danger font-weight-bold">Waiting for response</p>
+                    </div>
+                    <div th:unless="${appliedPositionIds.contains(traineePosition.positionId)}">
+                        <form th:action="@{/student/applyToTraineeship}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <input type="hidden" name="selected_position_id" th:value="${traineePosition.positionId}" />
+                            <button type="submit" class="btn btn-success btn-sm">Apply</button>
+                        </form>
+                    </div>
                 </td>
+
+
             </tr>
             </tbody>
         </table>

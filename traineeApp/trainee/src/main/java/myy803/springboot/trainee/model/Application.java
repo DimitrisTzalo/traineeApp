@@ -13,7 +13,7 @@ public class Application {
     private Integer application_id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "student_username")
+    @JoinColumn(name = "student_username", referencedColumnName = "username")
     private Student applicant;
 
     @ManyToOne(fetch = FetchType.EAGER)
