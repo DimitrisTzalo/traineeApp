@@ -28,6 +28,7 @@ public class Committee {
 
 
 
+
     public List<TraineePosition> getPositions() {return positions;}
     public void setPositions(List<TraineePosition> positions) {this.positions = positions;}
 

@@ -51,11 +51,12 @@ public class CommitteeServiceImpl implements CommitteeService {
 
     @Override
     public List<Application> getApplicationsForAvailablePositions() {
-        List<TraineePosition> allPositions = traineePositionRepo.findAll();
+        List<TraineePosition> availablePositions = getAvailableTraineeships();
         List<Application> applications = new ArrayList<>();
 
-        for (TraineePosition position : allPositions) {
+        for (TraineePosition position : availablePositions) {
             if (!position.isAssigned()) {
+
                 List<Application> apps = applicationRepo.findByPosition_PositionId(position.getPositionId());
                 applications.addAll(apps);
             }
@@ -63,5 +64,17 @@ public class CommitteeServiceImpl implements CommitteeService {
 
         return applications;
     }
+
+    public List<TraineePosition> getAvailableTraineeships() {
+        List<TraineePosition> allPositions = traineePositionRepo.findAll();
+        List<TraineePosition> availablePositions = new ArrayList<TraineePosition>();
+        for(TraineePosition position : allPositions) {
+
+            if (!position.isAssigned())
+                availablePositions.add(position);
+        }
+        return availablePositions;
+    }
+
 
 }

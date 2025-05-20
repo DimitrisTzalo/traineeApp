@@ -34,6 +34,8 @@ public class TraineePosition {
     @JoinColumn(name = "committee_username", referencedColumnName = "username")
     private Committee committee;
 
+
+
     //@OneToMany(mappedBy = "traineePosition", cascade = CascadeType.ALL)
     //private List<Evaluation> evaluations;
 

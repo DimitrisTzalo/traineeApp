@@ -1,8 +1,6 @@
 package myy803.springboot.trainee.controller;
 
-import myy803.springboot.trainee.model.Application;
-import myy803.springboot.trainee.model.TraineePosition;
-import myy803.springboot.trainee.model.User;
+import myy803.springboot.trainee.model.*;
 import myy803.springboot.trainee.repository.ApplicationRepo;
 import myy803.springboot.trainee.repository.CommitteeRepo;
 import myy803.springboot.trainee.repository.UserDAO;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import myy803.springboot.trainee.model.Committee;
 import myy803.springboot.trainee.service.CommitteeService;
 
 import java.util.HashSet;
@@ -88,11 +85,16 @@ public class CommitteeController {
         return "redirect:/committee/dashboard";
     }
 
-    @RequestMapping("/committee/traineeship_positions")
-    public String getTraineeshipPositions(Model model) {
+    @RequestMapping("/committee/available_positions")
+    public String listApplicants(Model model) {
+        List<TraineePosition> availablePositions = committeeService.getAvailableTraineeships();
         List<Application> applications = committeeService.getApplicationsForAvailablePositions();
+
+        model.addAttribute("availablePositions", availablePositions);
         model.addAttribute("applications", applications);
-        return "committee/traineeship_positions";
+
+        return "committee/available_positions";
+
     }
 
 }

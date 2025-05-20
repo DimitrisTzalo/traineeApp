@@ -1,6 +1,5 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,36 +10,77 @@
 
 <body>
 <div class="container mt-5">
-
     <h3>Applicants for Available Traineeship Positions</h3>
     <hr>
 
-    <div th:if="${#lists.isEmpty(applications)}">
-        <p>No applications found for available positions.</p>
+    <div th:if="${#lists.isEmpty(availablePositions)}">
+        <p>No available positions found.</p>
     </div>
 
-    <div th:unless="${#lists.isEmpty(applications)}">
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>Position Title</th>
-                <th>Company</th>
-                <th>Location</th>
-                <th>Applicant Name</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="application : ${applications}">
-                <td th:text="${application.position.title}">Position Title</td>
-                <td th:text="${application.position.company != null ? application.position.company.companyName : 'N/A'}">Company</td>
-                <td th:text="${application.position.location}">Location</td>
-                <td th:text="${application.applicant.studentName}">Student Name</td>
-            </tr>
-            </tbody>
-        </table>
+    <div th:unless="${#lists.isEmpty(availablePositions)}">
+        <div class="form-group">
+            <label for="positionSelect">Select an Available Trainee Position:</label>
+            <select class="form-control" id="positionSelect" onchange="filterByPosition()">
+                <option value="">-- Select a position --</option>
+                <option th:each="pos : ${availablePositions}"
+                        th:value="${pos.positionId}"
+                        th:text="${pos.title + ' (' + pos.company.companyName + ')'}">
+                </option>
+            </select>
+        </div>
+
+        <div id="applicantsSection" style="display: none;">
+            <table class="table table-bordered mt-4">
+                <thead>
+                <tr>
+                    <th>Position Title</th>
+                    <th>Company</th>
+                    <th>Location</th>
+                    <th>Applicant Name</th>
+                </tr>
+                </thead>
+                <tbody id="applicantsTable">
+                <tr th:each="applicantStudent : ${applications}"
+                    th:data-posid="${applicantStudent.position.positionId}">
+                    <td th:text="${applicantStudent.position.title}">Position Title</td>
+                    <td th:text="${applicantStudent.position.company != null ? applicantStudent.position.company.companyName : 'N/A'}">Company</td>
+                    <td th:text="${applicantStudent.position.location}">Location</td>
+                    <td th:text="${applicantStudent.applicant != null ? applicantStudent.applicant.studentName : 'Unknown'}">Student Name</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <a th:href="@{/committee/dashboard}" class="btn btn-secondary mt-3">Back to Dashboard</a>
 </div>
+
+<script>
+    function filterByPosition() {
+        const select = document.getElementById("positionSelect");
+        const selectedId = select.value;
+        const section = document.getElementById("applicantsSection");
+        const rows = document.querySelectorAll("#applicantsTable tr");
+
+        if (!selectedId) {
+            section.style.display = "none";
+            return;
+        }
+
+        let visible = false;
+        rows.forEach(row => {
+            const posId = row.getAttribute("data-posid");
+            if (posId === selectedId) {
+                row.style.display = "";
+                visible = true;
+            } else {
+                row.style.display = "none";
+            }
+        });
+
+        section.style.display = visible ? "block" : "none";
+    }
+</script>
+
 </body>
 </html>

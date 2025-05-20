@@ -13,5 +13,6 @@ public interface CommitteeService {
     public void saveProfile(Committee committee);
     public Committee getCommitteeProfile(String username);
     public List<Application> getApplicationsForAvailablePositions();
+    public List<TraineePosition> getAvailableTraineeships();
 
 }
