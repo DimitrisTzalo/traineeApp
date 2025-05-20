@@ -36,10 +36,10 @@
             </thead>
             <tbody>
             <tr th:each="traineePosition : ${availableTraineeships}">
-                <td th:text="${traineePosition.title}">Title</td>
+                <td th:text="${traineePosition.title != null ? traineePosition.title : 'N/A'}">Title</td>
                 <td th:text="${traineePosition.company != null ? traineePosition.company.companyName : 'N/A'}">Company</td>
-                <td th:text="${traineePosition.location}">Location</td>
-                <td th:text="${traineePosition.description}">Description</td>
+                <td th:text="${traineePosition.location != null ? traineePosition.location : 'N/A'}">Location</td>
+                <td th:text="${traineePosition.description != null ? traineePosition.description : 'N/A'}">Description</td>
 
 
                 <td>

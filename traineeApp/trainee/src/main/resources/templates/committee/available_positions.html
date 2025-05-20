@@ -41,10 +41,10 @@
                 </thead>
                 <tbody id="applicantsTable">
                 <tr th:each="applicantStudent : ${applications}"
-                    th:data-posid="${applicantStudent.position.positionId}">
-                    <td th:text="${applicantStudent.position.title}">Position Title</td>
+                    th:data-posid="${applicantStudent.position.positionId != null ? applicantStudent.position.positionId : ''}">
+                    <td th:text="${applicantStudent.position.title != null ? applicantStudent.position.title : 'N/A'}">Position Title</td>
                     <td th:text="${applicantStudent.position.company != null ? applicantStudent.position.company.companyName : 'N/A'}">Company</td>
-                    <td th:text="${applicantStudent.position.location}">Location</td>
+                    <td th:text="${applicantStudent.position.location != null ? applicantStudent.position.location : 'N/A'}">Location</td>
                     <td th:text="${applicantStudent.applicant != null ? applicantStudent.applicant.studentName : 'Unknown'}">Student Name</td>
                 </tr>
                 </tbody>
