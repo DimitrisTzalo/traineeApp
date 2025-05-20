@@ -36,6 +36,9 @@ public class User implements UserDetails{
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private Professor professor;
+
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	private Committee committee;
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -96,6 +99,12 @@ public class User implements UserDetails{
 	public void setProfessor(Professor professor) {
 		this.professor = professor;
 		professor.setUser(this);
+	}
+
+	public Committee getCommittee() {return committee;}
+	public void setCommittee(Committee committee) {
+		this.committee = committee;
+		committee.setUser(this);
 	}
 
 

@@ -1,9 +1,12 @@
 package myy803.springboot.trainee.controller;
 
+import myy803.springboot.trainee.model.Application;
 import myy803.springboot.trainee.model.TraineePosition;
 import myy803.springboot.trainee.model.User;
+import myy803.springboot.trainee.repository.ApplicationRepo;
 import myy803.springboot.trainee.repository.CompanyRepo;
 import myy803.springboot.trainee.repository.UserDAO;
+import myy803.springboot.trainee.service.ApplicationService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +34,8 @@ public class CompanyController {
     @Autowired
     CompanyService companyService;
 
+    @Autowired
+    ApplicationRepo applicationRepo;
     @RequestMapping("/company/dashboard")
     public String getCompanyDashboard(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -89,7 +94,6 @@ public class CompanyController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Company company = companyService.getCompanyProfile(username);
         List<TraineePosition> positions = companyService.getCompanyPositions(username);
-
         model.addAttribute("positions", positions);
         model.addAttribute("traineePosition", new TraineePosition());
 

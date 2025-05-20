@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Committee's Profile</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+
+  <h4 class="mb-4">Committee's Profile</h4>
+
+
+  <div id="profileDetails">
+    <ul class="list-group mb-4">
+      <li class="list-group-item"><strong>Full Name:</strong> <span th:text="${committee.committeeName}">John Doe</span></li>
+    </ul>
+  </div>
+
+
+  <div class="mb-4">
+    <button type="button" id="editBtn" class="btn btn-warning" onclick="showEditForm()">Edit Profile</button>
+    <button type="button" id="viewBtn" class="btn btn-secondary" onclick="hideEditForm()" style="display: none;">View Profile</button>
+    <a th:href="@{/committee/dashboard}" class="btn btn-primary ml-2">Back to Dashboard</a>
+  </div>
+
+  <div id="editForm" style="display: none;">
+    <form th:action="@{/committee/save}" th:object="${committee}" method="post">
+      <input type="hidden" th:field="*{username}" />
+
+      <div class="form-group">
+        <label for="committeeName">Full Name</label>
+        <input type="text" id="committeeName" th:field="*{committeeName}" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-success">Save Changes</button>
+    </form>
+  </div>
+
+</div>
+
+
+<script>
+  function showEditForm() {
+    document.getElementById('editForm').style.display = 'block';
+    document.getElementById('profileDetails').style.display = 'none';
+    document.getElementById('editBtn').style.display = 'none';
+    document.getElementById('viewBtn').style.display = 'inline-block';
+  }
+
+  function hideEditForm() {
+    document.getElementById('editForm').style.display = 'none';
+    document.getElementById('profileDetails').style.display = 'block';
+    document.getElementById('editBtn').style.display = 'inline-block';
+    document.getElementById('viewBtn').style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
