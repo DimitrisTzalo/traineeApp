@@ -37,9 +37,10 @@
             <tbody>
             <tr th:each="traineePosition : ${availableTraineeships}">
                 <td th:text="${traineePosition.title}">Title</td>
-                <td th:text="${traineePosition.company.name}">Company Name</td>
+                <td th:text="${traineePosition.company != null ? traineePosition.company.companyName : 'N/A'}">Company</td>
                 <td th:text="${traineePosition.location}">Location</td>
                 <td th:text="${traineePosition.description}">Description</td>
+
                 <td>
                     <form th:action="@{/student/applyToTraineeship}" method="post">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />

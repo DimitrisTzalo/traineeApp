@@ -87,15 +87,17 @@ public class StudentController {
     @RequestMapping("/student/traineeship_positions")
     public String listPositions(Model model) {
         List<TraineePosition> availableTraineeships = studentService.getAllTraineeships();
+        System.out.println("### Found " + availableTraineeships.size() + " trainee positions");
 
         if(availableTraineeships.isEmpty()) {
+            System.out.println("### No available traineeships");
             model.addAttribute("errorMessage", "No available traineeships at the moment.");
         } else {
             model.addAttribute("successMessage", "Available traineeships:");
         }
 
-        model.addAttribute("traineePositions", availableTraineeships);
-        return "applytoTraineeship";
+        model.addAttribute("availableTraineeships", availableTraineeships);
+        return "student/traineeship_positions";
     }
 
     @RequestMapping("/student/applyToTraineeship")
@@ -111,7 +113,7 @@ public class StudentController {
         studentService.applyToTraineeship(username, position_id); //to id na einai tou traineeship
         model.addAttribute("message", "Application submitted successfully!");
 
-        return "student/traineeship_positions";
+        return "redirect:/student/traineeship_positions";
     };
 
 
