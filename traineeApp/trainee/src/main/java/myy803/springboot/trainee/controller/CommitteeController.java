@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import myy803.springboot.trainee.model.Committee;
 import myy803.springboot.trainee.service.CommitteeService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashSet;
 import java.util.List;
@@ -31,6 +30,8 @@ public class CommitteeController {
 
     @Autowired
     CommitteeService committeeService;
+    @Autowired
+    private ApplicationRepo applicationRepo;
 
     @RequestMapping("/committee/dashboard")
     public String getCommitteeDashboard(Model model) {
@@ -87,5 +88,11 @@ public class CommitteeController {
         return "redirect:/committee/dashboard";
     }
 
+    @RequestMapping("/committee/traineeship_positions")
+    public String getTraineeshipPositions(Model model) {
+        List<Application> applications = committeeService.getApplicationsForAvailablePositions();
+        model.addAttribute("applications", applications);
+        return "committee/traineeship_positions";
+    }
 
 }

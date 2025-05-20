@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <title>Applicants for Available Traineeships</title>
+</head>
+
+<body>
+<div class="container mt-5">
+
+    <h3>Applicants for Available Traineeship Positions</h3>
+    <hr>
+
+    <div th:if="${#lists.isEmpty(applications)}">
+        <p>No applications found for available positions.</p>
+    </div>
+
+    <div th:unless="${#lists.isEmpty(applications)}">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Position Title</th>
+                <th>Company</th>
+                <th>Location</th>
+                <th>Applicant Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="application : ${applications}">
+                <td th:text="${application.position.title}">Position Title</td>
+                <td th:text="${application.position.company != null ? application.position.company.companyName : 'N/A'}">Company</td>
+                <td th:text="${application.position.location}">Location</td>
+                <td th:text="${application.applicant.studentName}">Student Name</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a th:href="@{/committee/dashboard}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+</div>
+</body>
+</html>

@@ -23,6 +23,13 @@ public class Committee {
     @Column(nullable = false, name = "committee_name")
     private String committeeName;
 
+    @OneToMany(mappedBy = "committee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TraineePosition> positions;
+
+
+
+    public List<TraineePosition> getPositions() {return positions;}
+    public void setPositions(List<TraineePosition> positions) {this.positions = positions;}
 
     public Committee() {
         super();

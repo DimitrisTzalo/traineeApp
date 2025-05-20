@@ -48,4 +48,20 @@ public class CommitteeServiceImpl implements CommitteeService {
     public Committee getCommitteeProfile(String username) {
         return committeeRepo.findByUsername(username).orElse(new Committee(username));
     }
+
+    @Override
+    public List<Application> getApplicationsForAvailablePositions() {
+        List<TraineePosition> allPositions = traineePositionRepo.findAll();
+        List<Application> applications = new ArrayList<>();
+
+        for (TraineePosition position : allPositions) {
+            if (!position.isAssigned()) {
+                List<Application> apps = applicationRepo.findByPosition_PositionId(position.getPositionId());
+                applications.addAll(apps);
+            }
+        }
+
+        return applications;
+    }
+
 }

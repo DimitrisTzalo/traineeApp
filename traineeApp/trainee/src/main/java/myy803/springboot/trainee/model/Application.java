@@ -20,6 +20,7 @@ public class Application {
     @JoinColumn(name = "position_id")
     private TraineePosition position;
 
+
     public Application() {super();}
 
     public Application(Student applicant, TraineePosition position) {
@@ -36,6 +37,5 @@ public class Application {
 
     public TraineePosition getPosition() {return position;}
     public void setPosition(TraineePosition position) {this.position = position;}
-
 
 }

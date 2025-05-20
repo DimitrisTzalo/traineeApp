@@ -30,6 +30,10 @@ public class TraineePosition {
     @JoinColumn(name = "company_id")
     private Company company;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "committee_username", referencedColumnName = "username")
+    private Committee committee;
+
     //@OneToMany(mappedBy = "traineePosition", cascade = CascadeType.ALL)
     //private List<Evaluation> evaluations;
 
@@ -106,4 +110,5 @@ public class TraineePosition {
     public void setAssigned(boolean isAssigned) { this.isAssigned = isAssigned; }
 
     public String getStudentLogBook() { return studentLogBook;}
+
 }
