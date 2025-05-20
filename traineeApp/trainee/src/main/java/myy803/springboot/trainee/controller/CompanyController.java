@@ -110,5 +110,14 @@ public class CompanyController {
         return "redirect:/company/positions";
     }
 
+    @RequestMapping("/company/delete_position")
+    public String deletePosition(@ModelAttribute("position") TraineePosition traineePosition, Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        companyService.deletePosition(username, traineePosition);
+        model.addAttribute("successMessage", "Successfully deleted position!");
+
+        return "redirect:/company/positions";
+    }
+
 
 }

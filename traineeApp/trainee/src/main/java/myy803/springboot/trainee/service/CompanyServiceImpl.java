@@ -1,8 +1,10 @@
 package myy803.springboot.trainee.service;
 
 
+import myy803.springboot.trainee.model.Application;
 import myy803.springboot.trainee.model.Company;
 import myy803.springboot.trainee.model.TraineePosition;
+import myy803.springboot.trainee.repository.ApplicationRepo;
 import myy803.springboot.trainee.repository.CompanyRepo;
 import myy803.springboot.trainee.repository.TraineePositionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
     private TraineePositionRepo traineePositionRepo;
+    @Autowired
+    private ApplicationRepo applicationRepo;
 
     @Override
     public void saveProfile(Company company) {
@@ -65,6 +69,18 @@ public class CompanyServiceImpl implements CompanyService {
             traineePositionRepo.save(position);
         }
 
+    }
+
+    @Override
+    public void deletePosition(String username, TraineePosition position) {
+        Optional<Company> company = companyRepo.findByUsername(username);
+        if (company.isPresent()) {
+
+            List<Application> relatedApplications = applicationRepo.findByPosition_PositionId(position.getPositionId());
+            applicationRepo.deleteAll(relatedApplications);
+
+            traineePositionRepo.delete(position);
+        }
     }
 
 

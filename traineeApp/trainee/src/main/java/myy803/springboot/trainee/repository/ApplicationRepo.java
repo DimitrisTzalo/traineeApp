@@ -10,6 +10,7 @@ public interface ApplicationRepo extends JpaRepository<Application, Integer> {
 
     Optional<Application> findByApplicant_UsernameAndPosition_PositionId(String username, Integer positionId);
 
+    List<Application> findByPosition_PositionId(Integer positionId);
 
     List<Application> findByApplicant_Username(String username);
 

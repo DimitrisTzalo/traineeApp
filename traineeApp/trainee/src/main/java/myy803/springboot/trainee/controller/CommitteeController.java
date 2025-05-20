@@ -86,4 +86,6 @@ public class CommitteeController {
         model.addAttribute("successMessage", "Profile saved successfully!");
         return "redirect:/committee/dashboard";
     }
+
+
 }

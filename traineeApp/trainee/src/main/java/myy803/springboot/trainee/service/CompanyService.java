@@ -14,6 +14,7 @@ public interface CompanyService {
     public Company getCompanyProfile(String username);
     List<TraineePosition> getCompanyPositions(String username);
     void addPosition(String username, TraineePosition position);
+    void deletePosition(String username, TraineePosition position);
 
 
     /*
