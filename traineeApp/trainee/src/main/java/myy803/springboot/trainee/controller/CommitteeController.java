@@ -1,5 +1,6 @@
 package myy803.springboot.trainee.controller;
 
+import myy803.springboot.trainee.formsdata.SearchForm;
 import myy803.springboot.trainee.model.*;
 import myy803.springboot.trainee.repository.ApplicationRepo;
 import myy803.springboot.trainee.repository.CommitteeRepo;
@@ -97,4 +98,14 @@ public class CommitteeController {
 
     }
 
+    @RequestMapping("/committee/match_student")
+    public String matchStudent(@ModelAttribute SearchForm searchForm, Model model) {
+        Integer studentId = searchForm.getStudentId();
+        String criteria = searchForm.getCriteria();
+
+        List<TraineePosition> results = committeeService.searchForStudent(studentId, criteria);
+        model.addAttribute("matchedPositions", results);
+
+        return "committee/match_student";
+    }
 }

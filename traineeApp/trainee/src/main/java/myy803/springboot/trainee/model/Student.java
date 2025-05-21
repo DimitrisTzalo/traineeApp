@@ -53,15 +53,9 @@ public class Student {
     }
 
 
-    public User getUser() {
-        return user;
-    }
+    public User getUser() {return user;}
+    public void setUser(User user) {this.user = user;}
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    // Getters and Setters
     public Integer getStudentId() {return student_id;}
 
     public String getUsername() {return username;}
@@ -93,4 +87,6 @@ public class Student {
 
 
     public void addApplication(Application application) {applications.add(application); }
+
+    public List<String> getInterestList() {return interests != null ? List.of(interests.split(",")) : List.of();}
 }

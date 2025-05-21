@@ -2,9 +2,13 @@ package myy803.springboot.trainee.service;
 
 import myy803.springboot.trainee.model.Committee;
 import myy803.springboot.trainee.model.Application;
+import myy803.springboot.trainee.model.Student;
 import myy803.springboot.trainee.model.TraineePosition;
+import myy803.springboot.trainee.model.strategies.InterestSearchStrategy;
+import myy803.springboot.trainee.model.strategies.TraineeshipSearchStrategy;
 import myy803.springboot.trainee.repository.CommitteeRepo;
 import myy803.springboot.trainee.repository.ApplicationRepo;
+import myy803.springboot.trainee.repository.StudentRepo;
 import myy803.springboot.trainee.repository.TraineePositionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,6 +32,9 @@ public class CommitteeServiceImpl implements CommitteeService {
 
     @Autowired
     private ApplicationRepo applicationRepo;
+
+    @Autowired
+    private StudentRepo studentRepo;
 
     @Override
     public void saveProfile(Committee committee) {
@@ -76,5 +83,28 @@ public class CommitteeServiceImpl implements CommitteeService {
         return availablePositions;
     }
 
+    @Override
+    public List<TraineePosition> searchForStudent(Integer studentId, String criteria) {
+        Student student = studentRepo.findById(studentId).orElseThrow();
+        List<TraineePosition> allPositions = traineePositionRepo.findAll();
+
+        TraineeshipSearchStrategy strategy;
+
+        switch (criteria) {
+            case "interest":
+                strategy = new InterestSearchStrategy();
+                break;
+//            case "location":
+//                strategy = new LocationSearchStrategy();
+//                break;
+//            case "both":
+//                strategy = new InterestAndLocationSearchStrategy();
+//                break;
+            default:
+                throw new IllegalArgumentException("Invalid search criteria");
+        }
+
+        return strategy.search(student, allPositions);
+    }
 
 }

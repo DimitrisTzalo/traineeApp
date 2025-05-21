@@ -8,5 +8,6 @@ public interface StudentRepo extends JpaRepository<Student, String> {
     Optional<Student> findByUsername(String username);
 
     boolean existsByUsername(String username);
+    Optional<Student> findById(Integer id);
 
 }

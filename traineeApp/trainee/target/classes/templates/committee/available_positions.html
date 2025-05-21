@@ -45,7 +45,10 @@
                     <td th:text="${applicantStudent.position.title != null ? applicantStudent.position.title : 'N/A'}">Position Title</td>
                     <td th:text="${applicantStudent.position.company != null ? applicantStudent.position.company.companyName : 'N/A'}">Company</td>
                     <td th:text="${applicantStudent.position.location != null ? applicantStudent.position.location : 'N/A'}">Location</td>
-                    <td th:text="${applicantStudent.applicant != null ? applicantStudent.applicant.studentName : 'Unknown'}">Student Name</td>
+                    <td>
+                        <span th:text="${applicantStudent.applicant != null ? applicantStudent.applicant.studentName : 'Unknown'}">Student Name</span>
+                        <a th:href="@{'/committee/match_student'}" class = "btn btn-sm btn-outline-primary ml-2">Match</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>

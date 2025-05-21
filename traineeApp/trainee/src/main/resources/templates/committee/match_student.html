@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Matching Traineeship Positions</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Matching Traineeship Positions</h2>
+    <hr>
+
+    <div th:if="${#lists.isEmpty(results)}">
+        <div class="alert alert-warning">No matching positions found for the selected criteria.</div>
+    </div>
+
+    <div th:unless="${#lists.isEmpty(results)}">
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <th>Position Title</th>
+                <th>Company</th>
+                <th>Location</th>
+                <th>Required Skills</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="pos : ${results}">
+                <td th:text="${pos.title}">Title</td>
+                <td th:text="${pos.company.companyName}">Company</td>
+                <td th:text="${pos.location}">Location</td>
+                <td th:text="${pos.requiredSkills}">Skills</td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <a th:href="@{/committee/available_positions}" class="btn btn-secondary mt-3">Back to Available Positions</a>
+    <a th:href="@{/committee/dashboard}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+</div>
+</body>
+</html>
