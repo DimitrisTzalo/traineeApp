@@ -7,6 +7,8 @@ import java.util.*;
 
 public class InterestSearchStrategy implements TraineeshipSearchStrategy {
 
+    private static final double SIMILARITY_THRESHOLD = 0.3;
+
     @Override
     public List<TraineePosition> search(Student student, List<TraineePosition> positions) {
         List<TraineePosition> result = new ArrayList<>();
@@ -16,39 +18,28 @@ public class InterestSearchStrategy implements TraineeshipSearchStrategy {
             return result;
         }
 
-        Map<TraineePosition, Integer> scoredPositions = new HashMap<>();
+        Set<String> studentInterestSet = new HashSet<>(studentInterests);
 
         for (TraineePosition pos : positions) {
             if (pos == null) continue;
 
-            List<String> positionInterests = pos.getSkillsList(); // skills used as "interests"
-            if (positionInterests == null || positionInterests.isEmpty()) continue;
+            List<String> positionTopics = pos.getSkillsList(); // skills treated as topics
+            if (positionTopics == null || positionTopics.isEmpty()) continue;
 
-            int score = 0;
+            Set<String> positionTopicSet = new HashSet<>(positionTopics);
 
-            for (String interest : positionInterests) {
-                if (interest == null) continue;
+            // Υπολογισμός Jaccard similarity
+            Set<String> intersection = new HashSet<>(studentInterestSet);
+            intersection.retainAll(positionTopicSet);
 
-                // Προσθέτει περισσότερους βαθμούς για απόλυτη ταύτιση
-                if (interest.equals(student.getInterests())) {
-                    score += 3;
-                } else if (studentInterests.contains(interest)) {
-                    score++;
-                }
+            Set<String> union = new HashSet<>(studentInterestSet);
+            union.addAll(positionTopicSet);
+
+            double similarity = union.isEmpty() ? 0 : (double) intersection.size() / union.size();
+
+            if (similarity > SIMILARITY_THRESHOLD) {
+                result.add(pos);
             }
-
-            if (score > 0) {
-                scoredPositions.put(pos, score);
-            }
-        }
-
-        // Ταξινόμηση με βάση το score (φθίνουσα σειρά)
-        List<Map.Entry<TraineePosition, Integer>> sortedEntries = new ArrayList<>(scoredPositions.entrySet());
-        sortedEntries.sort((e1, e2) -> Integer.compare(e2.getValue(), e1.getValue()));
-
-        // Τελικό αποτέλεσμα
-        for (Map.Entry<TraineePosition, Integer> entry : sortedEntries) {
-            result.add(entry.getKey());
         }
 
         return result;
