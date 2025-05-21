@@ -22,18 +22,22 @@ public class InterestAndLocationSearchStrategy implements TraineeshipSearchStrat
         }
 
         Set<String> studentInterestSet = new HashSet<>(studentInterests);
+        String mainInterest = student.getInterests();
+
+        Map<TraineePosition, Integer> scoredPositions = new HashMap<>();
 
         for (TraineePosition pos : positions) {
             if (pos == null) continue;
 
             String positionLocation = pos.getLocation();
-            if (!studentPreferredLocation.equals(positionLocation)) continue; // Φιλτράρισμα με βάση location
+            if (!studentPreferredLocation.equals(positionLocation)) continue;
 
-            List<String> positionTopics = pos.getSkillsList(); // Χρήση skills ως topics
+            List<String> positionTopics = pos.getSkillsList();
             if (positionTopics == null || positionTopics.isEmpty()) continue;
 
             Set<String> positionTopicSet = new HashSet<>(positionTopics);
 
+            // Jaccard similarity
             Set<String> intersection = new HashSet<>(studentInterestSet);
             intersection.retainAll(positionTopicSet);
 
@@ -43,8 +47,24 @@ public class InterestAndLocationSearchStrategy implements TraineeshipSearchStrat
             double similarity = union.isEmpty() ? 0 : (double) intersection.size() / union.size();
 
             if (similarity > SIMILARITY_THRESHOLD) {
-                result.add(pos);
+                int score = 0;
+
+                score += intersection.size(); // +1 για κάθε κοινό θέμα
+
+                if (mainInterest != null && positionTopicSet.contains(mainInterest)) {
+                    score += 3; // bonus για απόλυτη ταύτιση
+                }
+
+                scoredPositions.put(pos, score);
             }
+        }
+
+        // Ταξινόμηση κατά score φθίνοντα
+        List<Map.Entry<TraineePosition, Integer>> sortedEntries = new ArrayList<>(scoredPositions.entrySet());
+        sortedEntries.sort((e1, e2) -> Integer.compare(e2.getValue(), e1.getValue()));
+
+        for (Map.Entry<TraineePosition, Integer> entry : sortedEntries) {
+            result.add(entry.getKey());
         }
 
         return result;
