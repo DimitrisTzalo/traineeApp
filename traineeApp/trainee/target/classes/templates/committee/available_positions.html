@@ -11,8 +11,9 @@
 <body>
 <div class="container mt-5">
     <h3>Applicants for Available Traineeship Positions</h3>
-    <hr>
+    <p><strong>Searching for student:</strong> <span th:text="${username}">username</span></p>
 
+    <hr>
     <div th:if="${#lists.isEmpty(availablePositions)}">
         <p>No available positions found.</p>
     </div>
@@ -47,7 +48,8 @@
                     <td th:text="${applicantStudent.position.location != null ? applicantStudent.position.location : 'N/A'}">Location</td>
                     <td>
                         <span th:text="${applicantStudent.applicant != null ? applicantStudent.applicant.studentName : 'Unknown'}">Student Name</span>
-                        <a th:href="@{'/committee/match_student'}" class = "btn btn-sm btn-outline-primary ml-2">Match</a>
+                        <a th:href="@{'/committee/match_student'(selectedUsername=${applicantStudent.applicant.username})}"
+                           class="btn btn-sm btn-outline-primary ml-2">Match</a>
                     </td>
                 </tr>
                 </tbody>

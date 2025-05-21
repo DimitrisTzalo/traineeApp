@@ -113,4 +113,6 @@ public class TraineePosition {
 
     public String getStudentLogBook() { return studentLogBook;}
 
+    public List<String> getSkillsList(){return skills != null ? List.of(skills.split(",")) : List.of();}
+
 }

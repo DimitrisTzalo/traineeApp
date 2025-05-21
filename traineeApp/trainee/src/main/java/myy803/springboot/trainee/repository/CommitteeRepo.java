@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface CommitteeRepo extends JpaRepository<Committee, String> {
+public interface CommitteeRepo extends JpaRepository<Committee, Integer> {
 
     Optional<Committee> findByUsername(String username);
 

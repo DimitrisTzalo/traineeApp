@@ -4,7 +4,7 @@ import java.util.Optional;
 import myy803.springboot.trainee.model.Professor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProfessorRepo extends JpaRepository<Professor, String> {
+public interface ProfessorRepo extends JpaRepository<Professor, Integer> {
 
     Optional<Professor> findByUsername(String username);
 

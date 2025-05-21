@@ -5,7 +5,7 @@ import myy803.springboot.trainee.model.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface CompanyRepo  extends JpaRepository<Company, String> {
+public interface CompanyRepo  extends JpaRepository<Company, Integer> {
 
     Optional<Company> findByUsername(String username);
 

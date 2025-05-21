@@ -84,8 +84,10 @@ public class CommitteeServiceImpl implements CommitteeService {
     }
 
     @Override
-    public List<TraineePosition> searchForStudent(Integer studentId, String criteria) {
-        Student student = studentRepo.findById(studentId).orElseThrow();
+    public List<TraineePosition> searchForStudent(String username, String criteria) {
+        Student student = studentRepo.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Student not found with username: " + username));
+
         List<TraineePosition> allPositions = traineePositionRepo.findAll();
 
         TraineeshipSearchStrategy strategy;

@@ -5,20 +5,30 @@ import myy803.springboot.trainee.model.TraineePosition;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class InterestSearchStrategy implements TraineeshipSearchStrategy {
     @Override
     public List<TraineePosition> search(Student student, List<TraineePosition> positions) {
         List<TraineePosition> result = new ArrayList<>();
 
+        // Προστασία από null
         List<String> studentInterests = student.getInterestList();
-
+        if (studentInterests == null || studentInterests.isEmpty()) {
+            return result; // καμία αντιστοίχιση δυνατή
+        }
 
         for (TraineePosition pos : positions) {
-            boolean interestMatch = studentInterests.contains(pos.getSkills());
+            if (pos == null) continue;
 
-            if (interestMatch) {
-                result.add(pos);
+            List<String> positionInterests = pos.getSkillsList();
+            if (positionInterests == null || positionInterests.isEmpty()) continue;
+
+            for (String interest : positionInterests) {
+                if (interest != null && studentInterests.contains(interest)) {
+                    result.add(pos);
+                    break;
+                }
             }
         }
 

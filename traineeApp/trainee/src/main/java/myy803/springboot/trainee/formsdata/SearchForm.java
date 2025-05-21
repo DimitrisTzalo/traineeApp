@@ -1,17 +1,13 @@
 package myy803.springboot.trainee.formsdata;
 
 public class SearchForm {
-    private Integer studentId;
+    private String selectedUsername;
     private String criteria; // values: "location", "interest", "both"
 
     // Getters & Setters
-    public Integer getStudentId() {
-        return studentId;
-    }
+    public String getSelectedUsername() {return selectedUsername;}
 
-    public void setStudentId(Integer studentId) {
-        this.studentId = studentId;
-    }
+    public void setSelectedUsername(String studentUserName) {this.selectedUsername = studentUserName;}
 
     public String getCriteria() {
         return criteria;

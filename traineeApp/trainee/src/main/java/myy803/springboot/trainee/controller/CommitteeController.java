@@ -4,6 +4,7 @@ import myy803.springboot.trainee.formsdata.SearchForm;
 import myy803.springboot.trainee.model.*;
 import myy803.springboot.trainee.repository.ApplicationRepo;
 import myy803.springboot.trainee.repository.CommitteeRepo;
+import myy803.springboot.trainee.repository.StudentRepo;
 import myy803.springboot.trainee.repository.UserDAO;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.springframework.data.repository.util.ClassUtils.ifPresent;
+
 @Controller
 public class CommitteeController {
     @Autowired
@@ -25,6 +28,9 @@ public class CommitteeController {
 
     @Autowired
     CommitteeRepo committeeRepo;
+
+    @Autowired
+    StudentRepo studentRepo;
 
     @Autowired
     CommitteeService committeeService;
@@ -100,11 +106,20 @@ public class CommitteeController {
 
     @RequestMapping("/committee/match_student")
     public String matchStudent(@ModelAttribute SearchForm searchForm, Model model) {
-        Integer studentId = searchForm.getStudentId();
+        String username = searchForm.getSelectedUsername();
         String criteria = searchForm.getCriteria();
+        model.addAttribute("searchForm", searchForm);
+        model.addAttribute("username", username);
 
-        List<TraineePosition> results = committeeService.searchForStudent(studentId, criteria);
-        model.addAttribute("matchedPositions", results);
+        if (searchForm.getSelectedUsername() != null && !searchForm.getSelectedUsername().isBlank()) {
+            studentRepo.findByUsername(searchForm.getSelectedUsername())
+                    .ifPresent(student -> model.addAttribute("selectedStudent", student));
+        }
+
+        if (criteria != null && !criteria.isBlank()) {
+            List<TraineePosition> results = committeeService.searchForStudent(username, criteria);
+            model.addAttribute("results", results);
+        }
 
         return "committee/match_student";
     }

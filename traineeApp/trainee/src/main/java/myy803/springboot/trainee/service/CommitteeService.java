@@ -14,6 +14,6 @@ public interface CommitteeService {
     public Committee getCommitteeProfile(String username);
     public List<Application> getApplicationsForAvailablePositions();
     public List<TraineePosition> getAvailableTraineeships();
-    public List<TraineePosition> searchForStudent(Integer studentId, String criteria);
+    public List<TraineePosition> searchForStudent(String username, String criteria);
 
 }
