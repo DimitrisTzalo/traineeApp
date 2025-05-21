@@ -12,10 +12,10 @@ public class InterestSearchStrategy implements TraineeshipSearchStrategy {
     public List<TraineePosition> search(Student student, List<TraineePosition> positions) {
         List<TraineePosition> result = new ArrayList<>();
 
-        // Προστασία από null
+
         List<String> studentInterests = student.getInterestList();
         if (studentInterests == null || studentInterests.isEmpty()) {
-            return result; // καμία αντιστοίχιση δυνατή
+            return result;
         }
 
         for (TraineePosition pos : positions) {

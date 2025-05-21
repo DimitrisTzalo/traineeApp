@@ -119,6 +119,7 @@ public class CommitteeController {
         if (criteria != null && !criteria.isBlank()) {
             List<TraineePosition> results = committeeService.searchForStudent(username, criteria);
             model.addAttribute("results", results);
+            System.out.println("Results: " + results);
         }
 
         return "committee/match_student";
