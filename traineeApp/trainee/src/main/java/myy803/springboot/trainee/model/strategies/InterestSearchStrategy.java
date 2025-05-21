@@ -25,9 +25,13 @@ public class InterestSearchStrategy implements TraineeshipSearchStrategy {
             if (positionInterests == null || positionInterests.isEmpty()) continue;
 
             for (String interest : positionInterests) {
-                if (interest != null && studentInterests.contains(interest)) {
+                if(interest != null && interest.equals(student.getInterests())) {
                     result.add(pos);
-                    break;
+                    continue;
+                }
+                if (interest != null && studentInterests.contains(interest) && !result.contains(pos)) {
+                    result.add(pos);
+                    continue;
                 }
             }
         }

@@ -28,9 +28,13 @@ public class InterestAndLocationSearchStrategy implements TraineeshipSearchStrat
             String positionLocation = pos.getLocation();
 
             for (String interest : positionInterests) {
-                if (interest != null && studentInterests.contains(interest) && (studentPreferredLocation.equals(positionLocation))) {
+                if(interest != null && interest.equals(student.getInterests())) {
                     result.add(pos);
-                    break;
+                    continue;
+                }
+                if (interest != null && studentInterests.contains(interest) && (studentPreferredLocation.equals(positionLocation)) && !result.contains(pos)) {
+                    result.add(pos);
+                    continue;
                 }
             }
 

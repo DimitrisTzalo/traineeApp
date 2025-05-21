@@ -24,7 +24,7 @@ public class LocationSearchStrategy implements TraineeshipSearchStrategy{
 
             if (studentPreferredLocation.equals(positionLocation)) {
                 result.add(pos);
-                break;
+                continue;
             }
         }
 
