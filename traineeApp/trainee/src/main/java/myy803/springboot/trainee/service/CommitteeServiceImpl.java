@@ -4,7 +4,9 @@ import myy803.springboot.trainee.model.Committee;
 import myy803.springboot.trainee.model.Application;
 import myy803.springboot.trainee.model.Student;
 import myy803.springboot.trainee.model.TraineePosition;
+import myy803.springboot.trainee.model.strategies.InterestAndLocationSearchStrategy;
 import myy803.springboot.trainee.model.strategies.InterestSearchStrategy;
+import myy803.springboot.trainee.model.strategies.LocationSearchStrategy;
 import myy803.springboot.trainee.model.strategies.TraineeshipSearchStrategy;
 import myy803.springboot.trainee.repository.CommitteeRepo;
 import myy803.springboot.trainee.repository.ApplicationRepo;
@@ -96,12 +98,12 @@ public class CommitteeServiceImpl implements CommitteeService {
             case "interest":
                 strategy = new InterestSearchStrategy();
                 break;
-//            case "location":
-//                strategy = new LocationSearchStrategy();
-//                break;
-//            case "both":
-//                strategy = new InterestAndLocationSearchStrategy();
-//                break;
+            case "location":
+                strategy = new LocationSearchStrategy();
+                break;
+            case "both":
+                strategy = new InterestAndLocationSearchStrategy();
+                break;
             default:
                 throw new IllegalArgumentException("Invalid search criteria");
         }

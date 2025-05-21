@@ -33,47 +33,129 @@
     <div th:if="${results != null}">
 
         <hr>
-        <h4 class="mt-4">Applicant's interests</h4>
-        <ul class="list-unstyled">
-            <li th:each="interest : ${#strings.arraySplit(selectedStudent.interests, ',')}">
-                <span class="fs-5 fw-bold" th:text="${interest}">Interest</span>
-            </li>
-        </ul>
 
-        <hr>
-        <h4 class="mt-4">Matching Positions based on Applicant's interests:</h4>
+        <div th:if="${searchForm.criteria == 'interest'}">
+            <h4>Search by Interest</h4>
+            <h4 class="mt-4">Applicant's interests</h4>
+            <ul class="list-unstyled">
+                <li th:each="interest : ${#strings.arraySplit(selectedStudent.interests, ',')}">
+                    <span class="fs-5 fw-bold" th:text="${interest}">Interest</span>
+                </li>
+            </ul>
+            <h4 class="mt-4">Matching Positions based on Applicant's interests:</h4>
 
 
 
-        <div th:if="${#lists.isEmpty(results)}">
-            <div class="alert alert-warning mt-3">No matching positions found for the selected criteria.</div>
+            <div th:if="${#lists.isEmpty(results)}">
+                <div class="alert alert-warning mt-3">No matching positions found for the selected criteria.</div>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(results)}">
+                <table class="table table-bordered mt-3">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Title</th>
+                        <th>Company</th>
+                        <th>Location</th>
+                        <th>Required Skills</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="pos : ${results}">
+                        <td th:text="${pos.title}">Title</td>
+                        <td th:text="${pos.company.companyName}">Company</td>
+                        <td th:text="${pos.location}">Location</td>
+                        <td th:text="${pos.skills}">Skills</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        <div th:if="${searchForm.criteria == 'location'}">
+            <h4>Search by Preferred Location</h4>
+            <h4 class="mt-4">Applicant's Preferred Location</h4>
+            <ul class="list-unstyled">
+                <li th:each="location : ${#strings.arraySplit(selectedStudent.preferredLocation, ',')}">
+                    <span class="fs-5 fw-bold" th:text="${location}">Location</span>
+                </li>
+            </ul>
+            <h4 class="mt-4">Matching Positions based on Applicant's preferred location:</h4>
+
+
+
+            <div th:if="${#lists.isEmpty(results)}">
+                <div class="alert alert-warning mt-3">No matching positions found for the selected criteria.</div>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(results)}">
+                <table class="table table-bordered mt-3">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Title</th>
+                        <th>Company</th>
+                        <th>Location</th>
+                        <th>Required Skills</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="pos : ${results}">
+                        <td th:text="${pos.title}">Title</td>
+                        <td th:text="${pos.company.companyName}">Company</td>
+                        <td th:text="${pos.location}">Location</td>
+                        <td th:text="${pos.skills}">Skills</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div th:unless="${#lists.isEmpty(results)}">
-            <table class="table table-bordered mt-3">
-                <thead class="thead-dark">
-                <tr>
-                    <th>Title</th>
-                    <th>Company</th>
-                    <th>Location</th>
-                    <th>Required Skills</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="pos : ${results}">
-                    <td th:text="${pos.title}">Title</td>
-                    <td th:text="${pos.company.companyName}">Company</td>
-                    <td th:text="${pos.location}">Location</td>
-                    <td th:text="${pos.skills}">Skills</td>
-                </tr>
-                </tbody>
-            </table>
+        <div th:if="${searchForm.criteria == 'both'}">
+            <h4>Search by Interests and Preferred Location</h4>
+            <h4 class="mt-4">Applicant's interests</h4>
+            <ul class="list-unstyled">
+                <li th:each="interest : ${#strings.arraySplit(selectedStudent.interests, ',')}">
+                    <span class="fs-5 fw-bold" th:text="${interest}">Interest</span>
+                </li>
+            </ul>
+
+            <h4 class="mt-4">Applicant's Preferred Location</h4>
+            <ul class="list-unstyled">
+                <li th:each="location : ${#strings.arraySplit(selectedStudent.preferredLocation, ',')}">
+                    <span class="fs-5 fw-bold" th:text="${location}">Location</span>
+                </li>
+            </ul>
+            <h4 class="mt-4">Matching Positions based on Applicant's preferred location:</h4>
+
+
+
+            <div th:if="${#lists.isEmpty(results)}">
+                <div class="alert alert-warning mt-3">No matching positions found for the selected criteria.</div>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(results)}">
+                <table class="table table-bordered mt-3">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Title</th>
+                        <th>Company</th>
+                        <th>Location</th>
+                        <th>Required Skills</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="pos : ${results}">
+                        <td th:text="${pos.title}">Title</td>
+                        <td th:text="${pos.company.companyName}">Company</td>
+                        <td th:text="${pos.location}">Location</td>
+                        <td th:text="${pos.skills}">Skills</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-
-
 
     </div>
-
+    <a th:href="@{/committee/available_positions}" class="btn btn-secondary mt-4">Back to available positions</a>
     <a th:href="@{/committee/dashboard}" class="btn btn-secondary mt-4">Back to Dashboard</a>
 </div>
 </body>
