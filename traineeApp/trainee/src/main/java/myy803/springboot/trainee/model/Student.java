@@ -45,6 +45,9 @@ public class Student {
     @OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Application> applications;
 
+    @OneToOne(mappedBy = "applicant", cascade = CascadeType.ALL)
+    private TraineePosition traineePosition;
+
     public Student() {
         super();
     }
@@ -85,6 +88,8 @@ public class Student {
     public List<Application> getApplications() {return applications;}
     public void setApplications(List<Application> applications) {this.applications = applications;}
 
+    public TraineePosition getTraineePosition() {return traineePosition;}
+    public void setTraineePosition(TraineePosition traineePosition) {this.traineePosition = traineePosition;}
 
     public void addApplication(Application application) {applications.add(application); }
 

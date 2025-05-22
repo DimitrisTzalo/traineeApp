@@ -5,6 +5,7 @@ import myy803.springboot.trainee.model.TraineePosition;
 import myy803.springboot.trainee.model.User;
 import myy803.springboot.trainee.repository.ApplicationRepo;
 import myy803.springboot.trainee.repository.CompanyRepo;
+import myy803.springboot.trainee.repository.TraineePositionRepo;
 import myy803.springboot.trainee.repository.UserDAO;
 import myy803.springboot.trainee.service.ApplicationService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,6 +37,9 @@ public class CompanyController {
 
     @Autowired
     ApplicationRepo applicationRepo;
+
+    @Autowired
+    TraineePositionRepo traineePositionRepo;
     @RequestMapping("/company/dashboard")
     public String getCompanyDashboard(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -90,25 +94,53 @@ public class CompanyController {
     }
 
     @RequestMapping("/company/positions")
-    public String getCompanyPositions(Model model) {
+    public String getCompanyPositions(@ModelAttribute("traineePosition") TraineePosition traineePosition, Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Company company = companyService.getCompanyProfile(username);
         List<TraineePosition> positions = companyService.getCompanyPositions(username);
         model.addAttribute("positions", positions);
-        model.addAttribute("traineePosition", new TraineePosition());
+
+        if (traineePosition.getPositionId() != null) {
+            Optional<TraineePosition> existing = traineePositionRepo.findById(traineePosition.getPositionId());
+            if (existing.isPresent()) {
+                model.addAttribute("traineePosition", existing.get());
+                model.addAttribute("editMode", true);
+            }
+        } else {
+            model.addAttribute("traineePosition", new TraineePosition());
+            model.addAttribute("editMode", false);
+        }
 
         return "company/positions";
     }
 
-    @RequestMapping("company/add_position")
-    public String addPosition(@ModelAttribute("traineePosition") TraineePosition traineePosition, Model model) {
+
+    @RequestMapping("/company/add_position")
+    public String addOrUpdatePosition(@ModelAttribute("traineePosition") TraineePosition traineePosition, Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        companyService.addPosition(username, traineePosition);
-        model.addAttribute("successMessage", "Successfully added position!");
+        if (traineePosition.getPositionId() != null) {
+            Optional<TraineePosition> existing = traineePositionRepo.findById(traineePosition.getPositionId());
+            if (existing.isPresent()) {
+                TraineePosition existingPosition = existing.get();
+                existingPosition.setTitle(traineePosition.getTitle());
+                existingPosition.setDescription(traineePosition.getDescription());
+                existingPosition.setFromDate(traineePosition.getFromDate());
+                existingPosition.setToDate(traineePosition.getToDate());
+                existingPosition.setLocation(traineePosition.getLocation());
+                existingPosition.setSkills(traineePosition.getSkills());
+                existingPosition.setTopics(traineePosition.getTopics());
+                existingPosition.setCompany(companyService.getCompanyProfile(username));
+                traineePositionRepo.save(existingPosition);
+            }
+        } else {
+            traineePosition.setCompany(companyService.getCompanyProfile(username));
+            companyService.addPosition(username, traineePosition);
+        }
 
         return "redirect:/company/positions";
     }
+
+
 
     @RequestMapping("/company/delete_position")
     public String deletePosition(@ModelAttribute("position") TraineePosition traineePosition, Model model) {

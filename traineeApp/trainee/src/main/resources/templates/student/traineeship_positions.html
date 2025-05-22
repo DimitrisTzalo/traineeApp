@@ -4,26 +4,21 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-
     <title>Available Traineeship Positions</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
 </head>
 
 <body>
-
 <div class="container mt-5">
 
-    <h3>Available Traineeship Positions</h3>
+    <h3>Your Available Traineeship Positions</h3>
     <hr>
+
     <div th:if="${#lists.isEmpty(availableTraineeships)}">
-        <p>No available traineeship positions at the moment.</p>
+        <p class="text-muted">No available traineeship positions at the moment.</p>
     </div>
 
     <div th:unless="${#lists.isEmpty(availableTraineeships)}">
-    <p>Here are the available traineeship positions:</p>
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -31,22 +26,28 @@
                 <th>Company</th>
                 <th>Location</th>
                 <th>Description</th>
-                <th>Apply</th>
+                <th>Status</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="traineePosition : ${availableTraineeships}">
-                <td th:text="${traineePosition.title != null ? traineePosition.title : 'N/A'}">Title</td>
-                <td th:text="${traineePosition.company != null ? traineePosition.company.companyName : 'N/A'}">Company</td>
-                <td th:text="${traineePosition.location != null ? traineePosition.location : 'N/A'}">Location</td>
-                <td th:text="${traineePosition.description != null ? traineePosition.description : 'N/A'}">Description</td>
-
-
+                <td th:text="${traineePosition.title ?: 'N/A'}">Title</td>
+                <td th:text="${traineePosition.company?.companyName ?: 'N/A'}">Company</td>
+                <td th:text="${traineePosition.location ?: 'N/A'}">Location</td>
+                <td th:text="${traineePosition.description ?: 'N/A'}">Description</td>
                 <td>
-                    <div th:if="${appliedPositionIds.contains(traineePosition.positionId)}">
-                        <p class="text-danger font-weight-bold">Waiting for response</p>
+
+                    <div th:if="${hasAssignment}">
+                        <p class="text-success font-weight-bold">Approved</p>
                     </div>
-                    <div th:unless="${appliedPositionIds.contains(traineePosition.positionId)}">
+
+
+                    <div th:if="${!hasAssignment and appliedPositionIds.contains(traineePosition.positionId)}">
+                        <p class="text-warning font-weight-bold">Waiting for response</p>
+                    </div>
+
+
+                    <div th:if="${!hasAssignment and !appliedPositionIds.contains(traineePosition.positionId)}">
                         <form th:action="@{/student/applyToTraineeship}" method="post">
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                             <input type="hidden" name="selected_position_id" th:value="${traineePosition.positionId}" />
@@ -54,8 +55,6 @@
                         </form>
                     </div>
                 </td>
-
-
             </tr>
             </tbody>
         </table>
@@ -64,6 +63,5 @@
     <a th:href="@{/student/dashboard}" class="btn btn-secondary mt-3">Back to Dashboard</a>
 
 </div>
-
 </body>
 </html>

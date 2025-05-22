@@ -3,52 +3,58 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Student's Profile</title>
+    <title>Company's Positions</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container mt-4">
 
-    <h4 class="mb-4">Your Trainee Positions</h4>
+    <h4 class="mb-4">Company's Trainee Positions</h4>
 
-    <div id="positionDetails">
-        <div th:if="${#lists.isEmpty(positions)}">
-            <p>You haven't uploaded any Traineeship positions yet.</p>
-        </div>
+    <!-- === ΛΙΣΤΑ ΘΕΣΕΩΝ === -->
+    <div id="positionDetails" th:if="${editMode == null or !editMode}">
+        <ul class="list-group mb-4" th:if="${positions != null and not #lists.isEmpty(positions)}">
+            <li class="list-group-item" th:each="position : ${positions}">
+                <strong th:text="${position.title}">Position Title</strong><br>
+                <span><strong>Description:</strong> <span th:text="${position.description}">Description</span></span><br>
+                <span><strong>From:</strong> <span th:text="${position.fromDate}">Start</span>
+                      <strong>To:</strong> <span th:text="${position.toDate}">End</span></span><br>
+                <span><strong>Location:</strong> <span th:text="${position.location}">Location</span></span><br>
+                <span><strong>Skills:</strong> <span th:text="${position.skills}">Skills</span></span><br>
+                <span><strong>Topics:</strong> <span th:text="${position.topics}">Topics</span></span><br>
 
-        <div th:unless="${#lists.isEmpty(positions)}">
-            <p>Here are your uploaded traineeship positions:</p>
+                <form th:action="@{/company/delete_position}" method="post" class="mt-2 d-inline"
+                      onsubmit="return confirm('Are you sure you want to delete this position?');">
+                    <input type="hidden" name="positionId" th:value="${position.positionId}" />
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
 
-            <ul class="list-group mb-4">
-                <li class="list-group-item" th:each="position : ${positions}">
-                    <strong th:text="${position.title}">Position Title</strong><br>
-                    <span th:text="'Description: ' + ${position.description}">Description</span><br>
-                    <span th:text="'From: ' + ${position.fromDate} + ' To: ' + ${position.toDate}">Date range</span><br>
-                    <span th:text="'Location: ' + ${position.location}">Location</span><br>
-                    <span th:text="'Skills: ' + ${position.skills}">Skills</span>
+                <form th:action="@{/company/positions}" method="get" class="d-inline">
+                    <input type="hidden" name="positionId" th:value="${position.positionId}" />
+                    <button type="submit" class="btn btn-warning btn-sm ml-2">Edit</button>
+                </form>
+            </li>
+        </ul>
 
-                    <form th:action="@{/company/delete_position}" method="post" class="mt-2" onsubmit="return confirm('Are you sure you want to delete this position?');">
-                        <input type="hidden" name="positionId" th:value="${position.positionId}" />
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-
-                    <button type="button" class="btn btn-warning btn-sm mt-2" onclick="showEditForm()">Edit Position</button>
-                </li>
-            </ul>
+        <div th:if="${positions == null or #lists.isEmpty(positions)}">
+            <p class="text-muted">You haven't uploaded any Traineeship positions yet.</p>
         </div>
     </div>
 
-    <div class="mb-4">
-        <button type="button" id="addBtn" class="btn btn-primary" onclick="showAddForm()">Add Position</button>
-        <button type="button" id="viewBtn" class="btn btn-secondary" onclick="hideAllForms()" style="display: none;">View Positions</button>
+    <!-- === ΚΟΥΜΠΙ ΠΡΟΣΘΗΚΗΣ === -->
+    <div class="mb-4" th:if="${!editMode}">
+        <button type="button" id="editBtn" class="btn btn-primary" onclick="showEditForm()">Add Position</button>
         <a th:href="@{/company/dashboard}" class="btn btn-outline-secondary ml-2">Back to Dashboard</a>
     </div>
 
-    <!-- Add Form -->
-    <div id="addForm" style="display: none;">
+    <!-- === ΦΟΡΜΑ ΘΕΣΗΣ: ΥΠΑΡΧΕΙ ΠΑΝΤΑ στο DOM === -->
+    <div id="editForm" th:classappend="${editMode} ? '' : 'd-none'">
         <form th:action="@{/company/add_position}" th:object="${traineePosition}" method="post">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <input type="hidden" th:field="*{positionId}" />
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <h5 class="mb-3" th:text="*{positionId} != null ? 'Edit Position' : 'Add New Position'">Position Form</h5>
 
             <div class="form-group">
                 <label for="title">Position Title</label>
@@ -63,106 +69,46 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="fromDate">From Date</label>
-                    <input type="date" id="fromDate" th:field="*{fromDate}" class="form-control" required>
+                    <input type="date" id="fromDate" th:field="*{fromDate}" class="form-control" required />
                 </div>
                 <div class="form-group col-md-6">
                     <label for="toDate">To Date</label>
-                    <input type="date" id="toDate" th:field="*{toDate}" class="form-control" required>
+                    <input type="date" id="toDate" th:field="*{toDate}" class="form-control" required />
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="location">Location</label>
-                <input type="text" id="location" th:field="*{location}" class="form-control" required>
+                <input type="text" id="location" th:field="*{location}" class="form-control" required />
             </div>
 
             <div class="form-group">
                 <label for="skills">Required Skills</label>
-                <input type="text" id="skills" th:field="*{skills}" class="form-control">
+                <input type="text" id="skills" th:field="*{skills}" class="form-control" />
             </div>
 
             <div class="form-group">
                 <label for="topics">Topics</label>
-                <input type="text" id="topics" th:field="*{topics}" class="form-control">
+                <input type="text" id="topics" th:field="*{topics}" class="form-control" />
             </div>
 
-            <button type="submit" class="btn btn-success">Upload Position</button>
+            <button type="submit" class="btn btn-success"
+                    th:text="*{positionId} != null ? 'Save Changes' : 'Upload Position'">Submit</button>
+            <a th:href="@{/company/positions}" class="btn btn-secondary ml-2">Cancel</a>
         </form>
     </div>
-
-    <!-- Edit Form -->
-    <div id="editForm" style="display: none;">
-        <form th:action="@{/company/update_position}" th:object="${traineePosition}" method="post">
-            <input type="hidden" th:field="*{positionId}" />
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-
-            <h5 class="mt-4">Edit Position</h5>
-
-            <div class="form-group">
-                <label for="titleEdit">Position Title</label>
-                <input type="text" id="titleEdit" th:field="*{title}" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <label for="descriptionEdit">Description</label>
-                <textarea id="descriptionEdit" th:field="*{description}" class="form-control" rows="3" required></textarea>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="fromDateEdit">From Date</label>
-                    <input type="date" id="fromDateEdit" th:field="*{fromDate}" class="form-control" required>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="toDateEdit">To Date</label>
-                    <input type="date" id="toDateEdit" th:field="*{toDate}" class="form-control" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="locationEdit">Location</label>
-                <input type="text" id="locationEdit" th:field="*{location}" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <label for="skillsEdit">Required Skills</label>
-                <input type="text" id="skillsEdit" th:field="*{skills}" class="form-control">
-            </div>
-
-            <div class="form-group">
-                <label for="topicsEdit">Topics</label>
-                <input type="text" id="topicsEdit" th:field="*{topics}" class="form-control">
-            </div>
-
-            <button type="submit" class="btn btn-success">Save Changes</button>
-        </form>
-    </div>
-
 </div>
 
+<!-- === JavaScript εμφάνισης φόρμας === -->
 <script>
-    function showAddForm() {
-        document.getElementById('addForm').style.display = 'block';
-        document.getElementById('editForm').style.display = 'none';
-        document.getElementById('positionDetails').style.display = 'none';
-        document.getElementById('addBtn').style.display = 'none';
-        document.getElementById('viewBtn').style.display = 'inline-block';
-    }
-
     function showEditForm() {
-        document.getElementById('addForm').style.display = 'none';
-        document.getElementById('editForm').style.display = 'block';
-        document.getElementById('positionDetails').style.display = 'none';
-        document.getElementById('addBtn').style.display = 'none';
-        document.getElementById('viewBtn').style.display = 'inline-block';
-    }
+        const editForm = document.getElementById('editForm');
+        const positionDetails = document.getElementById('positionDetails');
+        const editBtn = document.getElementById('editBtn');
 
-    function hideAllForms() {
-        document.getElementById('addForm').style.display = 'none';
-        document.getElementById('editForm').style.display = 'none';
-        document.getElementById('positionDetails').style.display = 'block';
-        document.getElementById('addBtn').style.display = 'inline-block';
-        document.getElementById('viewBtn').style.display = 'none';
+        if (editForm) editForm.classList.remove('d-none');
+        if (positionDetails) positionDetails.style.display = 'none';
+        if (editBtn) editBtn.style.display = 'none';
     }
 </script>
 

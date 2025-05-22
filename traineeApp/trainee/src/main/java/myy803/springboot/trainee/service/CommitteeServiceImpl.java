@@ -1,5 +1,6 @@
 package myy803.springboot.trainee.service;
 
+import jakarta.transaction.Transactional;
 import myy803.springboot.trainee.model.Committee;
 import myy803.springboot.trainee.model.Application;
 import myy803.springboot.trainee.model.Student;
@@ -64,7 +65,7 @@ public class CommitteeServiceImpl implements CommitteeService {
         List<Application> applications = new ArrayList<>();
 
         for (TraineePosition position : availablePositions) {
-            if (!position.isAssigned()) {
+            if (!position.getisAssigned()) {
 
                 List<Application> apps = applicationRepo.findByPosition_PositionId(position.getPositionId());
                 applications.addAll(apps);
@@ -79,7 +80,7 @@ public class CommitteeServiceImpl implements CommitteeService {
         List<TraineePosition> availablePositions = new ArrayList<TraineePosition>();
         for(TraineePosition position : allPositions) {
 
-            if (!position.isAssigned())
+            if (!position.getisAssigned())
                 availablePositions.add(position);
         }
         return availablePositions;
@@ -109,6 +110,31 @@ public class CommitteeServiceImpl implements CommitteeService {
         }
 
         return strategy.search(student, allPositions);
+    }
+
+    @Transactional
+    @Override
+    public void assignPositiontoStudent(String committeeUsername, Integer positionId, String studentUsername){
+
+        Optional<Student> applicant = studentRepo.findByUsername(studentUsername);
+        Optional<TraineePosition> position = traineePositionRepo.findById(positionId);
+        Optional<Committee> selectedCommittee = committeeRepo.findByUsername(committeeUsername);
+
+
+        Student student = applicant.get();
+        TraineePosition traineePosition = position.get();
+        Committee committee = selectedCommittee.get();
+
+        traineePosition.setApplicant(student);
+        traineePosition.setCommittee(committee);
+        traineePosition.setisAssigned(true);
+
+        traineePositionRepo.save(traineePosition);
+
+        applicationRepo.deleteByApplicant_UsernameAndPosition_PositionIdNot(studentUsername, positionId);
+        applicationRepo.deleteByPosition_PositionIdAndApplicant_UsernameNot(positionId, studentUsername);
+
+
     }
 
 }

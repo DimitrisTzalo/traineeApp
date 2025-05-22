@@ -21,7 +21,6 @@ public class InterestSearchStrategy implements TraineeshipSearchStrategy {
         Set<String> studentInterestSet = new HashSet<>(studentInterests);
         String mainInterest = student.getInterests(); // κύριο ενδιαφέρον αν υπάρχει
 
-        // Map για να κρατήσουμε score ανά θέση
         Map<TraineePosition, Integer> scoredPositions = new HashMap<>();
 
         for (TraineePosition pos : positions) {
@@ -56,7 +55,7 @@ public class InterestSearchStrategy implements TraineeshipSearchStrategy {
             }
         }
 
-        // Ταξινόμηση με βάση το score (φθίνουσα)
+
         List<Map.Entry<TraineePosition, Integer>> sortedEntries = new ArrayList<>(scoredPositions.entrySet());
         sortedEntries.sort((e1, e2) -> Integer.compare(e2.getValue(), e1.getValue()));
 

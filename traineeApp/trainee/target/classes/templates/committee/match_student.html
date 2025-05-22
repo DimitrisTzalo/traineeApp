@@ -7,7 +7,21 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h3>Select  Criteria for Matching Traineeships</h3>
+
+
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        <span th:text="${successMessage}">Position assigned to student  </span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+        <span th:text="${errorMessage}">Error!</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+
+
+    <h3>Select Criteria for Matching Traineeships</h3>
     <hr>
 
     <p th:if="${selectedStudent != null}">
@@ -58,6 +72,7 @@
                         <th>Company</th>
                         <th>Location</th>
                         <th>Required Skills</th>
+                        <th>Assign Student for this position?</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -66,6 +81,22 @@
                         <td th:text="${pos.company.companyName}">Company</td>
                         <td th:text="${pos.location}">Location</td>
                         <td th:text="${pos.skills}">Skills</td>
+                        <td>
+                            <form th:action="@{/committee/assign_position}" method="post">
+                                <input type="hidden" name="positionId" th:value="${pos.positionId}" />
+                                <input type="hidden" name="studentUsername" th:value="${selectedStudent.username}" />
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                <button type="submit" class="btn btn-primary">Assign</button>
+                            </form>
+
+                            <form th:action="@{/committee/reject_position}" method="post" style="display:inline; margin-left:5px;">
+                                <input type="hidden" name="positionId" th:value="${pos.positionId}" />
+                                <input type="hidden" name="studentUsername" th:value="${selectedStudent.username}" />
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                <button type="submit" class="btn btn-danger">Reject</button>
+                            </form>
+                        </td>
+
                     </tr>
                     </tbody>
                 </table>
@@ -95,6 +126,7 @@
                         <th>Company</th>
                         <th>Location</th>
                         <th>Required Skills</th>
+                        <th>Assign Student for this position?</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -103,6 +135,21 @@
                         <td th:text="${pos.company.companyName}">Company</td>
                         <td th:text="${pos.location}">Location</td>
                         <td th:text="${pos.skills}">Skills</td>
+                        <td>
+                            <form th:action="@{/committee/assign_position}" method="post">
+                                <input type="hidden" name="positionId" th:value="${pos.positionId}" />
+                                <input type="hidden" name="studentUsername" th:value="${selectedStudent.username}" />
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                <button type="submit" class="btn btn-primary">Assign</button>
+                            </form>
+
+                            <form th:action="@{/committee/reject_position}" method="post" style="display:inline; margin-left:5px;">
+                                <input type="hidden" name="positionId" th:value="${pos.positionId}" />
+                                <input type="hidden" name="studentUsername" th:value="${selectedStudent.username}" />
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                <button type="submit" class="btn btn-danger">Reject</button>
+                            </form>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -140,6 +187,7 @@
                         <th>Company</th>
                         <th>Location</th>
                         <th>Required Skills</th>
+                        <th>Assign Student for this position?</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -148,6 +196,21 @@
                         <td th:text="${pos.company.companyName}">Company</td>
                         <td th:text="${pos.location}">Location</td>
                         <td th:text="${pos.skills}">Skills</td>
+                        <td>
+                            <form th:action="@{/committee/assign_position}" method="post">
+                                <input type="hidden" name="positionId" th:value="${pos.positionId}" />
+                                <input type="hidden" name="studentUsername" th:value="${selectedStudent.username}" />
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                <button type="submit" class="btn btn-primary">Assign</button>
+                            </form>
+
+                            <form th:action="@{/committee/reject_position}" method="post" style="display:inline; margin-left:5px;">
+                                <input type="hidden" name="positionId" th:value="${pos.positionId}" />
+                                <input type="hidden" name="studentUsername" th:value="${selectedStudent.username}" />
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                <button type="submit" class="btn btn-danger">Reject</button>
+                            </form>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

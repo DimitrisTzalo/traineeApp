@@ -49,10 +49,10 @@ public class InterestAndLocationSearchStrategy implements TraineeshipSearchStrat
             if (similarity > SIMILARITY_THRESHOLD) {
                 int score = 0;
 
-                score += intersection.size(); // +1 για κάθε κοινό θέμα
+                score += intersection.size();
 
                 if (mainInterest != null && positionTopicSet.contains(mainInterest)) {
-                    score += 3; // bonus για απόλυτη ταύτιση
+                    score += 3;
                 }
 
                 scoredPositions.put(pos, score);

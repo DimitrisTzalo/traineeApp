@@ -18,16 +18,16 @@ public class TraineePosition {
     @Column(name = "position_id")
     private Integer positionId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "student_username")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "student_username", referencedColumnName = "username")
     private Student applicant;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "professor_username")
+    @JoinColumn(name = "professor_username",referencedColumnName = "username")
     private Professor supervisor;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "company_username", referencedColumnName = "username")
     private Company company;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -84,6 +84,9 @@ public class TraineePosition {
     public Company getCompany() { return company; }
     public void setCompany(Company company) { this.company = company; }
 
+    public Committee getCommittee() { return committee; }
+    public void setCommittee(Committee committee) { this.committee = committee; }
+
     //public List<Evaluation> getEvaluations() { return evaluations; }
     //public void setEvaluations(List<Evaluation> evaluations) { this.evaluations = evaluations; }
 
@@ -108,8 +111,8 @@ public class TraineePosition {
     public String getSkills() { return skills; }
     public void setSkills(String skills) { this.skills = skills; }
 
-    public boolean isAssigned() { return isAssigned; }
-    public void setAssigned(boolean isAssigned) { this.isAssigned = isAssigned; }
+    public boolean getisAssigned() { return isAssigned; }
+    public void setisAssigned(boolean isAssigned) { this.isAssigned = isAssigned; }
 
     public String getStudentLogBook() { return studentLogBook;}
 

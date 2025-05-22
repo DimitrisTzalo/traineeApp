@@ -5,6 +5,7 @@ import myy803.springboot.trainee.model.TraineePosition;
 import myy803.springboot.trainee.model.User;
 import myy803.springboot.trainee.repository.ApplicationRepo;
 import myy803.springboot.trainee.repository.StudentRepo;
+import myy803.springboot.trainee.repository.TraineePositionRepo;
 import myy803.springboot.trainee.repository.UserDAO;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -36,6 +37,8 @@ public class StudentController {
 
     @Autowired
     StudentService studentService;
+    @Autowired
+    private TraineePositionRepo traineePositionRepo;
 
     @RequestMapping("/student/dashboard")
     public String getStudentDashboard(Model model) {
@@ -97,19 +100,27 @@ public class StudentController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Student currentStudent = studentService.getStudentProfile(username);
 
-        List<TraineePosition> positions = studentService.getAllTraineeships();
-        List<Application> studentApplications = applicationRepo.findByApplicant_Username(username);
+        Optional<TraineePosition> assignedPosition = traineePositionRepo.findByApplicant_UsernameAndIsAssignedTrue(username);
+        if(assignedPosition.isPresent()) {
+            model.addAttribute("availableTraineeships", List.of(assignedPosition.get()));
+            model.addAttribute("hasAssignment", true);
+        }else {
 
-        Set<Integer> appliedPositionIds = new HashSet<>();
-        for (Application app : studentApplications) {
-            appliedPositionIds.add(app.getPosition().getPositionId());
+            List<TraineePosition> positions = studentService.getAllTraineeships();
+            List<Application> studentApplications = applicationRepo.findByApplicant_Username(username);
+
+            Set<Integer> appliedPositionIds = new HashSet<>();
+            for (Application app : studentApplications) {
+                appliedPositionIds.add(app.getPosition().getPositionId());
+            }
+
+
+            model.addAttribute("availableTraineeships", positions);
+            model.addAttribute("hasAssignment", false);
+            model.addAttribute("appliedPositionIds", appliedPositionIds);
         }
 
-
-        model.addAttribute("availableTraineeships", positions);
         model.addAttribute("currentStudent", currentStudent);
-        model.addAttribute("appliedPositionIds", appliedPositionIds);
-
         return "student/traineeship_positions";
 
     }

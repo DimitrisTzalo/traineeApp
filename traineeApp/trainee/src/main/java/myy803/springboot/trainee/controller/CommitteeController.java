@@ -1,5 +1,6 @@
 package myy803.springboot.trainee.controller;
 
+import myy803.springboot.trainee.formsdata.AssignStudentForm;
 import myy803.springboot.trainee.formsdata.SearchForm;
 import myy803.springboot.trainee.model.*;
 import myy803.springboot.trainee.repository.ApplicationRepo;
@@ -123,5 +124,29 @@ public class CommitteeController {
         }
 
         return "committee/match_student";
+    }
+
+    @RequestMapping("/committee/assign_position")
+    public String assignPosition(@ModelAttribute AssignStudentForm assignStudentForm, Model model){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName(); //COMMITTEE
+
+        Integer positionId = assignStudentForm.getPositionId();
+        String studentUsername = assignStudentForm.getStudentUsername();
+
+        Optional<Student> selectedStudent = studentRepo.findByUsername(studentUsername);
+
+        boolean hasApplied = applicationRepo.existsByApplicant_UsernameAndPosition_PositionId(studentUsername, positionId);
+
+        if(!hasApplied) {
+            model.addAttribute("errorMessage", "Student has not applied for this position.");
+            return "/committee/match_student";
+        }
+
+        committeeService.assignPositiontoStudent(username, positionId, studentUsername);
+        model.addAttribute("successMessage", selectedStudent.get().getStudentName()+ "has assigned to position " + positionId + " successfully!");
+
+
+
+        return "redirect:/committee/available_positions";
     }
 }

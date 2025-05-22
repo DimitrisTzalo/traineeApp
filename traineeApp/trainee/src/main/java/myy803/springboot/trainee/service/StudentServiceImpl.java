@@ -65,7 +65,7 @@ public class StudentServiceImpl implements StudentService {
         List<TraineePosition> availablePositions = new ArrayList<TraineePosition>();
         for(TraineePosition position : allPositions) {
 
-            if (!position.isAssigned())
+            if (!position.getisAssigned())
                 availablePositions.add(position);
         }
 

@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface TraineePositionRepo extends JpaRepository<TraineePosition, Integer> {
     Optional<TraineePosition> findByPositionId(Integer traineeId);
 
+    Optional<TraineePosition> findByApplicant_UsernameAndIsAssignedTrue(String username);
+
     boolean existsByPositionId(Integer traineeId);
 
 }

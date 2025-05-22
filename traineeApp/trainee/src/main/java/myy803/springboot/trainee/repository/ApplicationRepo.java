@@ -14,5 +14,9 @@ public interface ApplicationRepo extends JpaRepository<Application, Integer> {
 
     List<Application> findByApplicant_Username(String username);
 
-    boolean existsByApplicant_Username(String username);
+    boolean existsByApplicant_UsernameAndPosition_PositionId(String username, Integer positionId);
+
+    void deleteByApplicant_UsernameAndPosition_PositionIdNot(String username, Integer positionId);
+    void deleteByPosition_PositionIdAndApplicant_UsernameNot(Integer positionId, String username);
+
 }
