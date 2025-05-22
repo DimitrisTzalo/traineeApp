@@ -22,8 +22,6 @@ public class InterestAndLocationSearchStrategy implements TraineeshipSearchStrat
         }
 
         Set<String> studentInterestSet = new HashSet<>(studentInterests);
-        String mainInterest = student.getInterests();
-
         Map<TraineePosition, Integer> scoredPositions = new HashMap<>();
 
         for (TraineePosition pos : positions) {
@@ -37,7 +35,7 @@ public class InterestAndLocationSearchStrategy implements TraineeshipSearchStrat
 
             Set<String> positionTopicSet = new HashSet<>(positionTopics);
 
-            // Jaccard similarity
+            // Υπολογισμός Jaccard similarity
             Set<String> intersection = new HashSet<>(studentInterestSet);
             intersection.retainAll(positionTopicSet);
 
@@ -47,14 +45,7 @@ public class InterestAndLocationSearchStrategy implements TraineeshipSearchStrat
             double similarity = union.isEmpty() ? 0 : (double) intersection.size() / union.size();
 
             if (similarity > SIMILARITY_THRESHOLD) {
-                int score = 0;
-
-                score += intersection.size();
-
-                if (mainInterest != null && positionTopicSet.contains(mainInterest)) {
-                    score += 3;
-                }
-
+                int score = intersection.size(); // Μόνο ο αριθμός κοινών στοιχείων
                 scoredPositions.put(pos, score);
             }
         }

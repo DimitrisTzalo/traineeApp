@@ -19,8 +19,6 @@ public class InterestSearchStrategy implements TraineeshipSearchStrategy {
         }
 
         Set<String> studentInterestSet = new HashSet<>(studentInterests);
-        String mainInterest = student.getInterests(); // κύριο ενδιαφέρον αν υπάρχει
-
         Map<TraineePosition, Integer> scoredPositions = new HashMap<>();
 
         for (TraineePosition pos : positions) {
@@ -41,20 +39,10 @@ public class InterestSearchStrategy implements TraineeshipSearchStrategy {
             double similarity = union.isEmpty() ? 0 : (double) intersection.size() / union.size();
 
             if (similarity > SIMILARITY_THRESHOLD) {
-                int score = 0;
-
-                // +1 για κάθε κοινό topic
-                score += intersection.size();
-
-                // +3 αν υπάρχει απόλυτη αντιστοιχία με το κύριο ενδιαφέρον
-                if (mainInterest != null && positionTopicSet.contains(mainInterest)) {
-                    score += 3;
-                }
-
+                int score = intersection.size(); // Βαθμολογία: πλήθος κοινών ενδιαφερόντων
                 scoredPositions.put(pos, score);
             }
         }
-
 
         List<Map.Entry<TraineePosition, Integer>> sortedEntries = new ArrayList<>(scoredPositions.entrySet());
         sortedEntries.sort((e1, e2) -> Integer.compare(e2.getValue(), e1.getValue()));

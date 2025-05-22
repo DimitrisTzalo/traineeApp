@@ -1,18 +1,9 @@
 package myy803.springboot.trainee.service;
 
 import jakarta.transaction.Transactional;
-import myy803.springboot.trainee.model.Committee;
-import myy803.springboot.trainee.model.Application;
-import myy803.springboot.trainee.model.Student;
-import myy803.springboot.trainee.model.TraineePosition;
-import myy803.springboot.trainee.model.strategies.InterestAndLocationSearchStrategy;
-import myy803.springboot.trainee.model.strategies.InterestSearchStrategy;
-import myy803.springboot.trainee.model.strategies.LocationSearchStrategy;
-import myy803.springboot.trainee.model.strategies.TraineeshipSearchStrategy;
-import myy803.springboot.trainee.repository.CommitteeRepo;
-import myy803.springboot.trainee.repository.ApplicationRepo;
-import myy803.springboot.trainee.repository.StudentRepo;
-import myy803.springboot.trainee.repository.TraineePositionRepo;
+import myy803.springboot.trainee.model.*;
+import myy803.springboot.trainee.model.strategies.*;
+import myy803.springboot.trainee.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,6 +29,8 @@ public class CommitteeServiceImpl implements CommitteeService {
 
     @Autowired
     private StudentRepo studentRepo;
+    @Autowired
+    private ProfessorRepo professorRepo;
 
     @Override
     public void saveProfile(Committee committee) {
@@ -134,7 +127,45 @@ public class CommitteeServiceImpl implements CommitteeService {
         applicationRepo.deleteByApplicant_UsernameAndPosition_PositionIdNot(studentUsername, positionId);
         applicationRepo.deleteByPosition_PositionIdAndApplicant_UsernameNot(positionId, studentUsername);
 
+    }
 
+    @Override
+    public List<TraineePosition> searchForProfessor(String professorUsername, String criteria) {
+        Professor professor = professorRepo.findByUsername(professorUsername)
+                .orElseThrow(() -> new RuntimeException("Professor not found with username: " + professorUsername));
+
+        List<TraineePosition> allPositions = traineePositionRepo.findAll();
+
+        ProfessorSearchStrategy strategy;
+
+        switch (criteria) {
+            case "interest":
+                strategy = new ProfessorInterestSearchStrategy();
+                break;
+            case "load":
+                strategy = new ProfessorLoadSearchStrategy();
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid search criteria");
+        }
+
+        return strategy.search(professor, allPositions);
+    }
+
+    @Override
+    public void assignPositiontoProfessor(String committeeUsername, Integer positionId, String professorUsername){
+        Optional<Professor> supervisor = professorRepo.findByUsername(professorUsername);
+        Optional<TraineePosition> position = traineePositionRepo.findById(positionId);
+        Optional<Committee> selectedCommittee = committeeRepo.findByUsername(committeeUsername);
+
+        Professor professor = supervisor.get();
+        TraineePosition traineePosition = position.get();
+        Committee committee = selectedCommittee.get();
+
+        traineePosition.setSupervisor(professor);
+        traineePosition.setCommittee(committee);
+
+        traineePositionRepo.save(traineePosition);
     }
 
 }

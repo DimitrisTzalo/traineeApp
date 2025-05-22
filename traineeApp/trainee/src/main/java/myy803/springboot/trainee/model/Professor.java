@@ -30,7 +30,7 @@ public class Professor {
     private String interests;
 
     @OneToMany(mappedBy = "supervisor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<TraineePosition> supervisedPositions;
+    private List<TraineePosition> supervisedPositions; // to counter to pairnw apto size ths listas
 
     public Professor() {super();}
     public Professor(String username) {this.username = username;}
@@ -52,4 +52,6 @@ public class Professor {
 
     public List<TraineePosition> getSupervisedPositions() {return supervisedPositions;}
     public void setSupervisedPositions(List<TraineePosition> supervisedPositions) {this.supervisedPositions = supervisedPositions;}
+
+    public List<String> getInterestList() {return interests != null ? List.of(interests.split(",")) : List.of();}
 }

@@ -1,12 +1,10 @@
 package myy803.springboot.trainee.controller;
 
+import myy803.springboot.trainee.formsdata.AssignProfessorForm;
 import myy803.springboot.trainee.formsdata.AssignStudentForm;
 import myy803.springboot.trainee.formsdata.SearchForm;
 import myy803.springboot.trainee.model.*;
-import myy803.springboot.trainee.repository.ApplicationRepo;
-import myy803.springboot.trainee.repository.CommitteeRepo;
-import myy803.springboot.trainee.repository.StudentRepo;
-import myy803.springboot.trainee.repository.UserDAO;
+import myy803.springboot.trainee.repository.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,12 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import myy803.springboot.trainee.service.CommitteeService;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-
-import static org.springframework.data.repository.util.ClassUtils.ifPresent;
 
 @Controller
 public class CommitteeController {
@@ -37,6 +31,10 @@ public class CommitteeController {
     CommitteeService committeeService;
     @Autowired
     private ApplicationRepo applicationRepo;
+    @Autowired
+    private ProfessorRepo professorRepo;
+    @Autowired
+    private TraineePositionRepo traineePositionRepo;
 
     @RequestMapping("/committee/dashboard")
     public String getCommitteeDashboard(Model model) {
@@ -127,7 +125,7 @@ public class CommitteeController {
     }
 
     @RequestMapping("/committee/assign_position")
-    public String assignPosition(@ModelAttribute AssignStudentForm assignStudentForm, Model model){
+    public String assignStudentPosition(@ModelAttribute AssignStudentForm assignStudentForm, Model model){
         String username = SecurityContextHolder.getContext().getAuthentication().getName(); //COMMITTEE
 
         Integer positionId = assignStudentForm.getPositionId();
@@ -146,7 +144,50 @@ public class CommitteeController {
         model.addAttribute("successMessage", selectedStudent.get().getStudentName()+ "has assigned to position " + positionId + " successfully!");
 
 
-
         return "redirect:/committee/available_positions";
+    }
+
+    @RequestMapping("/committee/assign_professor")
+    public String assignProfessorPosition(@ModelAttribute AssignProfessorForm assignProfessorForm, Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName(); //COMMITTEE
+
+        Integer positionId = assignProfessorForm.getPositionId();
+        String professorUsername = assignProfessorForm.getProfessorUsername();
+
+        Optional<Professor> selectedProfessor = professorRepo.findByUsername(professorUsername);
+
+        boolean hasSupervised = traineePositionRepo.existsBySupervisor_UsernameAndPositionId(professorUsername, positionId);
+
+        if(!hasSupervised) {
+            model.addAttribute("errorMessage", "Professor has not supervised for this position.");
+            return "search_professor";
+        }
+
+        committeeService.assignPositiontoProfessor(username, positionId, professorUsername);
+        model.addAttribute("successMessage", selectedProfessor.get().getProfessorName()+ "has supervised to position " + positionId + " successfully!");
+
+        return "redirect:/committee/dashboard";
+    }
+
+    @RequestMapping("/committee/search_professor")
+    public String searchProfessor(@ModelAttribute SearchForm searchForm, Model model) {
+        String username = searchForm.getSelectedUsername();
+        String criteria = searchForm.getCriteria();
+        model.addAttribute("allProfessors", professorRepo.findAll());
+        model.addAttribute("searchForm", searchForm);
+        model.addAttribute("username", username);
+
+        if (searchForm.getSelectedUsername() != null && !searchForm.getSelectedUsername().isBlank()) {
+            professorRepo.findByUsername(searchForm.getSelectedUsername())
+                    .ifPresent(professor -> model.addAttribute("selectedProfessor", professor));
+        }
+
+        if (criteria != null && !criteria.isBlank()) {
+            List<TraineePosition> results = committeeService.searchForProfessor(username, criteria);
+            model.addAttribute("results", results);
+            System.out.println("Results: " + results);
+        }
+
+        return "committee/search_professor";
     }
 }
