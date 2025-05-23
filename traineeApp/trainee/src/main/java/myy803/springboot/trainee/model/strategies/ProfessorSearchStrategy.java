@@ -6,7 +6,7 @@ import myy803.springboot.trainee.model.TraineePosition;
 import java.util.List;
 
 public interface ProfessorSearchStrategy {
-    List<TraineePosition> search(Professor professor, List<TraineePosition> positions);
+    List<TraineePosition> search(TraineePosition position, List<TraineePosition> positions);
 
 }
 

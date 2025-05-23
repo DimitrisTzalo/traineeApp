@@ -2,52 +2,45 @@ package myy803.springboot.trainee.model.strategies;
 
 import myy803.springboot.trainee.model.Professor;
 import myy803.springboot.trainee.model.TraineePosition;
+import myy803.springboot.trainee.repository.ProfessorRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class ProfessorLoadSearchStrategy implements ProfessorSearchStrategy{
+@Component
+public class ProfessorLoadSearchStrategy implements ProfessorSearchStrategy {
+
+    @Autowired
+    private ProfessorRepo professorRepo;
+
     @Override
-    public List<TraineePosition> search(Professor professor, List<TraineePosition> positions) {
-        List<TraineePosition> result = new ArrayList<>();
+    public List<TraineePosition> search(TraineePosition position, List<TraineePosition> positions) {
+        Map<String, Long> loadMap = positions.stream()
+                .filter(p -> p.getSupervisor() != null)
+                .collect(Collectors.groupingBy(
+                        p -> p.getSupervisor().getUsername(),
+                        Collectors.counting()
+                ));
 
-        if (professor == null || positions == null || professor.getSupervisedPositions() == null) {
-            return result;
-        }
-
-        int currentLoad = professor.getSupervisedPositions().size();
-
-        // Δημιουργία προσωρινού πίνακα φορτίου
-        Map<TraineePosition, Integer> positionLoadMap = new HashMap<>();
-        int simulatedLoad = currentLoad;
-
-        for (TraineePosition pos : positions) {
-            if (pos != null) {
-                positionLoadMap.put(pos, simulatedLoad);
-                simulatedLoad++; // υποθέτουμε ότι κάθε θέση προσθέτει 1 φορτίο
-            }
-        }
-
-        while (!positionLoadMap.isEmpty()) {
-            TraineePosition minPos = null;
-            int minLoad = Integer.MAX_VALUE;
-
-            for (Map.Entry<TraineePosition, Integer> entry : positionLoadMap.entrySet()) {
-                if (entry.getValue() < minLoad) {
-                    minLoad = entry.getValue();
-                    minPos = entry.getKey();
-                }
-            }
-
-            if (minPos != null) {
-                result.add(minPos);
-                positionLoadMap.remove(minPos);
-            }
-        }
-
-        return result;
+        return professorRepo.findAll().stream()
+                .sorted((p1, p2) -> Long.compare(
+                        loadMap.getOrDefault(p1.getUsername(), 0L),
+                        loadMap.getOrDefault(p2.getUsername(), 0L)
+                ))
+                .map(professor -> {
+                    TraineePosition temp = new TraineePosition();
+                    temp.setPositionId(position.getPositionId());
+                    temp.setTitle(position.getTitle());
+                    temp.setLocation(position.getLocation());
+                    temp.setSkills(position.getSkills());
+                    temp.setCompany(position.getCompany());
+                    temp.setApplicant(position.getApplicant());
+                    temp.setSupervisor(professor);
+                    //temp.setLoad(loadMap.getOrDefault(professor.getUsername(), 0L));
+                    return temp;
+                })
+                .collect(Collectors.toList());
     }
-
 }

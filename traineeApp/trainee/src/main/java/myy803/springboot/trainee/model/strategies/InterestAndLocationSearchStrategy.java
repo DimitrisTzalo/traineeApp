@@ -25,7 +25,7 @@ public class InterestAndLocationSearchStrategy implements TraineeshipSearchStrat
         Map<TraineePosition, Integer> scoredPositions = new HashMap<>();
 
         for (TraineePosition pos : positions) {
-            if (pos == null) continue;
+            if (pos == null || pos.isAssigned()) continue;
 
             String positionLocation = pos.getLocation();
             if (!studentPreferredLocation.equals(positionLocation)) continue;

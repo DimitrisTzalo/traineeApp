@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,13 @@ public class CommitteeServiceImpl implements CommitteeService {
     private StudentRepo studentRepo;
     @Autowired
     private ProfessorRepo professorRepo;
+
+    @Autowired
+    private ProfessorInterestSearchStrategy interestStrategy;
+
+    @Autowired
+    private ProfessorLoadSearchStrategy loadStrategy;
+
 
     @Override
     public void saveProfile(Committee committee) {
@@ -58,7 +66,7 @@ public class CommitteeServiceImpl implements CommitteeService {
         List<Application> applications = new ArrayList<>();
 
         for (TraineePosition position : availablePositions) {
-            if (!position.getisAssigned()) {
+            if (!position.isAssigned()) {
 
                 List<Application> apps = applicationRepo.findByPosition_PositionId(position.getPositionId());
                 applications.addAll(apps);
@@ -73,7 +81,7 @@ public class CommitteeServiceImpl implements CommitteeService {
         List<TraineePosition> availablePositions = new ArrayList<TraineePosition>();
         for(TraineePosition position : allPositions) {
 
-            if (!position.getisAssigned())
+            if (!position.isAssigned())
                 availablePositions.add(position);
         }
         return availablePositions;
@@ -120,7 +128,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 
         traineePosition.setApplicant(student);
         traineePosition.setCommittee(committee);
-        traineePosition.setisAssigned(true);
+        traineePosition.setIsAssigned(true);
 
         traineePositionRepo.save(traineePosition);
 
@@ -130,28 +138,32 @@ public class CommitteeServiceImpl implements CommitteeService {
     }
 
     @Override
-    public List<TraineePosition> searchForProfessor(String professorUsername, String criteria) {
-        Professor professor = professorRepo.findByUsername(professorUsername)
-                .orElseThrow(() -> new RuntimeException("Professor not found with username: " + professorUsername));
+    public List<TraineePosition> searchForProfessor(Integer positionId, String criteria) {
+        Optional<TraineePosition> optional = traineePositionRepo.findById(positionId);
+        if (!optional.isPresent()) return Collections.emptyList();
 
-        List<TraineePosition> allPositions = traineePositionRepo.findAll();
+        TraineePosition position = optional.get();
+
+        // Φέρνουμε όλες τις assigned θέσεις (χρήσιμες για το load)
+        List<TraineePosition> assignedPositions = traineePositionRepo.findByIsAssignedTrueAndSupervisorIsNull();
 
         ProfessorSearchStrategy strategy;
 
         switch (criteria) {
             case "interest":
-                strategy = new ProfessorInterestSearchStrategy();
-                break;
+                return interestStrategy.search(position, assignedPositions);
+
             case "load":
-                strategy = new ProfessorLoadSearchStrategy();
-                break;
+                return loadStrategy.search(position, assignedPositions);
             default:
                 throw new IllegalArgumentException("Invalid search criteria");
         }
 
-        return strategy.search(professor, allPositions);
+        //return strategy.search(position, assignedPositions);
     }
 
+
+    @Transactional
     @Override
     public void assignPositiontoProfessor(String committeeUsername, Integer positionId, String professorUsername){
         Optional<Professor> supervisor = professorRepo.findByUsername(professorUsername);
@@ -164,6 +176,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 
         traineePosition.setSupervisor(professor);
         traineePosition.setCommittee(committee);
+
 
         traineePositionRepo.save(traineePosition);
     }

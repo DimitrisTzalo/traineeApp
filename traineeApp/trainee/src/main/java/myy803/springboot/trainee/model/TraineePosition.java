@@ -80,7 +80,7 @@ public class TraineePosition {
     public void setApplicant(Student applicant) { this.applicant = applicant; }
 
     public Professor getSupervisor() { return supervisor; }
-    public void setSupervisor(Professor professor) { this.supervisor = supervisor; }
+    public void setSupervisor(Professor professor) { this.supervisor = professor; }
 
     public Company getCompany() { return company; }
     public void setCompany(Company company) { this.company = company; }
@@ -112,11 +112,12 @@ public class TraineePosition {
     public String getSkills() { return skills; }
     public void setSkills(String skills) { this.skills = skills; }
 
-    public boolean getisAssigned() { return isAssigned; }
-    public void setisAssigned(boolean isAssigned) { this.isAssigned = isAssigned; }
+    public boolean isAssigned() { return isAssigned; }
+    public void setIsAssigned(boolean isAssigned) { this.isAssigned = isAssigned; }
 
     public String getStudentLogBook() { return studentLogBook;}
 
     public List<String> getSkillsList(){return skills != null ? List.of(skills.split(",")) : List.of();}
+
 
 }

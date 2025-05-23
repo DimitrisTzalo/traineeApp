@@ -18,7 +18,7 @@ public class LocationSearchStrategy implements TraineeshipSearchStrategy{
         }
 
         for (TraineePosition pos : positions) {
-            if (pos == null) continue;
+            if (pos == null || pos.isAssigned()) continue;
 
             String positionLocation = pos.getLocation();
 

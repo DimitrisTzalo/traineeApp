@@ -22,7 +22,7 @@ public class InterestSearchStrategy implements TraineeshipSearchStrategy {
         Map<TraineePosition, Integer> scoredPositions = new HashMap<>();
 
         for (TraineePosition pos : positions) {
-            if (pos == null) continue;
+            if (pos == null || pos.isAssigned()) continue;
 
             List<String> positionTopics = pos.getSkillsList();
             if (positionTopics == null || positionTopics.isEmpty()) continue;

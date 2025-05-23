@@ -1,8 +1,10 @@
 package myy803.springboot.trainee.controller;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import myy803.springboot.trainee.formsdata.AssignProfessorForm;
 import myy803.springboot.trainee.formsdata.AssignStudentForm;
 import myy803.springboot.trainee.formsdata.SearchForm;
+import myy803.springboot.trainee.formsdata.SearchProfessorForm;
 import myy803.springboot.trainee.model.*;
 import myy803.springboot.trainee.repository.*;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -137,14 +139,39 @@ public class CommitteeController {
 
         if(!hasApplied) {
             model.addAttribute("errorMessage", "Student has not applied for this position.");
-            return "/committee/match_student";
+            return "committee/match_student";
         }
 
         committeeService.assignPositiontoStudent(username, positionId, studentUsername);
         model.addAttribute("successMessage", selectedStudent.get().getStudentName()+ "has assigned to position " + positionId + " successfully!");
 
 
-        return "redirect:/committee/available_positions";
+        return "redirect:/committee/dashboard";
+    }
+
+    @RequestMapping("/committee/search_professor")
+    public String searchProfessor(@ModelAttribute SearchProfessorForm searchProfessorForm, Model model) {
+        // Φέρνουμε όλες τις θέσεις που είναι assigned και χωρίς supervisor
+        List<TraineePosition> assignedPositions = traineePositionRepo.findByIsAssignedTrueAndSupervisorIsNull();
+        model.addAttribute("allPositions", assignedPositions);
+        model.addAttribute("searchProfessorForm", searchProfessorForm);
+
+        if (searchProfessorForm.getSelectedPosition() != null) {
+            Integer positionId = searchProfessorForm.getSelectedPosition();
+
+            Optional<TraineePosition> selected = assignedPositions.stream()
+                    .filter(p -> p.getPositionId().equals(positionId))
+                    .findFirst();
+
+            selected.ifPresent(p -> model.addAttribute("selectedPosition", p));
+
+            if (searchProfessorForm.getCriteria() != null && selected.isPresent()) {
+                List<TraineePosition> results = committeeService.searchForProfessor(positionId, searchProfessorForm.getCriteria());
+                model.addAttribute("results", results);
+            }
+        }
+
+        return "committee/search_professor";
     }
 
     @RequestMapping("/committee/assign_professor")
@@ -158,36 +185,18 @@ public class CommitteeController {
 
         boolean hasSupervised = traineePositionRepo.existsBySupervisor_UsernameAndPositionId(professorUsername, positionId);
 
-        if(!hasSupervised) {
-            model.addAttribute("errorMessage", "Professor has not supervised for this position.");
-            return "search_professor";
+        if (hasSupervised) {
+            model.addAttribute("errorMessage", "Professor is supervising this position.");
+            model.addAttribute("searchForm", new SearchForm()); // Ensure form exists
+            model.addAttribute("allProfessors", professorRepo.findAll());
+            return "committee/search_professor";
         }
 
         committeeService.assignPositiontoProfessor(username, positionId, professorUsername);
         model.addAttribute("successMessage", selectedProfessor.get().getProfessorName()+ "has supervised to position " + positionId + " successfully!");
 
-        return "redirect:/committee/dashboard";
+        return "redirect:/committee/search_professor";
     }
 
-    @RequestMapping("/committee/search_professor")
-    public String searchProfessor(@ModelAttribute SearchForm searchForm, Model model) {
-        String username = searchForm.getSelectedUsername();
-        String criteria = searchForm.getCriteria();
-        model.addAttribute("allProfessors", professorRepo.findAll());
-        model.addAttribute("searchForm", searchForm);
-        model.addAttribute("username", username);
 
-        if (searchForm.getSelectedUsername() != null && !searchForm.getSelectedUsername().isBlank()) {
-            professorRepo.findByUsername(searchForm.getSelectedUsername())
-                    .ifPresent(professor -> model.addAttribute("selectedProfessor", professor));
-        }
-
-        if (criteria != null && !criteria.isBlank()) {
-            List<TraineePosition> results = committeeService.searchForProfessor(username, criteria);
-            model.addAttribute("results", results);
-            System.out.println("Results: " + results);
-        }
-
-        return "committee/search_professor";
-    }
 }

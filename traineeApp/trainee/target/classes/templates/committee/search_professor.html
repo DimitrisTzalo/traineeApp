@@ -1,99 +1,101 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Search Professors for Matching</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <title>Recommend Professors</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container mt-5">
 
-    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-        <span th:text="${successMessage}">Professor assigned successfully.</span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  <h3>Recommend Professors for Assigned Positions</h3>
+  <hr>
+
+  <!-- Search Form -->
+  <form th:action="@{/committee/search_professor}" method="get" th:object="${searchProfessorForm}">
+    <div class="form-group">
+      <label for="selectedPosition">Select Assigned Position:</label>
+      <select class="form-control" th:field="*{selectedPosition}" id="selectedPosition" required>
+        <option value="">-- Select a position --</option>
+        <option th:each="pos : ${allPositions}"
+                th:value="${pos.positionId}"
+                th:text="${pos.title}">
+        </option>
+      </select>
     </div>
 
-    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
-        <span th:text="${errorMessage}">Error!</span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="form-group">
+      <label for="criteria">Recommendation Criteria:</label>
+      <select class="form-control" th:field="*{criteria}" id="criteria" required>
+        <option value="">-- Select a criteria --</option>
+        <option value="interest">By Interest</option>
+        <option value="load">By Load</option>
+      </select>
     </div>
 
-    <h3>Select Criteria for Matching Positions to Professor</h3>
-    <hr>
+    <button type="submit" class="btn btn-primary">Find Professors</button>
+  </form>
 
-    <form th:action="@{/committee/search_professor}" method="get" th:object="${searchForm}">
-        <div class="form-group">
-            <label for="selectedUsername">Select Professor:</label>
-            <select class="form-control" th:field="*{selectedUsername}" id="selectedUsername" required>
-                <option value="">-- Select a professor --</option>
-                <option th:each="prof : ${allProfessors}"
-                        th:value="${prof.username}"
-                        th:text="${prof.professorName + ' (' + prof.username + ')'}">
-                </option>
-            </select>
-        </div>
+  <!-- Show Position Info -->
+  <div th:if="${selectedPosition != null}" class="mt-4">
+    <h4>Selected Position Info</h4>
+    <ul class="list-group">
+      <li class="list-group-item"><strong>Title:</strong> <span th:text="${selectedPosition.title}">Title</span></li>
+      <li class="list-group-item"><strong>Student:</strong> <span th:text="${selectedPosition.applicant.studentName}">Student</span></li>
+      <li class="list-group-item"><strong>Location:</strong> <span th:text="${selectedPosition.location}">Location</span></li>
+      <li class="list-group-item"><strong>Skills:</strong> <span th:text="${selectedPosition.skills}">Skills</span></li>
+    </ul>
+  </div>
 
-        <div class="form-group">
-            <label for="criteria">Search by:</label>
-            <select class="form-control" th:field="*{criteria}" id="criteria" required>
-                <option value="">-- Select a criteria --</option>
-                <option value="interest">By Interest</option>
-                <option value="load">By Supervision Load</option>
-            </select>
-        </div>
+  <!-- Show Recommended Professors -->
+  <div th:if="${results != null}">
+    <h4 class="mt-4">Recommended Professors</h4>
 
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-
-    <div th:if="${selectedProfessor != null}">
-        <hr>
-        <h4 class="mt-4">Selected Professor:</h4>
-        <ul class="list-group mb-3">
-            <li class="list-group-item"><strong>Name:</strong> <span th:text="${selectedProfessor.professorName}">Name</span></li>
-            <li class="list-group-item"><strong>Interests:</strong> <span th:text="${selectedProfessor.interests}">Interests</span></li>
-            <li class="list-group-item"><strong>Supervised Positions:</strong> <span th:text="${#lists.size(selectedProfessor.supervisedPositions)}">0</span></li>
-        </ul>
+    <div th:if="${#lists.isEmpty(results)}">
+      <div class="alert alert-warning">No recommendations found.</div>
     </div>
 
-    <div th:if="${results != null}">
-        <h4 class="mt-4">Matching Positions:</h4>
+    <table class="table table-bordered" th:unless="${#lists.isEmpty(results)}">
+      <thead class="thead-dark">
+      <tr>
+        <th>Title</th>
+        <th>Company</th>
+        <th>Location</th>
+        <th>Skills</th>
+        <th>Recommended Professor</th>
+        <th th:if="${searchForm.criteria == 'load'}">Load</th>
+        <th>Assign</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="pos : ${results}">
+        <td th:text="${pos.title}">Title</td>
+        <td th:text="${pos.company.companyName}">Company</td>
+        <td th:text="${pos.location}">Location</td>
+        <td th:text="${pos.skills}">Skills</td>
+        <td th:text="${pos.supervisor.professorName}">Professor</td>
+        <td th:if="${searchForm.criteria == 'load'}"
+            th:text="${#lists.size(allPositions)}">
+          Load
+        </td>
+        <td>
+          <form th:action="@{/committee/assign_professor}" method="post" th:object="${assignProfessorForm}">
+            <input type="hidden" name="positionId" th:value="${pos.positionId}" />
+            <input type="hidden" name="professorUsername" th:value="${pos.supervisor.username}" />
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <button type="submit" class="btn btn-success btn-sm">Assign</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 
-        <div th:if="${#lists.isEmpty(results)}">
-            <div class="alert alert-warning mt-3">No matching positions found.</div>
-        </div>
+  <!-- Feedback messages -->
+  <div th:if="${errorMessage != null}" class="alert alert-danger mt-4" th:text="${errorMessage}"></div>
+  <div th:if="${successMessage != null}" class="alert alert-success mt-4" th:text="${successMessage}"></div>
 
-        <div th:unless="${#lists.isEmpty(results)}">
-            <table class="table table-bordered mt-3">
-                <thead class="thead-dark">
-                <tr>
-                    <th>Title</th>
-                    <th>Company</th>
-                    <th>Location</th>
-                    <th>Skills</th>
-                    <th>Assign</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="pos : ${results}">
-                    <td th:text="${pos.title}">Title</td>
-                    <td th:text="${pos.company.companyName}">Company</td>
-                    <td th:text="${pos.location}">Location</td>
-                    <td th:text="${pos.skills}">Skills</td>
-                    <td>
-                        <form th:action="@{/committee/assign_professor}" method="post">
-                            <input type="hidden" name="positionId" th:value="${pos.positionId}" />
-                            <input type="hidden" name="professorUsername" th:value="${selectedProfessor.username}" />
-                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                            <button type="submit" class="btn btn-success">Assign</button>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <a th:href="@{/committee/dashboard}" class="btn btn-secondary mt-4">Back to Dashboard</a>
+  <a th:href="@{/committee/dashboard}" class="btn btn-secondary mt-4">Back to Dashboard</a>
 </div>
 </body>
 </html>
