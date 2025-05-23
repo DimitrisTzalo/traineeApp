@@ -86,4 +86,12 @@ public class ProfessorController {
         model.addAttribute("successMessage", "Profile saved successfully!");
         return "professor/dashboard";
     }
+
+    @RequestMapping("/professor/supervised_positions")
+    public String listSupervisedPositions(Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<TraineePosition> supervisedPositions = professorService.getSupervisedPositions(username);
+        model.addAttribute("supervisedPositions", supervisedPositions);
+        return "professor/supervised_positions";
+    }
 }

@@ -46,13 +46,13 @@ public class TraineePosition {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "from_date", nullable = false)
+    @Column(name = "from_date")
     private LocalDate fromDate;
 
-    @Column(name = "to_date", nullable = false)
+    @Column(name = "to_date")
     private LocalDate toDate;
 
-    @Column(name = "location", nullable = false)
+    @Column(name = "location")
     private String location;
 
     @Column(name = "topics")

@@ -44,9 +44,14 @@ public class ProfessorServiceImpl implements ProfessorService {
         }
     }
 
+    @Override
     public Professor getProfessorProfile(String username) {
         return professorRepo.findByUsername(username).orElse(new Professor(username));
     }
 
+    @Override
+    public List<TraineePosition> getSupervisedPositions(String username) {
+        return traineePositionRepo.findBySupervisor_UsernameAndIsAssignedTrue(username);
+    }
 
 }

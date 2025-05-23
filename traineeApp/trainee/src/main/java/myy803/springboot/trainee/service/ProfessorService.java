@@ -12,7 +12,7 @@ public interface ProfessorService {
 
     public void saveProfile(Professor professor);
     public Professor getProfessorProfile(String username);
-
+    public List<TraineePosition> getSupervisedPositions(String username);
     // perimene na kaneis add kialla
 
 }

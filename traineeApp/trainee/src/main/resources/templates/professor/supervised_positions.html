@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Supervised Positions</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+
+<h3>My supervised Positions</h3>
+<hr>
+
+<div th:if="${#lists.isEmpty(supervisedPositions)}">
+    <p class="text-muted">You don’t supervise any positions.</p>
+</div>
+
+<div th:unless="${#lists.isEmpty(supervisedPositions)}">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Company</th>
+            <th>From–To</th>
+            <th>Location</th>
+            <th>Assigned Student</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pos : ${supervisedPositions}">
+            <td th:text="${pos.title}">Title</td>
+            <td th:text="${pos.company.companyName}">Company</td>
+            <td>
+                <span th:text="${pos.fromDate}">Start</span> –
+                <span th:text="${pos.toDate}">End</span>
+            </td>
+            <td th:text="${pos.location}">Location</td>
+            <td>
+            <span th:if="${pos.applicant != null}"
+                  th:text="${pos.applicant.studentName}">Student Name</span>
+                <span th:unless="${pos.applicant != null}">—</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<a th:href="@{/professor/dashboard}" class="btn btn-secondary">Back to Dashboard</a>
+</body>
