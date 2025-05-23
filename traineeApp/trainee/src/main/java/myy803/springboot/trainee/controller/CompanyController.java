@@ -10,6 +10,7 @@ import myy803.springboot.trainee.repository.UserDAO;
 import myy803.springboot.trainee.service.ApplicationService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -115,9 +116,20 @@ public class CompanyController {
 
 
     @RequestMapping("/company/add_position")
-    public String addOrUpdatePosition(@ModelAttribute("traineePosition") TraineePosition traineePosition, Model model) {
+    public String addOrUpdatePosition(@ModelAttribute("traineePosition") TraineePosition traineePosition, BindingResult bindingResult, Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
+
+        if (traineePosition.getFromDate() != null && traineePosition.getToDate() != null &&
+                traineePosition.getToDate().isBefore(traineePosition.getFromDate())) {
+            bindingResult.rejectValue("toDate", "error.toDate", "End date cannot be before start date.");
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("positions", companyService.getCompanyPositions(username));
+            model.addAttribute("editMode", traineePosition.getPositionId() != null);
+            return "company/positions"; // Show form again with error
+        }
         if (traineePosition.getPositionId() != null) {
             Optional<TraineePosition> existing = traineePositionRepo.findById(traineePosition.getPositionId());
             if (existing.isPresent()) {

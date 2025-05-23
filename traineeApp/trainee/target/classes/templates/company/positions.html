@@ -74,6 +74,9 @@
                 <div class="form-group col-md-6">
                     <label for="toDate">To Date</label>
                     <input type="date" id="toDate" th:field="*{toDate}" class="form-control" required />
+                    <div th:if="${#fields.hasErrors('toDate')}" class="text-danger">
+                        <p th:errors="*{toDate}">Invalid end date</p>
+                    </div>
                 </div>
             </div>
 

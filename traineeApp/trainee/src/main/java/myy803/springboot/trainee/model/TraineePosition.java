@@ -2,6 +2,7 @@ package myy803.springboot.trainee.model;
 
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
 import myy803.springboot.trainee.model.Company;
 //import myy803.springboot.trainee.model.Evaluation;
 import myy803.springboot.trainee.model.Professor;
@@ -46,9 +47,11 @@ public class TraineePosition {
     @Column(name = "description")
     private String description;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "from_date")
     private LocalDate fromDate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "to_date")
     private LocalDate toDate;
 

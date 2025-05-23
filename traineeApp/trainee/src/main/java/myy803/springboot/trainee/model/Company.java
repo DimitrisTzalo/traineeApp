@@ -20,7 +20,7 @@ public class Company {
     @JoinColumn(name = "company_id")
     private User user;
 
-    @Column(nullable = false, name = "username")
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false, name = "company_name")

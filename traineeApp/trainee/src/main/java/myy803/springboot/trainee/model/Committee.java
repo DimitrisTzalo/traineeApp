@@ -17,7 +17,7 @@ public class Committee {
     @JoinColumn(name = "committee_id")
     private User user;
 
-    @Column(nullable = false, name = "username")
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false, name = "committee_name")
