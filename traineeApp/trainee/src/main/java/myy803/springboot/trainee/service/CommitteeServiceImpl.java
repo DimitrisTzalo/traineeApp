@@ -147,6 +147,7 @@ public class CommitteeServiceImpl implements CommitteeService {
         // Φέρνουμε όλες τις assigned θέσεις (χρήσιμες για το load)
         List<TraineePosition> assignedPositions = traineePositionRepo.findByIsAssignedTrueAndSupervisorIsNull();
 
+
         List<Professor> results;
 
         ProfessorSearchStrategy strategy;
@@ -185,6 +186,7 @@ public class CommitteeServiceImpl implements CommitteeService {
 
         traineePosition.setSupervisor(professor);
         traineePosition.setCommittee(committee);
+        professor.setLoad(traineePositionRepo.countBySupervisor_UsernameAndIsAssignedTrue(professorUsername));
 
 
 
