@@ -151,7 +151,6 @@ public class CommitteeController {
 
     @RequestMapping("/committee/search_professor")
     public String searchProfessor(@ModelAttribute SearchProfessorForm searchProfessorForm, Model model) {
-        // Φέρνουμε όλες τις θέσεις που είναι assigned και χωρίς supervisor
         List<TraineePosition> assignedPositions = traineePositionRepo.findByIsAssignedTrueAndSupervisorIsNull();
         model.addAttribute("allPositions", assignedPositions);
         model.addAttribute("searchProfessorForm", searchProfessorForm);
@@ -166,8 +165,8 @@ public class CommitteeController {
             selected.ifPresent(p -> model.addAttribute("selectedPosition", p));
 
             if (searchProfessorForm.getCriteria() != null && selected.isPresent()) {
-                List<TraineePosition> results = committeeService.searchForProfessor(positionId, searchProfessorForm.getCriteria());
-                model.addAttribute("results", results);
+                List<Professor> results = committeeService.searchProfessor(positionId, searchProfessorForm.getCriteria());
+                model.addAttribute("resultsProfessors", results);
             }
         }
 

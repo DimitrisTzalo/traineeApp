@@ -48,14 +48,14 @@
   </div>
 
   <!-- Show Recommended Professors -->
-  <div th:if="${results != null}">
+  <div th:if="${resultsProfessors != null}">
     <h4 class="mt-4">Recommended Professors</h4>
 
-    <div th:if="${#lists.isEmpty(results)}">
+    <div th:if="${#lists.isEmpty(resultsProfessors)}">
       <div class="alert alert-warning">No recommendations found.</div>
     </div>
 
-    <table class="table table-bordered" th:unless="${#lists.isEmpty(results)}">
+    <table class="table table-bordered" th:unless="${#lists.isEmpty(resultsProfessors)}">
       <thead class="thead-dark">
       <tr>
         <th>Title</th>
@@ -68,20 +68,17 @@
       </tr>
       </thead>
       <tbody>
-      <tr th:each="pos : ${results}">
-        <td th:text="${pos.title}">Title</td>
-        <td th:text="${pos.company.companyName}">Company</td>
-        <td th:text="${pos.location}">Location</td>
-        <td th:text="${pos.skills}">Skills</td>
-        <td th:text="${pos.supervisor.professorName}">Professor</td>
-        <td th:if="${searchProfessorForm.criteria == 'load'}"
-            th:text="${#lists.size(allPositions)}">
-          Load
-        </td>
+      <tr th:each="prof : ${resultsProfessors}">
+        <td th:text="${selectedPosition.title}">Position</td>
+        <td th:text="${selectedPosition.company.companyName}">Company</td>
+        <td th:text="${selectedPosition.location}">Location</td>
+        <td th:text="${selectedPosition.skills}">Skills</td>
+        <td th:text="${prof.professorName}">Professor</td>
+        <td th:if="${searchProfessorForm.criteria == 'load'}" th:text="${prof.load}">Load</td>
         <td>
           <form th:action="@{/committee/assign_professor}" method="post" th:object="${assignProfessorForm}">
-            <input type="hidden" name="positionId" th:value="${pos.positionId}" />
-            <input type="hidden" name="professorUsername" th:value="${pos.supervisor.username}" />
+            <input type="hidden" name="positionId" th:value="${selectedPosition.positionId}" />
+            <input type="hidden" name="professorUsername" th:value="${prof.username}" />
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <button type="submit" class="btn btn-success btn-sm">Assign</button>
           </form>

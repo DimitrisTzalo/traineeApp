@@ -3,6 +3,7 @@ package myy803.springboot.trainee.model.strategies;
 import myy803.springboot.trainee.model.Professor;
 import myy803.springboot.trainee.model.TraineePosition;
 import myy803.springboot.trainee.repository.ProfessorRepo;
+import myy803.springboot.trainee.repository.TraineePositionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,33 +15,16 @@ public class ProfessorLoadSearchStrategy implements ProfessorSearchStrategy {
 
     @Autowired
     private ProfessorRepo professorRepo;
+    @Autowired
+    private TraineePositionRepo traineePositionRepo;
+
 
     @Override
-    public List<TraineePosition> search(TraineePosition position, List<TraineePosition> positions) {
-        Map<String, Long> loadMap = positions.stream()
-                .filter(p -> p.getSupervisor() != null)
-                .collect(Collectors.groupingBy(
-                        p -> p.getSupervisor().getUsername(),
-                        Collectors.counting()
-                ));
+    public List<Professor> searchSupervisor(TraineePosition position, List<TraineePosition> positions) {
+        List<Professor> professors = professorRepo.findAll();
 
-        return professorRepo.findAll().stream()
-                .sorted((p1, p2) -> Long.compare(
-                        loadMap.getOrDefault(p1.getUsername(), 0L),
-                        loadMap.getOrDefault(p2.getUsername(), 0L)
-                ))
-                .map(professor -> {
-                    TraineePosition temp = new TraineePosition();
-                    temp.setPositionId(position.getPositionId());
-                    temp.setTitle(position.getTitle());
-                    temp.setLocation(position.getLocation());
-                    temp.setSkills(position.getSkills());
-                    temp.setCompany(position.getCompany());
-                    temp.setApplicant(position.getApplicant());
-                    temp.setSupervisor(professor);
-                    //temp.setLoad(loadMap.getOrDefault(professor.getUsername(), 0L));
-                    return temp;
-                })
+        return professors.stream()
+                .sorted(Comparator.comparingInt(prof -> (int) traineePositionRepo.countBySupervisor_UsernameAndIsAssignedTrue(prof.getUsername())))
                 .collect(Collectors.toList());
     }
 }

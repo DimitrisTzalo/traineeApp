@@ -25,6 +25,7 @@
                 <th>Title</th>
                 <th>Company</th>
                 <th>Location</th>
+                <th>Skills</th>
                 <th>Description</th>
                 <th>Status</th>
             </tr>
@@ -34,6 +35,7 @@
                 <td th:text="${traineePosition.title ?: 'N/A'}">Title</td>
                 <td th:text="${traineePosition.company?.companyName ?: 'N/A'}">Company</td>
                 <td th:text="${traineePosition.location ?: 'N/A'}">Location</td>
+                <td th:text="${traineePosition.skills ?: 'N/A'}">Skills</td>
                 <td th:text="${traineePosition.description ?: 'N/A'}">Description</td>
                 <td>
 

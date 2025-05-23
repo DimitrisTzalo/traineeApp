@@ -80,6 +80,10 @@ public class ProfessorController {
         professor.setUser(user);
         professor.setUsername(user.getUsername());
 
+        if (professor.getLoad() == null) {
+            professor.setLoad(0);
+        }
+
         professorService.saveProfile(professor);
         model.addAttribute("successMessage", "Profile saved successfully!");
         return "professor/dashboard";

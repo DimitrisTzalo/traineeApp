@@ -29,6 +29,9 @@ public class Professor {
     @Column(name = "interests")
     private String interests;
 
+    @Column(name ="workload", columnDefinition = "INT DEFAULT 0")
+    private Integer load;
+
     @OneToMany(mappedBy = "supervisor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TraineePosition> supervisedPositions; // to counter to pairnw apto size ths listas
 
@@ -49,6 +52,9 @@ public class Professor {
 
     public String getInterests() {return interests;}
     public void setInterests(String interests) {this.interests = interests;}
+
+    public Integer getLoad() {return load;}
+    public void setLoad(Integer load) {this.load = load;}
 
     public List<TraineePosition> getSupervisedPositions() {return supervisedPositions;}
     public void setSupervisedPositions(List<TraineePosition> supervisedPositions) {this.supervisedPositions = supervisedPositions;}

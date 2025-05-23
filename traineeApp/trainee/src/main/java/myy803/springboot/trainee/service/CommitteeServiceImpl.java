@@ -138,7 +138,7 @@ public class CommitteeServiceImpl implements CommitteeService {
     }
 
     @Override
-    public List<TraineePosition> searchForProfessor(Integer positionId, String criteria) {
+    public List<Professor> searchProfessor(Integer positionId, String criteria) {
         Optional<TraineePosition> optional = traineePositionRepo.findById(positionId);
         if (!optional.isPresent()) return Collections.emptyList();
 
@@ -147,19 +147,28 @@ public class CommitteeServiceImpl implements CommitteeService {
         // Φέρνουμε όλες τις assigned θέσεις (χρήσιμες για το load)
         List<TraineePosition> assignedPositions = traineePositionRepo.findByIsAssignedTrueAndSupervisorIsNull();
 
+        List<Professor> results;
+
         ProfessorSearchStrategy strategy;
 
         switch (criteria) {
             case "interest":
-                return interestStrategy.search(position, assignedPositions);
+                results = interestStrategy.searchSupervisor(position, assignedPositions);
+                break;
 
             case "load":
-                return loadStrategy.search(position, assignedPositions);
+                results = loadStrategy.searchSupervisor(position, assignedPositions);
+                for (Professor p : results) {
+                    int currentLoad = traineePositionRepo.countBySupervisor_UsernameAndIsAssignedTrue(p.getUsername()); // ή όπως αλλιώς μετράς το φορτίο
+                    p.setLoad(currentLoad);
+                }
+                
+                break;
             default:
                 throw new IllegalArgumentException("Invalid search criteria");
         }
 
-        //return strategy.search(position, assignedPositions);
+        return results;
     }
 
 
