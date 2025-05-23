@@ -63,7 +63,7 @@
         <th>Location</th>
         <th>Skills</th>
         <th>Recommended Professor</th>
-        <th th:if="${searchForm.criteria == 'load'}">Load</th>
+        <th th:if="${searchProfessorForm.criteria == 'load'}">Load</th>
         <th>Assign</th>
       </tr>
       </thead>
@@ -74,7 +74,7 @@
         <td th:text="${pos.location}">Location</td>
         <td th:text="${pos.skills}">Skills</td>
         <td th:text="${pos.supervisor.professorName}">Professor</td>
-        <td th:if="${searchForm.criteria == 'load'}"
+        <td th:if="${searchProfessorForm.criteria == 'load'}"
             th:text="${#lists.size(allPositions)}">
           Load
         </td>
