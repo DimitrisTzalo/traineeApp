@@ -137,5 +137,36 @@ public class StudentController {
         return "redirect:/student/traineeship_positions";
     };
 
+    @RequestMapping("/student/saveLogbook")
+    public String saveLogbook(@ModelAttribute("traineePosition") TraineePosition traineePosition, Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<TraineePosition> assignedPosition = traineePositionRepo.findByApplicant_UsernameAndIsAssignedTrue(username);
+
+        if (assignedPosition.isPresent()) {
+            TraineePosition position = assignedPosition.get();
+            position.setStudentLogBook(traineePosition.getStudentLogBook());
+            traineePositionRepo.save(position);
+            model.addAttribute("successMessage", "Logbook updated successfully!");
+        } else {
+            model.addAttribute("errorMessage", "No assigned traineeship found.");
+        }
+
+        return "student/logbook";
+    }
+
+    @RequestMapping("/student/logbook")
+    public String showLogbookPage(Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<TraineePosition> assignedPosition = traineePositionRepo.findByApplicant_UsernameAndIsAssignedTrue(username);
+
+        if (assignedPosition.isPresent()) {
+            model.addAttribute("traineePosition", assignedPosition.get());
+        } else {
+            model.addAttribute("traineePosition", null);
+        }
+
+        return "student/logbook";
+    }
+
 
 }

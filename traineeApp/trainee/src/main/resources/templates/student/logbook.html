@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Logbook</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+  <h3>Your Traineeship Logbook</h3>
+  <hr>
+
+  <div th:if="${traineePosition != null}">
+    <form th:action="@{/student/saveLogbook}" method="post" th:object="${traineePosition}">
+      <input type="hidden" th:field="*{positionId}" />
+
+      <div class="form-group">
+        <label for="studentLogBook">Logbook Entry</label>
+        <textarea id="studentLogBook" class="form-control" rows="10" th:field="*{studentLogBook}" required></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Save Logbook</button>
+    </form>
+  </div>
+
+  <div th:if="${traineePosition == null}">
+    <p class="text-muted">No traineeship assigned yet.</p>
+  </div>
+
+  <div th:if="${successMessage != null}" class="alert alert-success mt-3" th:text="${successMessage}"></div>
+  <div th:if="${errorMessage != null}" class="alert alert-danger mt-3" th:text="${errorMessage}"></div>
+
+  <a th:href="@{/student/dashboard}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+</div>
+</body>
+</html>

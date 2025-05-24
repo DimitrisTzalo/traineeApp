@@ -119,6 +119,7 @@ public class TraineePosition {
     public void setIsAssigned(boolean isAssigned) { this.isAssigned = isAssigned; }
 
     public String getStudentLogBook() { return studentLogBook;}
+    public void setStudentLogBook(String studentLogBook) { this.studentLogBook = studentLogBook; }
 
     public List<String> getSkillsList(){return skills != null ? List.of(skills.split(",")) : List.of();}
 
