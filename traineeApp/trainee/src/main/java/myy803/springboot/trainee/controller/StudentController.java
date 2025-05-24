@@ -9,6 +9,7 @@ import myy803.springboot.trainee.repository.TraineePositionRepo;
 import myy803.springboot.trainee.repository.UserDAO;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -137,36 +138,31 @@ public class StudentController {
         return "redirect:/student/traineeship_positions";
     };
 
-    @RequestMapping("/student/saveLogbook")
-    public String saveLogbook(@ModelAttribute("traineePosition") TraineePosition traineePosition, Model model) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<TraineePosition> assignedPosition = traineePositionRepo.findByApplicant_UsernameAndIsAssignedTrue(username);
-
-        if (assignedPosition.isPresent()) {
-            TraineePosition position = assignedPosition.get();
-            position.setStudentLogBook(traineePosition.getStudentLogBook());
-            traineePositionRepo.save(position);
-            model.addAttribute("successMessage", "Logbook updated successfully!");
-        } else {
-            model.addAttribute("errorMessage", "No assigned traineeship found.");
-        }
-
-        return "student/logbook";
-    }
-
     @RequestMapping("/student/logbook")
     public String showLogbookPage(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<TraineePosition> assignedPosition = traineePositionRepo.findByApplicant_UsernameAndIsAssignedTrue(username);
 
-        if (assignedPosition.isPresent()) {
-            model.addAttribute("traineePosition", assignedPosition.get());
+        assignedPosition.ifPresent(position -> model.addAttribute("traineePosition", position));
+        return "student/logbook";
+    }
+
+    @PostMapping("/student/saveLogbook")
+    public String saveLogbook(@ModelAttribute("traineePosition") TraineePosition traineePosition, Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean success = studentService.saveLogbook(username, traineePosition.getStudentLogBook());
+
+        if (success) {
+            model.addAttribute("successMessage", "Logbook updated successfully!");
         } else {
-            model.addAttribute("traineePosition", null);
+            model.addAttribute("errorMessage", "No assigned traineeship found.");
         }
+
+        Optional<TraineePosition> assignedPosition = traineePositionRepo.findByApplicant_UsernameAndIsAssignedTrue(username);
+        assignedPosition.ifPresent(position -> model.addAttribute("traineePosition", position));
 
         return "student/logbook";
     }
 
-
+    
 }

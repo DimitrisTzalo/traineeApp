@@ -89,6 +89,20 @@ public class StudentServiceImpl implements StudentService {
 
     }
 
+    @Override
+    public boolean saveLogbook(String username, String logbookContent) {
+        Optional<TraineePosition> assignedPosition = traineePositionRepo.findByApplicant_UsernameAndIsAssignedTrue(username);
+
+        if (assignedPosition.isPresent()) {
+            TraineePosition position = assignedPosition.get();
+            position.setStudentLogBook(logbookContent);
+            traineePositionRepo.save(position);
+            return true;
+        }
+
+        return false;
+    }
+
 
 
 

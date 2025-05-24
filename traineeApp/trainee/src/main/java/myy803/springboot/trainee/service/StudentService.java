@@ -12,8 +12,8 @@ import java.util.List;
 public interface StudentService {
 
     public void saveProfile(Student student);
+    public boolean saveLogbook(String username, String logbookContent);
     public Student getStudentProfile(String username);
-
     void applyToTraineeship(String username, Integer studentId);
 
 
