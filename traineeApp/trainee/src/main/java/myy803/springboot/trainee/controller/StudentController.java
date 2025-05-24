@@ -164,5 +164,5 @@ public class StudentController {
         return "student/logbook";
     }
 
-    
+
 }

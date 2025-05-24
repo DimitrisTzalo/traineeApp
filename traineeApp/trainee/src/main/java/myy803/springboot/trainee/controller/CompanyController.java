@@ -163,5 +163,13 @@ public class CompanyController {
         return "redirect:/company/positions";
     }
 
+    @RequestMapping("/company/assigned_positions")
+    public String getAssignedPositions(Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<TraineePosition> assignedPositions = traineePositionRepo.findByCompany_UsernameAndIsAssignedTrue(username);
+        model.addAttribute("assignedPositions", assignedPositions);
+        return "company/assigned_positions";
+    }
+
 
 }
