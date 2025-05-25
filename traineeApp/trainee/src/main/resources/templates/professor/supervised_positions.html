@@ -42,10 +42,24 @@
                 <span th:unless="${pos.applicant != null}">—</span>
             </td>
             <td>
-                <form th:action="@{/professor/evaluate_traineeship}" method="get" class="d-inline" >
-                    <input type="hidden" name="traineePosition.positionId" th:value="${pos.positionId}" />
-                    <button type="submit" class="btn btn-primary btn-sm">Evaluate</button>
-                </form>
+                <div th:if="${pos.applicant!= null && pos.isAssigned}">
+                    <div th:if="${evaluatedPositions.contains(pos.positionId)}">
+                        <span class="badge badge-success mb-2">Already evaluated — Edit?</span>
+                        <form th:action="@{/professor/evaluate_traineeship}" method="get" class="d-inline" >
+                            <input type="hidden" name="traineePosition.positionId" th:value="${pos.positionId}" />
+                            <button type="submit" class="btn btn-primary btn-sm">ReEvaluate?</button>
+                        </form>
+                    </div>
+                    <div th:unless="${evaluatedPositions.contains(pos.positionId)}">
+                        <form th:action="@{/professor/evaluate_traineeship}" method="get" class="d-inline" >
+                        <input type="hidden" name="traineePosition.positionId" th:value="${pos.positionId}" />
+                        <button type="submit" class="btn btn-primary btn-sm">Evaluate</button>
+                        </form>
+
+                    </div>
+                </div>
+
+
 
             </td>
         </tr>

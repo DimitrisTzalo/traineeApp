@@ -15,4 +15,5 @@ public interface EvaluationRepo extends JpaRepository<Evaluation, Integer> {
     Optional<Evaluation> findByTraineePosition_PositionIdAndProfessor_Username(Integer posId, String username);
 
     List<Evaluation> findByCompany_Username(String username);
+    List<Evaluation> findByProfessor_Username(String username);
 }

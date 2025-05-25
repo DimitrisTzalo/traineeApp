@@ -105,6 +105,14 @@ public class ProfessorController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         List<TraineePosition> supervisedPositions = professorService.getSupervisedPositions(username);
         model.addAttribute("supervisedPositions", supervisedPositions);
+
+        List<Evaluation> evaluations = evaluationRepo.findByProfessor_Username(username);
+
+        List<Integer> evaluatedPositions = evaluations.stream()
+                .map(e -> e.getTraineePosition().getPositionId())
+                .toList();
+        model.addAttribute("evaluatedPositions", evaluatedPositions);
+
         return "professor/supervised_positions";
     }
 
@@ -114,7 +122,7 @@ public class ProfessorController {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
         Integer positionId = (evaluation.getTraineePosition() != null) ? evaluation.getTraineePosition().getPositionId() : null;
-        if (positionId != null) {
+        if (positionId == null) {
             return "redirect:/professor/supervised_positions";
         }
 

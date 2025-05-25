@@ -22,6 +22,11 @@
                 <span><strong>Location:</strong> <span th:text="${position.location}">Location</span></span><br>
                 <span><strong>Skills:</strong> <span th:text="${position.skills}">Skills</span></span><br>
                 <span><strong>Topics:</strong> <span th:text="${position.topics}">Topics</span></span><br>
+                <span><strong>Status:</strong>
+                    <span th:if="${position.assigned}" class="text-success font-weight-bold">Assigned</span>
+                    <span th:unless="${position.assigned}" class="text-danger font-weight-bold">Not Assigned</span>
+                </span><br>
+
 
                 <form th:action="@{/company/delete_position}" method="post" class="mt-2 d-inline"
                       onsubmit="return confirm('Are you sure you want to delete this position?');">
@@ -42,7 +47,7 @@
 
                         <form th:action="@{/company/evaluate_traineeship}" method="get" class="d-inline">
                             <input type="hidden" name="traineePosition.positionId" th:value="${position.positionId}" />
-                            <button type="submit" class="btn btn-warning btn-sm ml-2">ReEvaluate this position</button>
+                            <button type="submit" class="btn btn-warning btn-sm ">ReEvaluate this position</button>
                         </form>
 
                     </div>
@@ -50,7 +55,7 @@
                     <div th:unless="${evaluatedPositions.contains(position.positionId)}">
                         <form th:action="@{/company/evaluate_traineeship}" method="get" class="d-inline">
                             <input type="hidden" name="traineePosition.positionId" th:value="${position.positionId}" />
-                            <button type="submit" class="btn btn-warning btn-sm ml-2">Evaluate this position</button>
+                            <button type="submit" class="btn btn-warning btn-sm">Evaluate this position</button>
                         </form>
                     </div>
                 </div>
