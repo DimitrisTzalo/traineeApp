@@ -1,25 +1,23 @@
 package myy803.springboot.trainee.controller;
 
-import myy803.springboot.trainee.model.Application;
-import myy803.springboot.trainee.model.TraineePosition;
-import myy803.springboot.trainee.model.User;
-import myy803.springboot.trainee.repository.ApplicationRepo;
-import myy803.springboot.trainee.repository.CompanyRepo;
-import myy803.springboot.trainee.repository.TraineePositionRepo;
-import myy803.springboot.trainee.repository.UserDAO;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.servlet.http.HttpServletRequest;
+import myy803.springboot.trainee.model.*;
+import myy803.springboot.trainee.repository.*;
 import myy803.springboot.trainee.service.ApplicationService;
+import myy803.springboot.trainee.service.EvaluationService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import myy803.springboot.trainee.model.Company;
 import myy803.springboot.trainee.service.CompanyService;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +39,13 @@ public class CompanyController {
 
     @Autowired
     TraineePositionRepo traineePositionRepo;
+
+    @Autowired
+    EvaluationRepo evaluationRepo;
+
+    @Autowired
+    private EvaluationService evaluationService;
+
     @RequestMapping("/company/dashboard")
     public String getCompanyDashboard(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -100,6 +105,16 @@ public class CompanyController {
         List<TraineePosition> positions = companyService.getCompanyPositions(username);
         model.addAttribute("positions", positions);
 
+
+        List<Evaluation> evaluations = evaluationRepo.findByCompany_Username(username);
+
+        List<Integer> evaluatedPositions = evaluations.stream()
+                .map(e -> e.getTraineePosition().getPositionId())
+                .toList();
+        model.addAttribute("evaluatedPositions", evaluatedPositions);
+
+
+
         if (traineePosition.getPositionId() != null) {
             Optional<TraineePosition> existing = traineePositionRepo.findById(traineePosition.getPositionId());
             if (existing.isPresent()) {
@@ -110,6 +125,8 @@ public class CompanyController {
             model.addAttribute("traineePosition", new TraineePosition());
             model.addAttribute("editMode", false);
         }
+        System.out.println("aaa"+ getClass().getResource("/templates/evaluate_traineeship.html"));
+
 
         return "company/positions";
     }
@@ -166,10 +183,51 @@ public class CompanyController {
     @RequestMapping("/company/assigned_positions")
     public String getAssignedPositions(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<TraineePosition> assignedPositions = traineePositionRepo.findByCompany_UsernameAndIsAssignedTrue(username);
+        List<TraineePosition> assignedPositions = traineePositionRepo.findBySupervisor_UsernameNotNullAndIsAssignedTrue();
         model.addAttribute("assignedPositions", assignedPositions);
         return "company/assigned_positions";
     }
+
+    @RequestMapping("/company/evaluate_traineeship")
+    public String evaluateTraineeship(@ModelAttribute("evaluation") Evaluation evaluation, Model model) {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
+        Integer positionId = (evaluation.getTraineePosition() != null) ? evaluation.getTraineePosition().getPositionId() : null;
+        if (positionId == null) {
+            return "redirect:/company/positions";
+        }
+
+
+        Optional<Evaluation> existing = evaluationRepo.findByTraineePosition_PositionIdAndCompany_Username(positionId, username);
+
+        if ("POST".equalsIgnoreCase(request.getMethod())) {
+            companyService.saveOrUpdateEvaluation(evaluation, username);
+            return "redirect:/company/positions";
+        }
+
+
+        if (existing.isPresent()) {
+            model.addAttribute("evaluation", existing.get());
+        } else {
+            model.addAttribute("evaluation", evaluation);
+        }
+
+        return "company/evaluate_traineeship";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

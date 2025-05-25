@@ -17,8 +17,10 @@
             <thead>
             <tr>
                 <th>Title</th>
+                <th>Company's name</th>
                 <th>Description</th>
                 <th>Student</th>
+                <th>Supervisor</th>
                 <th>From Date</th>
                 <th>To Date</th>
             </tr>
@@ -26,8 +28,10 @@
             <tbody>
             <tr th:each="position : ${assignedPositions}">
                 <td th:text="${position.title}"></td>
+                <td th:text="${position.company.companyName}"></td>
                 <td th:text="${position.description}"></td>
-                <td th:text="${position.applicant.username}"></td>
+                <td th:text="${position.applicant.studentName}"></td>
+                <td th:text="${position.supervisor.professorName}"></td>
                 <td th:text="${position.fromDate}"></td>
                 <td th:text="${position.toDate}"></td>
             </tr>

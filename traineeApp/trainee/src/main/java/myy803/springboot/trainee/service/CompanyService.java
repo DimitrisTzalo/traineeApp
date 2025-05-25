@@ -2,6 +2,7 @@ package myy803.springboot.trainee.service;
 
 
 import myy803.springboot.trainee.model.Company;
+import myy803.springboot.trainee.model.Evaluation;
 import myy803.springboot.trainee.model.TraineePosition;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ public interface CompanyService {
     List<TraineePosition> getCompanyPositions(String username);
     void addPosition(String username, TraineePosition position);
     void deletePosition(String username, TraineePosition position);
+    void saveOrUpdateEvaluation(Evaluation evaluation, String username);
 
 
     /*

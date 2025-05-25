@@ -1,7 +1,7 @@
 package myy803.springboot.trainee.model;
 
 import jakarta.persistence.*;
-// GEIA SOU
+import myy803.springboot.trainee.model.EvaluationType;
 @Entity
 @Table(name = "evaluations")
 public class Evaluation {
@@ -15,13 +15,17 @@ public class Evaluation {
     @JoinColumn(name = "position_id", nullable = false)
     private TraineePosition traineePosition;
 
-    @Column(name = "motivation", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name= "company_username", referencedColumnName = "username")
+    private Company company;
+
+    @Column(name = "motivation")
     private int motivation;
 
-    @Column(name = "effectiveness", nullable = false)
+    @Column(name = "effectiveness")
     private int effectiveness;
 
-    @Column(name = "efficiency", nullable = false)
+    @Column(name = "efficiency")
     private int efficiency;
 
     private EvaluationType evaluationType;
@@ -34,6 +38,9 @@ public class Evaluation {
     public TraineePosition getTraineePosition() { return traineePosition; }
     public void setTraineePosition(TraineePosition traineePosition) { this.traineePosition = traineePosition; }
 
+    public Company getCompany() { return company; }
+    public void setCompany(Company company) { this.company = company; }
+
     public int getMotivation() { return motivation; }
     public void setMotivation(int motivation) { this.motivation = motivation; }
 
@@ -42,4 +49,7 @@ public class Evaluation {
 
     public int getEfficiency() { return efficiency; }
     public void setEfficiency(int efficiency) { this.efficiency = efficiency; }
+
+    public EvaluationType getEvaluationType() { return evaluationType; }
+    public void setEvaluationType(EvaluationType evaluationType) { this.evaluationType = evaluationType; }
 }

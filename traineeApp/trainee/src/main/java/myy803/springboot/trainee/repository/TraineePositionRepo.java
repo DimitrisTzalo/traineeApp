@@ -13,7 +13,7 @@ public interface TraineePositionRepo extends JpaRepository<TraineePosition, Inte
     List<TraineePosition> findByIsAssignedTrueAndSupervisorIsNull();
     List<TraineePosition> findBySupervisor_UsernameAndIsAssignedTrue(String username);
     List<TraineePosition> findByCompany_UsernameAndIsAssignedTrue(String username);
-    List<TraineePosition> findByCommittee_UsernameAndIsAssignedTrue(String username);
+    List<TraineePosition> findBySupervisor_UsernameNotNullAndIsAssignedTrue();
     Integer countBySupervisor_UsernameAndIsAssignedTrue(String username);
 
     boolean existsBySupervisor_UsernameAndPositionId(String username, Integer positionId);

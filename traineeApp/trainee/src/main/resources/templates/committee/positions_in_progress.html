@@ -19,6 +19,7 @@
                 <th>Title</th>
                 <th>Description</th>
                 <th>Student</th>
+                <th>Supervisor</th>
                 <th>From Date</th>
                 <th>To Date</th>
             </tr>
@@ -27,7 +28,8 @@
             <tr th:each="position : ${positionsInProgress}">
                 <td th:text="${position.title}"></td>
                 <td th:text="${position.description}"></td>
-                <td th:text="${position.applicant.username}"></td>
+                <td th:text="${position.applicant.studentName}"></td>
+                <td th:text="${position.supervisor.professorName}"></td>
                 <td th:text="${position.fromDate}"></td>
                 <td th:text="${position.toDate}"></td>
             </tr>

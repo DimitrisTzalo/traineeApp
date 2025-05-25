@@ -15,8 +15,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import myy803.springboot.trainee.service.CommitteeService;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class CommitteeController {
@@ -199,8 +202,21 @@ public class CommitteeController {
 
     @RequestMapping("/committee/positions_in_progress")
     public String getPositionsInProgress(Model model) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<TraineePosition> positionsInProgress = traineePositionRepo.findByCommittee_UsernameAndIsAssignedTrue(username);
+        //String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<TraineePosition> positions = traineePositionRepo.findBySupervisor_UsernameNotNullAndIsAssignedTrue();
+
+        LocalDate today = LocalDate.now();
+
+
+        List<TraineePosition> positionsInProgress = positions.stream()
+                .filter(pos -> {
+                    LocalDate from = pos.getFromDate();
+                    LocalDate to = pos.getToDate();
+                    return from != null && to != null &&
+                            !today.isBefore(from) && !today.isAfter(to);
+                })
+                .toList();
+
         model.addAttribute("positionsInProgress", positionsInProgress);
 
         return "committee/positions_in_progress";

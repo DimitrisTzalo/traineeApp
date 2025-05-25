@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Evaluate Traineeship</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .range-value {
+            font-weight: bold;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Evaluate Traineeship</h2>
+
+    <form th:action="@{/company/evaluate_traineeship}" th:object="${evaluation}" method="post">
+
+        <input type="hidden" th:field="*{traineePosition.positionId}" />
+
+
+        <div class="form-group">
+            <label for="effectivenessSlider">Effectiveness</label>
+            <input type="range" id="effectivenessSlider" min="1" max="5"
+                   class="form-control-range"
+                   oninput="document.getElementById('effectivenessHidden').value = this.value; document.getElementById('effectivenessValue').textContent = this.value"
+                   th:value="*{effectiveness}" />
+            <input type="hidden" id="effectivenessHidden" th:field="*{effectiveness}" />
+            <span class="range-value" id="effectivenessValue" th:text="*{effectiveness}">1</span>
+
+        </div>
+
+        <div class="form-group">
+            <label for="efficiencySlider">Efficiency</label>
+            <input type="range" id="efficiencySlider" min="1" max="5"
+                   class="form-control-range"
+                   oninput="document.getElementById('efficiencyHidden').value = this.value; document.getElementById('efficiencyValue').textContent = this.value"
+                   th:value="*{efficiency}" />
+            <input type="hidden" id="efficiencyHidden" th:field="*{efficiency}" />
+            <span class="range-value" id="efficiencyValue" th:text="*{efficiency}">1</span>
+        </div>
+
+        <div class="form-group">
+            <label for="motivationSlider">Motivation</label>
+            <input type="range" id="motivationSlider" min="1" max="5"
+                   class="form-control-range"
+                   oninput="document.getElementById('motivationHidden').value = this.value; document.getElementById('motivationValue').textContent = this.value"
+                   th:value="*{motivation}" />
+            <input type="hidden" id="motivationHidden" th:field="*{motivation}" />
+            <span class="range-value" id="motivationValue" th:text="*{motivation}">1</span>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Submit Evaluation</button>
+        <a th:href="@{/company/positions}" class="btn btn-secondary ml-2">Cancel Evaluation</a>
+    </form>
+
+</div>
+
+</body>
+</html>

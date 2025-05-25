@@ -11,7 +11,7 @@
 
     <h4 class="mb-4">Company's Trainee Positions</h4>
 
-    <!-- === ΛΙΣΤΑ ΘΕΣΕΩΝ === -->
+
     <div id="positionDetails" th:if="${editMode == null or !editMode}">
         <ul class="list-group mb-4" th:if="${positions != null and not #lists.isEmpty(positions)}">
             <li class="list-group-item" th:each="position : ${positions}">
@@ -34,6 +34,30 @@
                     <input type="hidden" name="positionId" th:value="${position.positionId}" />
                     <button type="submit" class="btn btn-warning btn-sm ml-2">Edit</button>
                 </form>
+
+                <div th:if="${position.isAssigned}">
+
+                    <div th:if="${evaluatedPositions.contains(position.positionId)}">
+                        <span class="badge badge-success mb-2">Already evaluated — Edit?</span>
+
+                        <form th:action="@{/company/evaluate_traineeship}" method="get" class="d-inline">
+                            <input type="hidden" name="traineePosition.positionId" th:value="${position.positionId}" />
+                            <button type="submit" class="btn btn-warning btn-sm ml-2">ReEvaluate this position</button>
+                        </form>
+
+                    </div>
+
+                    <div th:unless="${evaluatedPositions.contains(position.positionId)}">
+                        <form th:action="@{/company/evaluate_traineeship}" method="get" class="d-inline">
+                            <input type="hidden" name="traineePosition.positionId" th:value="${position.positionId}" />
+                            <button type="submit" class="btn btn-warning btn-sm ml-2">Evaluate this position</button>
+                        </form>
+                    </div>
+                </div>
+
+
+
+
             </li>
         </ul>
 
