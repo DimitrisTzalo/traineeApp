@@ -19,6 +19,10 @@ public class Evaluation {
     @JoinColumn(name= "company_username", referencedColumnName = "username")
     private Company company;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "professor_username", referencedColumnName = "username")
+    private Professor professor;
+
     @Column(name = "motivation")
     private int motivation;
 
@@ -27,6 +31,12 @@ public class Evaluation {
 
     @Column(name = "efficiency")
     private int efficiency;
+
+    @Column(name = "facilities", nullable = false)
+    private int facilities;
+
+    @Column(name = "guidance", nullable = false)
+    private int guidance;
 
     private EvaluationType evaluationType;
 
@@ -52,4 +62,13 @@ public class Evaluation {
 
     public EvaluationType getEvaluationType() { return evaluationType; }
     public void setEvaluationType(EvaluationType evaluationType) { this.evaluationType = evaluationType; }
+
+    public Professor getProfessor() { return professor; }
+    public void setProfessor(Professor professor) { this.professor = professor; }
+
+    public int getFacilities() { return facilities; }
+    public void setFacilities(int facilities) { this.facilities = facilities; }
+
+    public int getGuidance() { return guidance; }
+    public void setGuidance(int guidance) { this.guidance = guidance; }
 }

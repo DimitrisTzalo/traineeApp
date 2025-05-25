@@ -41,6 +41,13 @@
                   th:text="${pos.applicant.studentName}">Student Name</span>
                 <span th:unless="${pos.applicant != null}">—</span>
             </td>
+            <td>
+                <form th:action="@{/professor/evaluate_traineeship}" method="get" >
+                    <input type="hidden" name="traineePosition.positionId" th:value="${pos.positionId}" />
+                    <button type="submit" class="btn btn-primary btn-sm">Evaluate</button>
+                </form>
+
+            </td>
         </tr>
         </tbody>
     </table>
@@ -48,3 +55,4 @@
 
 <a th:href="@{/professor/dashboard}" class="btn btn-secondary">Back to Dashboard</a>
 </body>
+</html>

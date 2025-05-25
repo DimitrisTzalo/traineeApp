@@ -12,6 +12,7 @@ public interface EvaluationRepo extends JpaRepository<Evaluation, Integer> {
     Optional<Evaluation> findByEvaluationId(Integer integer);
 
     Optional<Evaluation> findByTraineePosition_PositionIdAndCompany_Username(Integer posId, String username);
+    Optional<Evaluation> findByTraineePosition_PositionIdAndProfessor_Username(Integer posId, String username);
 
     List<Evaluation> findByCompany_Username(String username);
 }

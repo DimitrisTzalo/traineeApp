@@ -1,19 +1,24 @@
 package myy803.springboot.trainee.controller;
 
 
-import myy803.springboot.trainee.model.TraineePosition;
-import myy803.springboot.trainee.model.User;
+import jakarta.servlet.http.HttpServletRequest;
+import myy803.springboot.trainee.model.*;
+import myy803.springboot.trainee.repository.EvaluationRepo;
 import myy803.springboot.trainee.repository.ProfessorRepo;
+import myy803.springboot.trainee.repository.TraineePositionRepo;
 import myy803.springboot.trainee.repository.UserDAO;
+import myy803.springboot.trainee.service.EvaluationService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import myy803.springboot.trainee.model.Professor;
 import myy803.springboot.trainee.service.ProfessorService;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +34,15 @@ public class ProfessorController {
 
     @Autowired
     ProfessorService professorService;
+
+    @Autowired
+    private EvaluationRepo evaluationRepo;
+
+    @Autowired
+    private TraineePositionRepo traineePositionRepo;
+
+    @Autowired
+    private EvaluationService evaluationService;
 
     @RequestMapping("/professor/dashboard")
     public String getProfessorDashboard(Model model) {
@@ -81,7 +95,6 @@ public class ProfessorController {
         professor.setUsername(user.getUsername());
 
 
-
         professorService.saveProfile(professor);
         model.addAttribute("successMessage", "Profile saved successfully!");
         return "professor/dashboard";
@@ -94,4 +107,30 @@ public class ProfessorController {
         model.addAttribute("supervisedPositions", supervisedPositions);
         return "professor/supervised_positions";
     }
+
+    @RequestMapping("/professor/evaluate_traineeship")
+    public String evaluateTraineeship(@ModelAttribute("evaluation") Evaluation evaluation, Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
+        Integer positionId = (evaluation.getTraineePosition() != null) ? evaluation.getTraineePosition().getPositionId() : null;
+        if (positionId != null) {
+            return "redirect:/professor/supervised_positions";
+        }
+
+        Optional<Evaluation> existingEvaluation = evaluationRepo.findByTraineePosition_PositionIdAndProfessor_Username(positionId, username);
+
+        if ("POST".equalsIgnoreCase(request.getMethod())) {
+            professorService.saveOrUpdateEvaluation(evaluation, username);
+            return "redirect:/professor/supervised_positions";
+        }
+        if (existingEvaluation.isPresent()) {
+            model.addAttribute("evaluation", existingEvaluation.get());
+        } else {
+            model.addAttribute("evaluation", evaluation);
+        }
+
+        return "professor/evaluate_traineeship";
+    }
+
 }
