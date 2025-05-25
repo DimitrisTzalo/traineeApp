@@ -1,7 +1,7 @@
 package myy803.springboot.trainee.model;
 
 import jakarta.persistence.*;
-
+// GEIA SOU
 @Entity
 @Table(name = "evaluations")
 public class Evaluation {
