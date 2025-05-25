@@ -197,5 +197,14 @@ public class CommitteeController {
         return "redirect:/committee/search_professor";
     }
 
+    @RequestMapping("/committee/positions_in_progress")
+    public String getPositionsInProgress(Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<TraineePosition> positionsInProgress = traineePositionRepo.findByCommittee_UsernameAndIsAssignedTrue(username);
+        model.addAttribute("positionsInProgress", positionsInProgress);
+
+        return "committee/positions_in_progress";
+    }
+
 
 }

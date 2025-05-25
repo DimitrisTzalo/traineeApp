@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>In-Progress Traineeships</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h3>In-Progress Traineeships</h3>
+    <hr>
+    <div th:if="${positionsInProgress.isEmpty()}">
+        <p class="text-muted">No traineeships are currently in progress.</p>
+    </div>
+    <div th:if="${!positionsInProgress.isEmpty()}">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Student</th>
+                <th>From Date</th>
+                <th>To Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="position : ${positionsInProgress}">
+                <td th:text="${position.title}"></td>
+                <td th:text="${position.description}"></td>
+                <td th:text="${position.applicant.username}"></td>
+                <td th:text="${position.fromDate}"></td>
+                <td th:text="${position.toDate}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <a th:href="@{/committee/dashboard}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+</div>
+</body>
+</html>
