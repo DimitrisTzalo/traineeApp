@@ -177,6 +177,8 @@ public class CompanyController {
     @RequestMapping("/company/delete_position")
     public String deletePosition(@ModelAttribute("position") TraineePosition traineePosition, Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        LocalDate today = LocalDate.now();
+
         companyService.deletePosition(username, traineePosition);
         model.addAttribute("successMessage", "Successfully deleted position!");
 

@@ -3,6 +3,7 @@ package myy803.springboot.trainee.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import myy803.springboot.trainee.model.TraineePosition;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,4 +20,5 @@ public interface TraineePositionRepo extends JpaRepository<TraineePosition, Inte
     boolean existsBySupervisor_UsernameAndPositionId(String username, Integer positionId);
     boolean existsByPositionId(Integer traineeId);
 
+    List<TraineePosition> findByToDateBefore(LocalDate today);
 }

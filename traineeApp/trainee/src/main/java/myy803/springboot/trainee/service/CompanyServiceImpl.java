@@ -7,11 +7,12 @@ import myy803.springboot.trainee.repository.CompanyRepo;
 import myy803.springboot.trainee.repository.EvaluationRepo;
 import myy803.springboot.trainee.repository.TraineePositionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -75,7 +76,10 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public void deletePosition(String username, TraineePosition position) {
+
+
         Optional<Company> company = companyRepo.findByUsername(username);
+
         if (company.isPresent()) {
 
             List<Application> relatedApplications = applicationRepo.findByPosition_PositionId(position.getPositionId());
@@ -83,6 +87,8 @@ public class CompanyServiceImpl implements CompanyService {
 
             traineePositionRepo.delete(position);
         }
+
+
     }
 
     @Override
