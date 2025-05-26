@@ -42,7 +42,7 @@
                 <span th:unless="${pos.applicant != null}">—</span>
             </td>
             <td>
-                <div th:if="${pos.applicant!= null && pos.isAssigned}">
+                <div th:if="${pos.applicant!= null and pos.isAssigned and !pos.fromDate.isAfter(T(java.time.LocalDate).now())}">
                     <div th:if="${evaluatedPositions.contains(pos.positionId)}">
                         <span class="badge badge-success mb-2">Already evaluated — Edit?</span>
                         <form th:action="@{/professor/evaluate_traineeship}" method="get" class="d-inline" >

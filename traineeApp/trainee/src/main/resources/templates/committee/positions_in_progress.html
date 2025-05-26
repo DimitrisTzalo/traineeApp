@@ -56,9 +56,14 @@
                             <button type="submit" class="btn btn-primary btn-sm">Monitor</button>
                         </form>
                     </div>
-                    <div th:if="${position.passFailGrade != null}">
-                        <span class="text-muted">No action</span>
+
+                    <div th:unless="${position.supervisor != null and position.passFailGrade == null}">
+                        <form th:action="@{/committee/monitor_position}" method="get">
+                            <input type="hidden" name="positionId" th:value="${position.positionId}" />
+                            <button type="submit" class="btn btn-primary btn-sm">See evaluations</button>
+                        </form>
                     </div>
+
                     <div th:if="${position.supervisor == null}">
                         <span class="text-muted">Awaiting Assignment</span>
                     </div>

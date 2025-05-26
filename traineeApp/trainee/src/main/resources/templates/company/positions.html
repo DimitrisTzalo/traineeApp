@@ -40,7 +40,7 @@
                     <button type="submit" class="btn btn-warning btn-sm ml-2">Edit</button>
                 </form>
 
-                <div th:if="${position.isAssigned and position.supervisor != null}">
+                <div th:if="${position.isAssigned and position.supervisor != null and !position.fromDate.isAfter(T(java.time.LocalDate).now())}">
 
                     <div th:if="${evaluatedPositions.contains(position.positionId)}">
                         <span class="badge badge-success mb-2">Already evaluated — Edit?</span>
