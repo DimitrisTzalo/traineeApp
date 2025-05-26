@@ -7,17 +7,21 @@ import myy803.springboot.trainee.formsdata.SearchForm;
 import myy803.springboot.trainee.formsdata.SearchProfessorForm;
 import myy803.springboot.trainee.model.*;
 import myy803.springboot.trainee.repository.*;
+import myy803.springboot.trainee.service.EvaluationService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import myy803.springboot.trainee.service.CommitteeService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -40,6 +44,10 @@ public class CommitteeController {
     private ProfessorRepo professorRepo;
     @Autowired
     private TraineePositionRepo traineePositionRepo;
+    @Autowired
+    private EvaluationRepo evaluationRepo;
+    @Autowired
+    private EvaluationService evaluationService;
 
     @RequestMapping("/committee/dashboard")
     public String getCommitteeDashboard(Model model) {
@@ -220,6 +228,45 @@ public class CommitteeController {
         model.addAttribute("positionsInProgress", positionsInProgress);
 
         return "committee/positions_in_progress";
+    }
+
+    @RequestMapping("/committee/monitor_position")
+    public String monitorPosition(@RequestParam("positionId") Integer positionId, Model model) {
+        Optional<TraineePosition> position = traineePositionRepo.findById(positionId);
+
+        if (position.isEmpty()) {
+            model.addAttribute("errorMessage", "Traineeship not found.");
+            return "redirect:/committee/positions_in_progress";
+        }
+
+        List<Evaluation> evaluations = evaluationRepo.findByTraineePosition_PositionId(positionId);
+        Map<String, Double> averages = evaluationService.calculateAverageEvaluationForPosition(positionId);
+
+        model.addAttribute("position", position.get());
+        model.addAttribute("evaluations", evaluations);
+        model.addAttribute("avgMotivation", averages.get("motivation"));
+        model.addAttribute("avgEffectiveness", averages.get("effectiveness"));
+        model.addAttribute("avgEfficiency", averages.get("efficiency"));
+
+        return "committee/monitor_position";
+    }
+
+    @PostMapping("/committee/complete_traineeship")
+    public String completeTraineeship(@RequestParam("positionId") Integer positionId, @RequestParam("result") String result, Model model) {
+        Optional<TraineePosition> position = traineePositionRepo.findById(positionId);
+
+        if (position.isEmpty()) {
+            model.addAttribute("errorMessage", "Traineeship not found.");
+            return "redirect:/committee/positions_in_progress";
+        }
+
+        TraineePosition traineePosition = position.get();
+        traineePosition.setPassFailGrade(result.equalsIgnoreCase("pass"));
+
+        traineePositionRepo.save(traineePosition);
+
+        model.addAttribute("successMessage", "Traineeship marked as " + result + " successfully.");
+        return "redirect:/committee/positions_in_progress";
     }
 
 

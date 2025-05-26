@@ -123,5 +123,8 @@ public class TraineePosition {
 
     public List<String> getSkillsList(){return skills != null ? List.of(skills.split(",")) : List.of();}
 
+    public boolean isPassFailGrade() { return passFailGrade; }
+    public void setPassFailGrade(boolean passFailGrade) { this.passFailGrade = passFailGrade;}
 
-}
+    }
+

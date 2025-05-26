@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Monitor Traineeship</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h3 th:text="'Monitoring Traineeship: ' + ${position.title}"></h3>
+    <hr>
+    <h5>Evaluations</h5>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Evaluator</th>
+            <th>Motivation</th>
+            <th>Effectiveness</th>
+            <th>Efficiency</th>
+            <th>Facilities</th>
+            <th>Guidance</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="evaluation : ${evaluations}">
+            <td th:text="${evaluation.professor?.professorName ?: evaluation.company?.companyName}"></td>
+            <td th:text="${evaluation.motivation}"></td>
+            <td th:text="${evaluation.effectiveness}"></td>
+            <td th:text="${evaluation.efficiency}"></td>
+            <td th:text="${evaluation.facilities}"></td>
+            <td th:text="${evaluation.guidance}"></td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>Average</th>
+            <th th:text="${avgMotivation ?: 0}">-</th>
+            <th th:text="${avgEffectiveness ?: 0}">-</th>
+            <th th:text="${avgEfficiency ?: 0}">-</th>
+            <th>-</th>
+            <th>-</th>
+        </tr>
+        </tfoot>
+
+    </table>
+    <form th:action="@{/committee/complete_traineeship}" method="post">
+        <input type="hidden" name="positionId" th:value="${position.positionId}" />
+        <button type="submit" name="result" value="pass" class="btn btn-success">Mark as Pass</button>
+        <button type="submit" name="result" value="fail" class="btn btn-danger">Mark as Fail</button>
+    </form>
+    <a th:href="@{/committee/positions_in_progress}" class="btn btn-secondary mt-3">Back</a>
+</div>
+</body>
+</html>

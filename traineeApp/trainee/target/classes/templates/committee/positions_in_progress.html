@@ -32,6 +32,12 @@
                 <td th:text="${position.supervisor.professorName}"></td>
                 <td th:text="${position.fromDate}"></td>
                 <td th:text="${position.toDate}"></td>
+                <td>
+                    <form th:action="@{/committee/monitor_position}" method="get">
+                        <input type="hidden" name="positionId" th:value="${position.positionId}" />
+                        <button type="submit" class="btn btn-primary btn-sm">Monitor</button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
