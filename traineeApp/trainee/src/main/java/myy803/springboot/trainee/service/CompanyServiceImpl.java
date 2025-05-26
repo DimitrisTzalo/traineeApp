@@ -86,7 +86,7 @@ public class CompanyServiceImpl implements CompanyService {
 
         traineePositionRepo.flush();
 
-        System.out.println("✅ Deleting: " + position.getPositionId());
+        System.out.println("Deleting: " + position.getPositionId());
         traineePositionRepo.delete(position); // ΕΔΩ γίνεται πραγματικό delete
     }
 
