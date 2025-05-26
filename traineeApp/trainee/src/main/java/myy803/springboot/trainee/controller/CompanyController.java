@@ -107,8 +107,11 @@ public class CompanyController {
 
 
         List<Evaluation> evaluations = evaluationRepo.findByCompany_Username(username);
+        LocalDate today = LocalDate.now();
 
         List<Integer> evaluatedPositions = evaluations.stream()
+                .filter(e -> e.getTraineePosition().getFromDate().isBefore(today)
+                        || e.getTraineePosition().getFromDate().isEqual(today))
                 .map(e -> e.getTraineePosition().getPositionId())
                 .toList();
         model.addAttribute("evaluatedPositions", evaluatedPositions);
