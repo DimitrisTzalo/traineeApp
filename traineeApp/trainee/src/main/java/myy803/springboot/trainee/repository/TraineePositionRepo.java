@@ -19,6 +19,5 @@ public interface TraineePositionRepo extends JpaRepository<TraineePosition, Inte
 
     boolean existsBySupervisor_UsernameAndPositionId(String username, Integer positionId);
     boolean existsByPositionId(Integer traineeId);
-
     List<TraineePosition> findByToDateBefore(LocalDate today);
 }

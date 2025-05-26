@@ -47,11 +47,11 @@ public class TraineePosition {
     @Column(name = "description")
     private String description;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+
     @Column(name = "from_date")
     private LocalDate fromDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+
     @Column(name = "to_date")
     private LocalDate toDate;
 

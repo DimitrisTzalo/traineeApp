@@ -16,6 +16,8 @@ public interface CompanyService {
     List<TraineePosition> getCompanyPositions(String username);
     void addPosition(String username, TraineePosition position);
     void deletePosition(String username, TraineePosition position);
+
+
     void saveOrUpdateEvaluation(Evaluation evaluation, String username);
 
 

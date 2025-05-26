@@ -1,18 +1,16 @@
 package myy803.springboot.trainee.service;
 
 
+import jakarta.transaction.Transactional;
 import myy803.springboot.trainee.model.*;
 import myy803.springboot.trainee.repository.ApplicationRepo;
 import myy803.springboot.trainee.repository.CompanyRepo;
 import myy803.springboot.trainee.repository.EvaluationRepo;
 import myy803.springboot.trainee.repository.TraineePositionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -74,22 +72,27 @@ public class CompanyServiceImpl implements CompanyService {
 
     }
 
+    @Transactional
     @Override
     public void deletePosition(String username, TraineePosition position) {
 
+        applicationRepo.deleteAll(applicationRepo.findByPosition_PositionId(position.getPositionId()));
+        evaluationRepo.deleteAll(evaluationRepo.findByTraineePosition_PositionId(position.getPositionId()));
 
-        Optional<Company> company = companyRepo.findByUsername(username);
+        position.setApplicant(null);
+        position.setSupervisor(null);
+        position.setCompany(null);
+        position.setCommittee(null);
 
-        if (company.isPresent()) {
+        traineePositionRepo.flush();
 
-            List<Application> relatedApplications = applicationRepo.findByPosition_PositionId(position.getPositionId());
-            applicationRepo.deleteAll(relatedApplications);
-
-            traineePositionRepo.delete(position);
-        }
-
-
+        System.out.println("✅ Deleting: " + position.getPositionId());
+        traineePositionRepo.delete(position); // ΕΔΩ γίνεται πραγματικό delete
     }
+
+
+
+
 
     @Override
     public void saveOrUpdateEvaluation(Evaluation evalForm, String username) {
