@@ -70,8 +70,8 @@ public class TraineePosition {
     @Column(name = "student_log_book")
     private String studentLogBook;
 
-    @Column(name = "pass_fail_grade", nullable = false)
-    private boolean passFailGrade;
+    @Column(name = "pass_fail_grade")
+    private Boolean passFailGrade;
 
 
     public TraineePosition() {}
@@ -123,7 +123,7 @@ public class TraineePosition {
 
     public List<String> getSkillsList(){return skills != null ? List.of(skills.split(",")) : List.of();}
 
-    public boolean isPassFailGrade() { return passFailGrade; }
+    public Boolean isPassFailGrade() { return passFailGrade; }
     public void setPassFailGrade(boolean passFailGrade) { this.passFailGrade = passFailGrade;}
 
     }

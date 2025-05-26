@@ -9,9 +9,14 @@
 <div class="container mt-5">
     <h3>In-Progress Traineeships</h3>
     <hr>
+
+    <!-- Flash message -->
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+
     <div th:if="${positionsInProgress.isEmpty()}">
         <p class="text-muted">No traineeships are currently in progress.</p>
     </div>
+
     <div th:if="${!positionsInProgress.isEmpty()}">
         <table class="table table-bordered">
             <thead>
@@ -22,6 +27,8 @@
                 <th>Supervisor</th>
                 <th>From Date</th>
                 <th>To Date</th>
+                <th>Status</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -29,19 +36,39 @@
                 <td th:text="${position.title}"></td>
                 <td th:text="${position.description}"></td>
                 <td th:text="${position.applicant.studentName}"></td>
-                <td th:text="${position.supervisor.professorName}"></td>
+                <td th:text="${position.supervisor != null ? position.supervisor.professorName : 'Not assigned'}"></td>
                 <td th:text="${position.fromDate}"></td>
                 <td th:text="${position.toDate}"></td>
+
+                <!-- Status Badge -->
                 <td>
-                    <form th:action="@{/committee/monitor_position}" method="get">
-                        <input type="hidden" name="positionId" th:value="${position.positionId}" />
-                        <button type="submit" class="btn btn-primary btn-sm">Monitor</button>
-                    </form>
+                    <span th:if="${position.supervisor == null}" class="badge badge-secondary">Not Assigned</span>
+                    <span th:if="${position.supervisor != null and position.passFailGrade == null}" class="badge badge-warning">Pending</span>
+                    <span th:if="${position.passFailGrade == true}" class="badge badge-success">Passed</span>
+                    <span th:if="${position.passFailGrade == false and position.supervisor != null}" class="badge badge-danger">Failed</span>
+                </td>
+
+                <!-- Action -->
+                <td>
+                    <div th:if="${position.supervisor != null and position.passFailGrade == null}">
+                        <form th:action="@{/committee/monitor_position}" method="get">
+                            <input type="hidden" name="positionId" th:value="${position.positionId}" />
+                            <button type="submit" class="btn btn-primary btn-sm">Monitor</button>
+                        </form>
+                    </div>
+                    <div th:if="${position.passFailGrade != null}">
+                        <span class="text-muted">No action</span>
+                    </div>
+                    <div th:if="${position.supervisor == null}">
+                        <span class="text-muted">Awaiting Assignment</span>
+                    </div>
                 </td>
             </tr>
+
             </tbody>
         </table>
     </div>
+
     <a th:href="@{/committee/dashboard}" class="btn btn-secondary mt-3">Back to Dashboard</a>
 </div>
 </body>

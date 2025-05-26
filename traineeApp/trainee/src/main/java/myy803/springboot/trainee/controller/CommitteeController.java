@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import myy803.springboot.trainee.service.CommitteeService;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -252,22 +253,41 @@ public class CommitteeController {
     }
 
     @PostMapping("/committee/complete_traineeship")
-    public String completeTraineeship(@RequestParam("positionId") Integer positionId, @RequestParam("result") String result, Model model) {
-        Optional<TraineePosition> position = traineePositionRepo.findById(positionId);
+    public String completeTraineeship(@RequestParam("positionId") Integer positionId,
+                                      @RequestParam("result") String result,
+                                      RedirectAttributes redirectAttributes) {
+        Optional<TraineePosition> positionOpt = traineePositionRepo.findById(positionId);
 
-        if (position.isEmpty()) {
-            model.addAttribute("errorMessage", "Traineeship not found.");
+        if (positionOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Traineeship not found.");
             return "redirect:/committee/positions_in_progress";
         }
 
-        TraineePosition traineePosition = position.get();
-        traineePosition.setPassFailGrade(result.equalsIgnoreCase("pass"));
+        TraineePosition position = positionOpt.get();
 
-        traineePositionRepo.save(traineePosition);
 
-        model.addAttribute("successMessage", "Traineeship marked as " + result + " successfully.");
+        if (position.getSupervisor() == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Cannot mark result — no professor assigned.");
+            return "redirect:/committee/positions_in_progress";
+        }
+
+
+        List<Evaluation> evaluations = evaluationRepo.findByTraineePosition_PositionId(positionId);
+        if (evaluations.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Cannot mark result — no evaluations submitted.");
+            return "redirect:/committee/positions_in_progress";
+        }
+
+
+        boolean isPassed = result.equalsIgnoreCase("pass");
+        position.setPassFailGrade(isPassed);
+        traineePositionRepo.save(position);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Traineeship marked as " + (isPassed ? "PASSED" : "FAILED") + " successfully.");
         return "redirect:/committee/positions_in_progress";
     }
+
+
 
 
 }
