@@ -2,61 +2,138 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{/css/MainHomepageCSS.css}">
-	<title>Homepage</title>
-</head>
+    <title>Homepage</title>
 
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
+
+    <!-- Light Minimalist Style -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #212529;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding-top: 3rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 2.5rem 3rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        h4 {
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+
+        .alert {
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        hr {
+            border-color: #dee2e6;
+        }
+
+        .btn {
+            margin-right: 0.5rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .btn-primary {
+            background-color: #4a90e2;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #357ab8;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        p {
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
 
 <body>
 <div class="container">
 
-  <h2>Welcome to Homepage</h2>
- 
- <br> <br> <hr> <br> <br>
+    <h2>Welcome to Homepage</h2>
+
+    <hr>
 
     <div th:if="${welcomeMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
         <span th:text="${welcomeMessage}">Welcome to our App!<br>Please fill your data!</span>
     </div>
 
-
+    <!-- If user is not logged in -->
     <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
-    <p>
-    	<a th:href="@{/login}" class="btn btn-primary btn-sm mb-3" th:text="Login"></a>
-    	<a th:href="@{/register}" class="btn btn-primary btn-sm mb-3" th:text="Register"></a>
-    </p>
-  </div>
+        <p>
+            <a th:href="@{/login}" class="btn btn-primary btn-sm" th:text="Login"></a>
+            <a th:href="@{/register}" class="btn btn-primary btn-sm" th:text="Register"></a>
+        </p>
+    </div>
 
-  <div sec:authorize="isAuthenticated()">
-    <h4>Logged as: <span sec:authentication="name"></span></h4>
-    <h4>Has role: <span sec:authentication="authorities"></span></h4>
-    
-    <br> <br> <hr> <br> <br>
-    
-    <p sec:authorize="hasAuthority('STUDENT')">
-    	<a th:href="@{/student/dashboard}" class="btn btn-primary btn-sm mb-3"> Student Dashboard</a>
-    	<a th:href="@{/logout}" class="btn btn-danger btn-sm mb-3"> Logout</a>
-    </p>
-    
-    <p sec:authorize="hasAuthority('PROFESSOR')">
-    	<a th:href="@{/professor/dashboard}" class="btn btn-primary btn-sm mb-3"> Professor Dashboard</a>
-    	<a th:href="@{/logout}" class="btn btn-danger btn-sm mb-3"> Logout</a>	
-    </p>
+    <!-- If user is authenticated -->
+    <div sec:authorize="isAuthenticated()">
+        <h4>Logged as: <span sec:authentication="name"></span></h4>
+        <h4>Has role: <span sec:authentication="authorities"></span></h4>
 
-      <p sec:authorize="hasAuthority('COMPANY')">
-          <a th:href="@{/company/dashboard}" class="btn btn-primary btn-sm mb-3"> Company Dashboard</a>
-          <a th:href="@{/logout}" class="btn btn-danger btn-sm mb-3"> Logout</a>
-      </p>
-      <p sec:authorize="hasAuthority('COMMITTEE')">
-          <a th:href="@{/committee/dashboard}" class="btn btn-primary btn-sm mb-3"> Committee Dashboard</a>
-          <a th:href="@{/logout}" class="btn btn-danger btn-sm mb-3"> Logout</a>
-      </p>
-  </div>
+        <hr>
+
+        <!-- Student -->
+        <p sec:authorize="hasAuthority('STUDENT')">
+            <a th:href="@{/student/dashboard}" class="btn btn-primary btn-sm">Student Dashboard</a>
+            <a th:href="@{/logout}" class="btn btn-danger btn-sm">Logout</a>
+        </p>
+
+        <!-- Professor -->
+        <p sec:authorize="hasAuthority('PROFESSOR')">
+            <a th:href="@{/professor/dashboard}" class="btn btn-primary btn-sm">Professor Dashboard</a>
+            <a th:href="@{/logout}" class="btn btn-danger btn-sm">Logout</a>
+        </p>
+
+        <!-- Company -->
+        <p sec:authorize="hasAuthority('COMPANY')">
+            <a th:href="@{/company/dashboard}" class="btn btn-primary btn-sm">Company Dashboard</a>
+            <a th:href="@{/logout}" class="btn btn-danger btn-sm">Logout</a>
+        </p>
+
+        <!-- Committee -->
+        <p sec:authorize="hasAuthority('COMMITTEE')">
+            <a th:href="@{/committee/dashboard}" class="btn btn-primary btn-sm">Committee Dashboard</a>
+            <a th:href="@{/logout}" class="btn btn-danger btn-sm">Logout</a>
+        </p>
+    </div>
 
 </div>
 </body>

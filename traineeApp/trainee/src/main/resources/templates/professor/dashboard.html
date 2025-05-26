@@ -1,25 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-
     <title>Professor Dashboard</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" crossorigin="anonymous">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #212529;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #fff;
+            padding: 2.5rem 3rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .alert {
+            border-radius: 10px;
+        }
+
+        .btn {
+            margin-right: 0.5rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+        }
+
+        .btn-primary {
+            background-color: #4a90e2;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #357ab8;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+    </style>
 </head>
 
-
 <body>
-
-<a class="container">
-
+<div class="container">
     <div th:if="${welcomeMessage}" class="alert alert-success alert-dismissible fade show">
         <span th:text="${welcomeMessage}">Welcome to our App!<br>Please fill your data!</span>
     </div>
-
 
     <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
         Profile updated successfully!
@@ -30,26 +74,14 @@
 
     <h2>Welcome <span th:text="${professor.professorName}"></span> to Professor Dashboard</h2>
 
-
-
-    <br> <br> <hr> <br> <br>
-
-
-
-
-    <br> <br> <hr> <br> <br>
+    <hr>
 
     <p>
-        <a th:href="@{/}" class="btn btn-primary btn-sm mb-3">Home</a>
-        <a th:href="@{/logout}" class="btn btn-danger btn-sm mb-3">Logout</a>
-        <a th:href="@{/professor/profile}" class="btn btn-primary btn-sm mb-3">My profile</a>
-        <a th:href="@{/professor/supervised_positions}" class="btn btn-primary btn-sm mb-3">My supervised Positions</a>
-
+        <a th:href="@{/}" class="btn btn-primary btn-sm">Home</a>
+        <a th:href="@{/logout}" class="btn btn-danger btn-sm">Logout</a>
+        <a th:href="@{/professor/profile}" class="btn btn-primary btn-sm">My profile</a>
+        <a th:href="@{/professor/supervised_positions}" class="btn btn-primary btn-sm">My supervised Positions</a>
     </p>
-
-    </a>
-
-
-
+</div>
 </body>
 </html>

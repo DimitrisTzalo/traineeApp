@@ -1,35 +1,130 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
 
-	<title>Login</title>
+    <title>Login</title>
+
+    <!-- Embedded Modern Minimalist CSS -->
+    <style>
+        body {
+            background-color: #f4f6f8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 2.5rem 3rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #222;
+        }
+
+        form input[type="text"],
+        form input[type="password"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-bottom: 1.25rem;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        form input:focus {
+            border-color: #4a90e2;
+            outline: none;
+        }
+
+        button.btn,
+        a.btn {
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem 0.25rem;
+            border-radius: 10px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button.btn-info {
+            background-color: #4a90e2;
+            border: none;
+            color: #fff;
+        }
+
+        button.btn-info:hover {
+            background-color: #357ab8;
+            transform: translateY(-2px);
+        }
+
+        a.btn-primary {
+            background-color: #2ecc71;
+            border: none;
+            color: #fff;
+            text-align: center;
+        }
+
+        a.btn-primary:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .error-message {
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.95rem;
+            color: #d9534f;
+        }
+
+        .success-message {
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.95rem;
+            color: #28a745;
+        }
+    </style>
 </head>
-
 
 <body>
 
 <div class="container">
+    <form th:action="@{/login}" method="POST">
+        <h3 th:text="'Login'">Login</h3>
 
-    <form th:action="@{/login}" method="POST" >
-        <h3 th:text="Login"></h3>
-        <input type="text" name="username" th:placeholder="Username" /> <br /><br />
-        <input type="password" th:placeholder="Password" name="password" /> <br /><br />
-        <button type="Submit" class="btn btn-info col-2"> Login </button>
-        <a th:href="@{register}" class="btn btn-primary col-2"> Register </a><br />
-        
-        <div th:if="${param.error}"><p>Username or Password is invalid.</p></div> <br/> 
-   
-   		<div th:utext="${successMessage}"></div>
+        <input type="text" name="username" placeholder="Username"/> <br/>
+        <input type="password" name="password" placeholder="Password"/> <br/>
+
+        <button type="submit" class="btn btn-info col-5">Login</button>
+        <a th:href="@{/register}" class="btn btn-primary col-5">Register</a><br/>
+
+        <div class="error-message" th:if="${param.error}">
+            <p>Username or Password is invalid.</p>
+        </div>
+
+        <div class="success-message" th:utext="${successMessage}"></div>
     </form>
-
 </div>
 
 </body>

@@ -1,25 +1,77 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Student Dashboard</title>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
 
-	<title>Student Dashboard</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #212529;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem;
+        }
+
+        h2 {
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .alert {
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            margin-right: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            border-radius: 10px;
+        }
+
+        .btn-primary {
+            background-color: #4a90e2;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #357ab8;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        hr {
+            border-color: #ccc;
+        }
+    </style>
 </head>
-
 
 <body>
 
-<a class="container">
+<div class="container">
 
     <div th:if="${welcomeMessage}" class="alert alert-success alert-dismissible fade show">
         <span th:text="${welcomeMessage}">Welcome to our App!<br>Please fill your data!</span>
     </div>
-
 
     <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
         Profile updated successfully!
@@ -30,35 +82,23 @@
 
     <h2>Welcome <span th:text="${student.studentName}"></span> to Student Dashboard</h2>
 
-
-
-    <br> <br> <hr> <br> <br>
-
-
-
-
-	<br> <br> <hr> <br> <br>
+    <hr><br><br>
 
     <p>
-    	<a th:href="@{/}" class="btn btn-primary btn-sm mb-3">Home</a>
-    	<a th:href="@{/logout}" class="btn btn-danger btn-sm mb-3">Logout</a>
-        <a th:href="@{/student/profile}" class="btn btn-primary btn-sm mb-3">My profile</a>
+        <a th:href="@{/' }" class="btn btn-primary btn-sm">Home</a>
+        <a th:href="@{/logout}" class="btn btn-danger btn-sm">Logout</a>
+        <a th:href="@{/student/profile}" class="btn btn-primary btn-sm">My profile</a>
 
         <a th:if="${student.lookingForTraineeship}"
            th:href="@{/student/traineeship_positions}"
-           class="btn btn-primary btn-sm mb-3">
+           class="btn btn-primary btn-sm">
             Apply for a Traineeship
         </a>
 
-        <a th:href="@{/student/logbook}" class="btn btn-primary btn-sm mb-3">My Logbook</a>
-
-
-
+        <a th:href="@{/student/logbook}" class="btn btn-primary btn-sm">My Logbook</a>
     </p>
 
-</a>
-
-
+</div>
 
 </body>
 </html>
