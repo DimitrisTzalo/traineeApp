@@ -20,6 +20,8 @@ It enables:
 - Professors to supervise and evaluate assigned students.
 - Committee members to assign traineeships and professors using customizable strategies.
 
+## Course Overview
+
 - **Course**: MYY803 - Software Engineering
 - **Instructor**: Mr. Aposotolos Zarras
 - **Semester Spring 2025** 
