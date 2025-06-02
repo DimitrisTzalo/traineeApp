@@ -43,11 +43,17 @@
         </tfoot>
 
     </table>
-    <form th:action="@{/committee/complete_traineeship}" method="post">
-        <input type="hidden" name="positionId" th:value="${position.positionId}" />
-        <button type="submit" name="result" value="pass" class="btn btn-success">Mark as Pass</button>
-        <button type="submit" name="result" value="fail" class="btn btn-danger">Mark as Fail</button>
-    </form>
+    <div th:if="${position.passFailGrade == null}">
+        <form th:action="@{/committee/complete_traineeship}" method="post">
+            <input type="hidden" name="positionId" th:value="${position.positionId}" />
+            <button type="submit" name="result" value="pass" class="btn btn-success">Mark as Pass</button>
+            <button type="submit" name="result" value="fail" class="btn btn-danger">Mark as Fail</button>
+        </form>
+    </div>
+    <div th:unless="${position.passFailGrade == null}">
+        <div class="alert alert-info mt-3">This traineeship has already been graded.</div>
+    </div>
+
     <a th:href="@{/committee/positions_in_progress}" class="btn btn-secondary mt-3">Back</a>
 </div>
 </body>

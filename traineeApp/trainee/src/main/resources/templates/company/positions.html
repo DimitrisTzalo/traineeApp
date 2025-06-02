@@ -56,11 +56,8 @@
 
                     <div th:if="${position.isAssigned and position.supervisor != null and position.fromDate != null and !position.fromDate.isAfter(T(java.time.LocalDate).now())}">
                         <div th:if="${evaluatedPositions.contains(position.positionId)}">
-                            <span class="badge badge-success mb-2">Already evaluated — Edit?</span>
-                            <form th:action="@{/company/evaluate_traineeship}" method="get" class="d-inline">
-                                <input type="hidden" name="traineePosition.positionId" th:value="${position.positionId}" />
-                                <button type="submit" class="btn btn-warning btn-sm">ReEvaluate this position</button>
-                            </form>
+                            <span class="badge badge-success mb-2">Already evaluated</span>
+
                         </div>
 
                         <div th:unless="${evaluatedPositions.contains(position.positionId)}">

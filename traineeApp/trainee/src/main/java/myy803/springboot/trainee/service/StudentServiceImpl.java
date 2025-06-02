@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +35,7 @@ public class StudentServiceImpl implements StudentService {
         Optional<Student> existing = studentRepo.findByUsername(student.getUsername());
 
 
-        if (existing.isPresent()) {
+        if (existing.isPresent()) { // tropopoiisi profil
             Student existingStudent = existing.get();
             existingStudent.setStudentName(student.getStudentName());
             existingStudent.setStudentAM(student.getStudentAM());
@@ -58,20 +59,21 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-
     public List<TraineePosition> getAllTraineeships() {
         List<TraineePosition> allPositions = traineePositionRepo.findAll();
-
         List<TraineePosition> availablePositions = new ArrayList<TraineePosition>();
+        LocalDate today = LocalDate.now();
+
         for(TraineePosition position : allPositions) {
 
-            if (!position.isAssigned())
+            if (!position.isAssigned() && (position.getToDate() == null || !position.getToDate().isBefore(today)))
                 availablePositions.add(position);
         }
 
         return availablePositions;
 
     }
+
     @Override
     public void applyToTraineeship(String username, Integer traineeshipId) {
 

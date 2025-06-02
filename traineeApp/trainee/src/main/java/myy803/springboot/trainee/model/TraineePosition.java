@@ -36,11 +36,6 @@ public class TraineePosition {
     private Committee committee;
 
 
-
-
-    //@OneToMany(mappedBy = "traineePosition", cascade = CascadeType.ALL)
-    //private List<Evaluation> evaluations;
-
     @Column(name = "position_title")
     private String title;
 

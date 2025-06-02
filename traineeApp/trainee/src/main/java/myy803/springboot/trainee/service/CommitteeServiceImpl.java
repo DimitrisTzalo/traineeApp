@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -79,9 +80,11 @@ public class CommitteeServiceImpl implements CommitteeService {
     public List<TraineePosition> getAvailableTraineeships() {
         List<TraineePosition> allPositions = traineePositionRepo.findAll();
         List<TraineePosition> availablePositions = new ArrayList<TraineePosition>();
+        LocalDate today = LocalDate.now();
+
         for(TraineePosition position : allPositions) {
 
-            if (!position.isAssigned())
+            if (!position.isAssigned() && (position.getToDate() == null || !position.getToDate().isBefore(today)))
                 availablePositions.add(position);
         }
         return availablePositions;
@@ -93,6 +96,12 @@ public class CommitteeServiceImpl implements CommitteeService {
                 .orElseThrow(() -> new RuntimeException("Student not found with username: " + username));
 
         List<TraineePosition> allPositions = traineePositionRepo.findAll();
+
+        // filtering by ToDate
+        LocalDate today = LocalDate.now();
+        List<TraineePosition> validPositions = allPositions.stream()
+                .filter(pos -> !pos.isAssigned() && (pos.getToDate() == null || !pos.getToDate().isBefore(today)))
+                .toList();
 
         TraineeshipSearchStrategy strategy;
 
@@ -110,7 +119,7 @@ public class CommitteeServiceImpl implements CommitteeService {
                 throw new IllegalArgumentException("Invalid search criteria");
         }
 
-        return strategy.search(student, allPositions);
+        return strategy.search(student, validPositions);
     }
 
     @Transactional
