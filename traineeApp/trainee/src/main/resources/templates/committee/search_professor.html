@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Recommend Professors</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 <div class="container mt-5">
@@ -92,7 +93,9 @@
   <div th:if="${errorMessage != null}" class="alert alert-danger mt-4" th:text="${errorMessage}"></div>
   <div th:if="${successMessage != null}" class="alert alert-success mt-4" th:text="${successMessage}"></div>
 
-  <a th:href="@{/committee/dashboard}" class="btn btn-secondary mt-4">Back to Dashboard</a>
+  <a th:href="@{/}" class="btn btn-primary btn-sm">Home</a>
+  <a th:href="@{/logout}" class="btn btn-danger btn-sm">Logout</a>
+  <a th:href="@{/committee/dashboard}" class="btn btn-secondary btn-sm">Back to Dashboard</a>
 </div>
 </body>
 </html>

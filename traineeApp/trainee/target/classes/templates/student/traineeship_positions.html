@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Available Traineeship Positions</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
@@ -62,7 +63,9 @@
         </table>
     </div>
 
-    <a th:href="@{/student/dashboard}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+    <a th:href="@{/}" class="btn btn-primary btn-sm">Home</a>
+    <a th:href="@{/logout}" class="btn btn-danger btn-sm">Logout</a>
+    <a th:href="@{/student/dashboard}" class="btn btn-secondary btn-sm">Back to Dashboard</a>
 
 </div>
 </body>

@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <title>Applicants for Available Traineeships</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
@@ -56,8 +57,9 @@
             </table>
         </div>
     </div>
-
-    <a th:href="@{/committee/dashboard}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+    <a th:href="@{/}" class="btn btn-primary btn-sm">Home</a>
+    <a th:href="@{/logout}" class="btn btn-danger btn-sm">Logout</a>
+    <a th:href="@{/committee/dashboard}" class="btn btn-secondary btn-sm">Back to Dashboard</a>
 </div>
 
 <script>

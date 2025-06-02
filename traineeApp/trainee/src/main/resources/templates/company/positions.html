@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Company's Positions</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 <div class="container mt-4">
@@ -80,7 +81,9 @@
     <!-- === ΚΟΥΜΠΙ ΠΡΟΣΘΗΚΗΣ === -->
     <div class="mb-4" th:if="${!editMode}">
         <button type="button" id="editBtn" class="btn btn-primary" onclick="showEditForm()">Add Position</button>
-        <a th:href="@{/company/dashboard}" class="btn btn-outline-secondary ml-2">Back to Dashboard</a>
+        <a th:href="@{/}" class="btn btn-primary btn-sm">Home</a>
+        <a th:href="@{/logout}" class="btn btn-danger btn-sm">Logout</a>
+        <a th:href="@{/company/dashboard}" class="btn btn-secondary btn-sm">Back to Dashboard</a>
     </div>
 
     <!-- === ΦΟΡΜΑ ΘΕΣΗΣ: ΥΠΑΡΧΕΙ ΠΑΝΤΑ στο DOM === -->
